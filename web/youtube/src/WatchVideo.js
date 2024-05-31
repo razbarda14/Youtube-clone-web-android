@@ -3,6 +3,9 @@ import Toolbar from './Toolbar';
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './CurrentVideo';
 import './WatchVideos.css';
+import upThumb from './hand-thumbs-up.svg'
+import downThumb from './hand-thumbs-down.svg'
+import Share from './share.svg'
 
 function WatchVideo() {
   return (
@@ -18,14 +21,9 @@ function WatchVideo() {
 
           {/* Current Video (Now on the right) */}
           <div className="col-md-8">
+          <div className="current-video-padding">
             <CurrentVideo />
-             {/* Buttons */}
-             <div className="video-buttons mt-3">
-                  <button className="btn btn-light">Like</button>
-                  <button className="btn btn-light">Share</button>
-                  <button className="btn btn-light">Comment</button>
-                  {/* ... Add other buttons ... */}
-                </div>
+            </div>
           </div>
           
         </div>

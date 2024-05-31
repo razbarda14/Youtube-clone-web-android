@@ -1,6 +1,6 @@
 import React from 'react';
 import './Toolbar.css';
-
+import youTubeIcon from './youtube.svg';
 function Toolbar() {
   return (
     <div className="toolbar d-flex justify-content-between align-items-center p-2 bg-light">
@@ -35,11 +35,9 @@ function Toolbar() {
 
       {/* Right section */}
       <div className="right-section d-flex">
-        <button className="btn btn-light mr-2">
-          <img src="/path/to/upload-icon.png" alt="Your Account" className="img-fluid" />
-        </button>
-        <button className="btn btn-light mr-2">
-          <img src="/path/to/youtube-apps-icon.png" alt="YouTube Home" className="img-fluid" />
+      <button type="button" class="btn btn-outline-dark">ScreenMode</button>
+        <button type="button" class="btn btn-outline-danger">YouTube  
+        <img src={youTubeIcon} alt="Notifications" className="img-fluid"  />
         </button>
       </div>
     </div>

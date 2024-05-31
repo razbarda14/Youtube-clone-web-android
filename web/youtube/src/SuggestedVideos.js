@@ -1,8 +1,7 @@
 import React from 'react';
 import SuggestedVideoItem from './SuggestedVideoItem';
 import videoData from './videodata.json'; // Adjust the path if necessary
-import thumbnail1 from './thumbnail1.jpg';
-import thumbnail2 from './thumbnail2.jpg';
+
 
 
 

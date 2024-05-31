@@ -1,70 +1,14 @@
 /* WatchVideo.css */
 
-/* Overall Page */
-.watch-video-page {
-    font-family: Roboto, Arial, sans-serif; /* Use a YouTube-like font */
-  }
-  
-  /* Main Content Area */
-  .main-content {
-    display: flex; /* Use flexbox for layout */
-    gap: 20px; /* Space between video and sidebar */
-  }
-  
-  /* Video Player */
-  .video-player {
-    background-color: #682d2d; /* Black background for video player */
-    border-radius: 8px; /* Rounded corners */
-    overflow: hidden;  /* Hide any video overflow */
-  }
-  
-  /* Video Details */
-  .video-details {
-    padding: 15px;
-    background-color: #ffffff; /* White background */
-    border-radius: 8px;
-  }
-  
-  .video-details h2 {
-    font-size: 1.2rem;
-    margin-bottom: 5px;
-  }
-  
   /* Suggested Videos */
   .suggested-videos {
-    background-color: #ffffff;
+    background-color: #1f1db3e5;
     border-radius: 8px;
-    padding: 15px;
+    padding: 15px; /* Add padding inside the container */
+    margin-top: 20px; /* Add margin to the top */
   }
-  
-  .suggested-videos h4 {
-    margin-bottom: 15px;
-    font-weight: bold; /* Make the "Suggested Videos" title bold */
-  }
-  
-  /* Suggested Video Item */
-  .suggested-video-item {
-    display: flex; /* Use flexbox for item layout */
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .suggested-video-item img {
-    width: 168px; /* Thumbnail size */
-    height: 94px;
-    object-fit: cover; /* Ensure thumbnail covers the area */
-    margin-right: 15px;
-    border-radius: 5px; /* Slightly round thumbnail corners */
-  }
-  
-  .suggested-video-item .video-info {
-    flex: 1; /* Allow video info to take remaining space */
-  }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) { 
-    .main-content {
-      flex-direction: column; /* Stack video and sidebar on smaller screens */
-    }
+  .current-video-padding {
+    padding-top: 200px;
+    margin-left: 200px; /* Add margin to the left */
   }
   
