@@ -1,15 +1,11 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 import AuthBox from './AuthBox';
 
 function App() {
   return (
     <div className="App">
-      <header>
-      </header>
-      <body>
-        <AuthBox />
-      </body>
+      <AuthBox />
     </div>
   );
 }
