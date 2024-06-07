@@ -1,6 +1,6 @@
 import React from 'react';
 import './Toolbar.css';
-import youTubeIcon from './photos/youtube.svg';
+import youTubeIcon from './photosVideo/youtube.svg';
 import { useTheme } from '../ScreenMode/ThemeContext';
 
 function Toolbar() {
