@@ -1,0 +1,11 @@
+.video-player {
+    width: 1000%; /* Make the video fill the width of its container */
+    max-width: 1600px; /* Optional: Set a maximum width for larger screens */
+    height: 500px;  /* Maintain aspect ratio */
+  }
+  
+  .video-buttons img {
+    width: 100px;      /* Adjust image size if needed */
+    height: 35px;
+  }
+  

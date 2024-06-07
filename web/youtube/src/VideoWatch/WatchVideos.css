@@ -1,0 +1,17 @@
+/* WatchVideo.css */
+
+  /* Suggested Videos */
+  .suggested-videos {
+    padding: 15px; /* Add padding inside the container */
+    margin-top: 20px; /* Add margin to the top */
+    margin-left: 300px;
+    margin-right: -400px;
+  }
+  .current-video {
+    padding-top: 200px;
+    margin-left: -450px; /* Add margin to the left */
+  }
+ 
+
+
+  
