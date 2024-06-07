@@ -8,11 +8,11 @@ function App() {
   return (
     <div>
       <div className={darkMode ? 'dark-mode' : 'light-mode'}>
-      <DarkModeToggle /> 
-      
-      <WatchVideo/>
-    </div>
-   
+        <DarkModeToggle />
+
+        <WatchVideo />
+      </div>
+
     </div>
   );
 }

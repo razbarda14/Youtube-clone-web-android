@@ -1,16 +1,25 @@
 import React from 'react';
 import SuggestedVideoItem from './SuggestedVideoItem';
-import videoData from '../videodata.json'; // Adjust the path if necessary
+import './WatchVideos.css';
+import { useTheme } from '../ScreenMode/ThemeContext';
 
-function SuggestedVideos() {
+
+function SuggestedVideos({videoData, onVideoSelect}) {
+  const { darkMode } = useTheme();
   return (
-    <div className="suggested-videos">
-        <h4>Suggested Videos</h4>
+    <div>
+    
+    <div className={`suggested-videos ${darkMode ? 'dark-mode' : 'light-mode'}`}> 
+      
       {videoData.map(video => (
-        
-        <SuggestedVideoItem key={video.id} video={video} />
-     
+        <SuggestedVideoItem 
+          key={video.id} 
+          video={video} 
+          onVideoClick={() => onVideoSelect(video)} // Pass the video object
+        />
       ))}
+    </div>
+  
     </div>
   );
 }

@@ -1,9 +1,8 @@
 import React from 'react';
 
-
-function SuggestedVideoItem({ video }) {
+function SuggestedVideoItem({ video, onVideoClick }) {
   return (
-    <div className="card mb-2">
+    <div className="card mb-2" onClick={() => onVideoClick(video)}>  
       <img src={video.thumbnail} className="card-img-top" alt={video.title} />
       <div className="card-body">
         <h5 className="card-title">{video.title}</h5>

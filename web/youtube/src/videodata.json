@@ -3,60 +3,70 @@
       "id": 1,
       "title": "Video Title 1",
       "channel": "Channel 1",
-      "thumbnail": "/path/to/thumbnail1.jpg"
+      "thumbnail": "/IMG_20220513_111520_238.jpg",
+       "videoUrl": "VID_142421208_140947_463.mp4"
     },
     {
       "id": 2,
       "title": "Video Title 2",
       "channel": "Channel 2",
-      "thumbnail": "/path/to/thumbnail2.jpg"
+      "thumbnail": "/IMG_20220513_111520_238.jpg",
+       "videoUrl": "/path/to/video1.mp4"
     },
     {
       "id": 3,
       "title": "Video Title 3",
       "channel": "Channel 3",
-      "thumbnail": "/path/to/thumbnail3.jpg"
+      "thumbnail": "/IMG_20220513_111520_238.jpg",
+       "videoUrl": "/path/to/video1.mp4"
     },
     {
       "id": 4,
       "title": "Video Title 4",
       "channel": "Channel 4",
-      "thumbnail": "/path/to/thumbnail4.jpg"
+      "thumbnail": "/IMG_20220513_111520_238.jpg",
+       "videoUrl": "/path/to/video1.mp4"
     },
     {
       "id": 5,
       "title": "Video Title 5",
       "channel": "Channel 5",
-      "thumbnail": "/path/to/thumbnail5.jpg"
+      "thumbnail": "/IMG_20220513_111520_238.jpg",
+       "videoUrl": "/path/to/video1.mp4"
     },
     {
       "id": 6,
       "title": "Video Title 6",
       "channel": "Channel 6",
-      "thumbnail": "/path/to/thumbnail6.jpg"
+      "thumbnail": "/IMG_20220513_111520_238.jpg",
+       "videoUrl": "/path/to/video1.mp4"
     },
     {
       "id": 7,
       "title": "Video Title 7",
       "channel": "Channel 7",
-      "thumbnail": "/path/to/thumbnail7.jpg"
+      "thumbnail": "/IMG_20220513_111520_238.jpg",
+       "videoUrl": "/path/to/video1.mp4"
     },
     {
       "id": 8,
       "title": "Video Title 8",
       "channel": "Channel 8",
-      "thumbnail": "/path/to/thumbnail8.jpg"
+      "thumbnail": "/path/to/thumbnail8.jpg",
+       "videoUrl": "/path/to/video1.mp4"
     },
     {
       "id": 9,
       "title": "Video Title 9",
       "channel": "Channel 9",
-      "thumbnail": "/path/to/thumbnail9.jpg"
+      "thumbnail": "/path/to/thumbnail9.jpg",
+       "videoUrl": "/path/to/video1.mp4"
     },
     {
       "id": 10,
       "title": "Video Title 10",
       "channel": "Channel 10",
-      "thumbnail": "/path/to/thumbnail10.jpg"
+      "thumbnail": "/path/to/thumbnail10.jpg",
+       "videoUrl": "/path/to/video1.mp4"
     }
   ]
