@@ -19,9 +19,11 @@ const currentVideoData = {
 };
 
 function CurrentVideo() {
-  // initialize the comment box
-  const [newComment, setNewComment] = useState('');
-  const [comments, setComments] = useState([]);
+ // Comments State
+ const [newComment, setNewComment] = useState('');
+ const [comments, setComments] = useState([]);
+ const [editingCommentIndex, setEditingCommentIndex] = useState(null);
+ const [editedCommentText, setEditedCommentText] = useState('');
 
   const handleInputChange = (event) => {
     setNewComment(event.target.value);
@@ -40,6 +42,23 @@ function CurrentVideo() {
   const handleCancelComment = () => {
     // Clear the input field
     setNewComment('');
+  };
+
+  const handleEditComment = (index) => {
+    setEditingCommentIndex(index);
+    setEditedCommentText(comments[index]);
+  };
+
+  const handleSaveComment = () => {
+    const updatedComments = [...comments];
+    updatedComments[editingCommentIndex] = editedCommentText;
+    setComments(updatedComments);
+    setEditingCommentIndex(null);
+    setEditedCommentText('');
+  };
+
+  const handleDeleteComment = (index) => {
+    setComments(comments.filter((_, i) => i !== index));
   };
 
   // Likes State: initial value of 500
@@ -77,6 +96,7 @@ function CurrentVideo() {
     }
   };
 
+  
   return (
     <div>
       {/* Watch Current Video */}
@@ -118,37 +138,71 @@ function CurrentVideo() {
 
         {/* Comment Input and Buttons */}
         <div className="input-group mt-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Add a comment..."
-            value={newComment}
-            onChange={handleInputChange}
-          />
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={handleAddComment}
-              disabled={newComment.trim() === ''}
-            >
-              Send
-            </button>
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={handleCancelComment}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
+        {editingCommentIndex !== null ? (
+          <>
+            <input 
+              type="text" 
+              className="form-control" 
+              value={editedCommentText}
+              onChange={(e) => setEditedCommentText(e.target.value)} 
+            />
+            <div className="input-group-append">
+              <button onClick={handleSaveComment}>Save</button>
+              <button onClick={() => setEditingCommentIndex(null)}>Cancel</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Add a comment..."
+              value={newComment}
+              onChange={handleInputChange}
+            />
+            <div className="input-group-append">
+              <button 
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={handleAddComment}
+                disabled={newComment.trim() === ''}
+              >
+                Send
+              </button>
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={handleCancelComment}
+              >
+                Cancel
+              </button>
+            </div>
+          </>
+        )}
+      </div>
         {/* Comments Section */}
         <div className="comments-section mt-3">
-          {comments.map((comment, index) => (
-            <p key={index}>{comment}</p>
-          ))}
-        </div>
+        {comments.map((comment, index) => (
+          <div key={index} className="comment-container"> 
+            {editingCommentIndex === index ? ( 
+              <input 
+                type="text"
+                value={editedCommentText}
+                onChange={(e) => setEditedCommentText(e.target.value)}
+              />
+            ) : (
+              <p>{comment}</p>
+            )}
+            {editingCommentIndex !== index && (
+              <>
+                <button onClick={() => handleEditComment(index)}>Edit</button>
+                <button onClick={() => handleDeleteComment(index)}>Delete</button>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+
       </div>
     </div>
   );

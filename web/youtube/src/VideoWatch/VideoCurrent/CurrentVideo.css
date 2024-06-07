@@ -1,5 +1,5 @@
 .video-player {
-    width: 1600px; /* Make the video fill the width of its container */
+    width: 1300px; /* Make the video fill the width of its container */
      /* Optional: Set a maximum width for larger screens */
     height: 400px;  /* Maintain aspect ratio */
   } 
@@ -7,4 +7,11 @@
     width: 100px;      /* Adjust image size if needed */
     height: 35px;
   }
+  .comment-container {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  
+  
   
