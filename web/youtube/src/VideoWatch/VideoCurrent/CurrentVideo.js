@@ -7,18 +7,18 @@ import downThumbBlack from '../photosVideo/hand-thumbs-down-fill.svg';
 import Share from '../photosVideo/share.svg';
 import Download from '../photosVideo/download.svg';
 import bell from '../photosVideo/bell.svg';
-const currentVideoData = {
-  id: 1,
-  title: 'Eyal Golan',
-  description: 'Blumfid 2024.',
-  channel: 'Channel Name ',
-  views: '100M views',
-  uploadDate: '1 sec ago',
-  videoUrl: '/VID_142421208_140947_463.mp4', // This would be a URL to the video file or video platform
-  thumbnail: '/IMG_20220513_111520_238.jpg' // Used as a placeholder before the video plays
-};
+// const video = {
+//   id: 1,
+//   title: 'Eyal Golan',
+//   description: 'Blumfid 2024.',
+//   channel: 'Channel Name ',
+//   views: '100M views',
+//   uploadDate: '1 sec ago',
+//   videoUrl: '/VID_142421208_140947_463.mp4', // This would be a URL to the video file or video platform
+//   thumbnail: '/IMG_20220513_111520_238.jpg' // Used as a placeholder before the video plays
+// };
 
-function CurrentVideo() {
+function CurrentVideo({video}) { // Receive video as a prop
  // Comments State
  const [newComment, setNewComment] = useState('');
  const [comments, setComments] = useState([]);
@@ -102,15 +102,15 @@ function CurrentVideo() {
       {/* Watch Current Video */}
       <div className="current-video">
         <div className="mb-3">
-          <video className="video-player" controls poster={currentVideoData.thumbnail}>
-            <source src={currentVideoData.videoUrl} type="video/mp4" />
+          <video className="video-player" controls poster={video.thumbnail}>
+            <source src={video.videoUrl} type="video/mp4" />
           </video>
         </div>
-        <h3>{currentVideoData.title}</h3>
-        <p>{currentVideoData.description}</p>
+        <h3>{video.title}</h3>
+        <p>{video.description}</p>
         <div className="d-flex justify-content-between">
-          <span>{currentVideoData.channel}
-            {currentVideoData.views} • {currentVideoData.uploadDate}</span>
+          <span>{video.channel}
+            {video.views} • {video.uploadDate}</span>
         </div>
         
         {/* Buttons */}

@@ -2,8 +2,9 @@ import React from 'react';
 import SuggestedVideoItem from './SuggestedVideoItem';
 import './WatchVideos.css';
 import './SuggestedVideos';
-
 function SuggestedVideos({videoData, onVideoSelect}) {
+
+
 
   return (
     <div className='suggested-videos'> 
@@ -12,7 +13,7 @@ function SuggestedVideos({videoData, onVideoSelect}) {
         <SuggestedVideoItem 
           key={video.id} 
           video={video} 
-          onVideoClick={() => onVideoSelect(video)} // Pass the video object
+          onVideoClick={() => onVideoSelect(video)} 
         />
       ))}
     </div>

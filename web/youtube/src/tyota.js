@@ -1,4 +1,3 @@
-
 // import Toolbar from './Toolbar';
 // import React, { useState } from 'react';
 // import SuggestedVideos from './SuggestedVideos';
@@ -9,8 +8,15 @@
 // function WatchVideo() {
 //   const [selectedVideo, setSelectedVideo] = useState(videoData[0]);
 
+ 
+
+//   const handleVideoSelect = (video) => {
+//     setSelectedVideo(video); 
+//   };
 //   return (
+
 //     <div>
+     
 //       <Toolbar />
 //       <div className="container mt-4">
 //         <div className="row">
@@ -22,12 +28,15 @@
 //           </div>
 //           {/* Suggested Videos (Now on the right) */}
 //           <div className="col-md-4">
-//             <SuggestedVideos onVideoSelect={setSelectedVideo} videoData={videoData} />
+//             <SuggestedVideos onVideoSelect={handleVideoSelect} videoData={videoData} />
 //           </div>
 //         </div>
 //       </div>
+
 //     </div>
+
 //   );
 // }
 
 // export default WatchVideo;
+
