@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AuthBox.css';
 
 function Login() {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginValid, setIsLoginValid] = useState(true);
+
+  const navigate = useNavigate();
 
   const handleUserNameChange = (e) => {
     setUserName(e.target.value);
@@ -34,6 +37,7 @@ function Login() {
         <div className="card">
           <div className="card-body">
             <div className="container overflow-hidden text-center">
+            <form noValidate onSubmit={handleSubmit}>
               <div className="row gy-5">
                 <div className="col-6">
                   <div className="p-3 text-start">
@@ -45,7 +49,7 @@ function Login() {
                 <div className="col-6">
                   <div className="p-3">
                     {/* Form for user input */}
-                    <form noValidate onSubmit={handleSubmit}>
+                    
                       <div className="form-floating mb-3">
                         {/* Username input */}
                         <input 
@@ -73,11 +77,6 @@ function Login() {
                         <label htmlFor="password">Password</label>
                         <div className="invalid-feedback">Invalid username or password.</div>
                       </div>
-                      {/* Submit button */}
-                      <button type="submit" className="btn btn-primary">
-                        Login
-                      </button>
-                    </form>
                   </div>
                 </div>
                 <div className="col-6">
@@ -88,10 +87,19 @@ function Login() {
                 <div className="col-6">
                   <div className="p-3">
                     {/* Sign up button */}
-                    <button type="button" className="btn btn-light me-5">Sign up</button>
+                    <button type="button" 
+                      className="btn btn-light me-5"
+                      onClick={() => navigate('/register')}>
+                      Sign up
+                    </button>
+                    {/* Submit button */}
+                    <button type="submit" className="btn btn-primary">
+                        Login
+                      </button>
                   </div>
                 </div>
               </div>
+            </form>
             </div>
           </div>
         </div>

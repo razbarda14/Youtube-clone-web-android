@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 import AuthBox from './AuthBox';
 import Login from './Login';
@@ -14,13 +14,18 @@ function App() {
       console.log('No user data found');
     }
   }, []);
+
   return (
-    
-      <div className="App">
-        <AuthBox></AuthBox>
-        
-      </div>
-    
+    <div className="App">
+      <nav>
+        <Link to="/register">Register</Link>
+        <Link to="/login">Login</Link>
+      </nav>
+      <Routes>
+        <Route path="/register" element={<AuthBox />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </div>
   );
 }
 
