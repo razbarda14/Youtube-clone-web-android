@@ -7,45 +7,83 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap's ORIGINAL CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Include my CSS, it's afrer Bootstrap CSS so it overrides their settings -->
+    <link rel="stylesheet" href="mainscreen.css">
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <!-- Adds tab title -->
     <title>Youtube</title>
-    <link rel="icon" href="./youtube-icon.png" type="image/icon type">
+
+    <!-- Adds tab icon -->
+    <link rel="icon" href="../img/youtube-icon.png" type="image/icon type">
 
 </head>
 
-<body>
+<body id="main_screen">
 
     <!-- Upper row container - row 1 -->
-    <div class="container-fluid">
-        <div class="row">
+    <!-- <div class="container-fluid fixed-top bg-white"> -->
+    <div class="container-fluid bg-white">
+
+        <!-- Icon, search bar, sign in bar -->
+        <div class="row" style="height: 50px;">
+
             <div class="col-4">
                 <div>
-
-                    <button type="button" class="btn btn-light">
+                    <button type="button" class="btn btn-light align-middle">
                         <i class="bi bi-list"></i>
                     </button>
 
-                    <img src="youtube-logo.jpg" alt="Youtube Icon" height="60px">
+                    <img src="../img/youtube-logo.jpg" alt="Youtube Icon" height="60px">
 
                 </div>
             </div>
-            <div class="col-6">
-                <input>
-                <button type="button" class="btn btn-outline-secondary">Search</button>
+
+            <div class="col-4">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <i class="bi bi-search align-middle" type="submit"></i>
+                </form>
             </div>
+
+            <!-- Intentionally empty space -->
+            <div class="col-2"></div>
+
             <div class="col-2">
                 <button type="button" class="btn btn-outline-secondary">
-                    <i class="bi bi-three-dots-vertical"></i>
+                    <i class="bi bi-moon"></i>
                 </button>
-                <button type="button" class="btn btn-outline-primary">Sign in</button>
+                <button type="button" class="btn btn-outline-primary align-middle">Sign in</button>
             </div>
         </div>
+
+        <!-- suggested tags -->
+        <div class="row" style="padding: 5px;">
+
+            <!-- Intentionally empty space -->
+            <div class="col-3"></div>
+
+            <div class="col-9 align-middle">
+                <div class="d-flex justify-content-evenly">
+                    <button type="button" class="btn btn-dark">All</button>
+                    <button type="button" class="btn btn-light" data-bs-toggle="popover">Music</button>
+                    <button type="button" class="btn btn-light">Sports</button>
+                    <button type="button" class="btn btn-light">Italian cuisine</button>
+                    <button type="button" class="btn btn-light">News</button>
+                    <button type="button" class="btn btn-light">Gaming</button>
+                </div>
+            </div>
+
+        </div>
+
+
+
     </div>
 
     <!-- row 2 -->
@@ -54,7 +92,8 @@
         <div class="row">
 
             <!-- Left tool bar col -->
-            <div class="col-3">
+            <!-- add postion-fixed to the next div class to make it fixed, then padding-left the videos -->
+            <div class="col-2">
                 <div class="row">
                     <div class="col">
                         <!-- Left tool bar-->
@@ -88,20 +127,9 @@
                 </div>
             </div>
 
-            <!-- suggested tags -->
+            <!-- suggested videos -->
             <div class="col-9">
-                <div class="row">
-                    <div class="d-flex justify-content-evenly">
-                        <button type="button" class="btn btn-dark">All</button>
-                        <button type="button" class="btn btn-light" data-bs-toggle="popover">Music</button>
-                        <button type="button" class="btn btn-light">Sports</button>
-                        <button type="button" class="btn btn-light">Italian cuisine</button>
-                        <button type="button" class="btn btn-light">News</button>
-                        <button type="button" class="btn btn-light">Gaming</button>
-                    </div>
-                </div>
 
-                <!-- suggested videos -->
                 <div class="row">
 
                     <div class="container">
@@ -109,113 +137,116 @@
                         <div class="row">
 
                             <div class="col-4">
-                                <div class="card" style="width: 18rem;">
-                                    <img src="./live-music.png" class="card-img-top" alt="...">
+
+                                <div class="card" id="cardImg">
+                                    <img src="./img/live-music.png" class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <h5 class="card-title">Card title</h5>
+                                        <h5 class="card-title">Bonobo - Circles - Live</h5>
                                         <p class="card-text">Some quick example text</p>
+                                        <p class="card-text">100k views, a week ago</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-4">
-                                <div class="card" style="width: 18rem;">
-                                    <img src="./live-music.png" class="card-img-top" alt="...">
+                                <div class="card" id="cardImg">
+                                    <img src="./img/champions.jpeg" class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <h5 class="card-title">Card title</h5>
+                                        <h5 class="card-title">Champions League Final</h5>
                                         <p class="card-text">Some quick example text</p>
+                                        <p class="card-text">100k views, a week ago</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-4">
-                                <div class="card" style="width: 18rem;">
-                                    <img src="./live-music.png" class="card-img-top" alt="...">
+                                <div class="card">
+                                    <img src="./img/tennis.jpeg" class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <h5 class="card-title">Card title</h5>
+                                        <h5 class="card-title">Top 10 Tennis Plays of 2024</h5>
                                         <p class="card-text">Some quick example text</p>
+                                        <p class="card-text">100k views, a week ago</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-4">
-                                <div class="card" style="width: 18rem;">
-                                    <img src="./live-music.png" class="card-img-top" alt="...">
+                                <div class="card">
+                                    <img src="./img/pizza.jpeg" class="card-img-top" alt="...">
                                     <div class="card-body">
-                                        <h5 class="card-title">Card title</h5>
+                                        <h5 class="card-title">Neopolitan Pizza</h5>
                                         <p class="card-text">Some quick example text</p>
+                                        <p class="card-text">100k views, a week ago</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-4">
-                                <div class="card" style="width: 18rem;">
-                                    <img src="./live-music.png" class="card-img-top" alt="...">
+                                <div class="card">
+                                    <img src="./img/btc.jpeg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title">Card title</h5>
                                         <p class="card-text">Some quick example text</p>
+                                        <p class="card-text">100k views, a week ago</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-4">
-                                <div class="card" style="width: 18rem;">
-                                    <img src="./live-music.png" class="card-img-top" alt="...">
+                                <div class="card">
+                                    <img src="./img/travel.jpeg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title">Card title</h5>
                                         <p class="card-text">Some quick example text</p>
+                                        <p class="card-text">100k views, a week ago</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-4">
-                                <div class="card" style="width: 18rem;">
-                                    <img src="./live-music.png" class="card-img-top" alt="...">
+                                <div class="card">
+                                    <img src="./img//lagos.jpeg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title">Card title</h5>
                                         <p class="card-text">Some quick example text</p>
+                                        <p class="card-text">100k views, a week ago</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-4">
-                                <div class="card" style="width: 18rem;">
-                                    <img src="./live-music.png" class="card-img-top" alt="...">
+                                <div class="card">
+                                    <img src="./img/ableton.jpeg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title">Card title</h5>
                                         <p class="card-text">Some quick example text</p>
+                                        <p class="card-text">100k views, a week ago</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-4">
-                                <div class="card" style="width: 18rem;">
-                                    <img src="./live-music.png" class="card-img-top" alt="...">
+                                <div class="card">
+                                    <img src="./img/spanish.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title">Card title</h5>
                                         <p class="card-text">Some quick example text</p>
+                                        <p class="card-text">100k views, a week ago</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-4">
-                                <div class="card" style="width: 18rem;">
-                                    <img src="./live-music.png" class="card-img-top" alt="...">
+                                <div class="card">
+                                    <img src="./img/fc24.jpeg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title">Card title</h5>
                                         <p class="card-text">Some quick example text</p>
+                                        <p class="card-text">100k views, a week ago</p>
                                     </div>
                                 </div>
                             </div>
-
-
-
                         </div>
-
-
-
-
-
                     </div>
                 </div>
             </div>
