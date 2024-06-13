@@ -1,0 +1,11 @@
+.no-outline:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+.custom-button:hover {
+    background-color: #EEEDE7
+    ; /* Change this color to your desired hover color */
+    color: black; /* Optionally change the text color */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+  }

@@ -21,10 +21,18 @@ function UpperBar() {
                 </div>
 
                 <div className="col-4">
-                    <form className="d-flex" role="search">
-                        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
-                        <i className="bi bi-search align-middle" type="submit"></i>
-                    </form>
+                    <div className="input-group mb-3 p-2">
+                        <input
+                            type="text"
+                            className="form-control no-outline"
+                            placeholder="Search"
+                            aria-label="Search"
+                            aria-describedby="button-addon2">
+                        </input>
+                        <button className="btn btn-outline-secondary custom-button" type="button" id="button-addon2">
+                            <i className="bi bi-search"></i>
+                        </button>
+                    </div>
                 </div>
 
                 {/*
