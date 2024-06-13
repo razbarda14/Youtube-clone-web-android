@@ -1,4 +1,4 @@
-// import React, { useState } from 'react'; // Import useState
+// import React, { useState, useEffect } from 'react'; // Import useState
 // import './CurrentVideo.css';
 // import upThumb from '../photosVideo/hand-thumbs-up.svg';
 // import downThumb from '../photosVideo/hand-thumbs-down.svg';
@@ -19,16 +19,7 @@
 //   const handleInputChange = (event) => {
 //     setNewComment(event.target.value);
 //   };
-//   // add comment
-//   const handleAddComment = () => {
-//     // Check if comment is not empty
-//     if (newComment.trim() !== '') {
-//       // Add to the end of the array
-//       setComments([...comments, newComment]);
-//       // Clear the input field
-//       setNewComment('');
-//     }
-//   };
+ 
 //   // if i want to clear the text
 //   const handleCancelComment = () => {
 //     // Clear the input field
@@ -57,20 +48,7 @@
 //   const [isLiked, setIsLiked] = useState(false);
 //   const [isDisliked, setIsDisliked] = useState(false);
 
-//   const handleLikeClick = () => {
-//     // Toggle liked state
-//     setIsLiked(!isLiked);
-
-//     // If disliked, remove dislike and add a like
-//     if (isDisliked) {
-//       setIsDisliked(false);
-//       // +1 for new like, +1 for removing dislike
-//       setLikes(likes + 1); 
-//     } else {
-//       // Otherwise, adjust like count based on previous state
-//       setLikes(isLiked ? likes - 1 : likes + 1);
-//     }
-//   };
+  
 
 //   const handleDislikeClick = () => {
 //     // Toggle disliked state
@@ -86,14 +64,30 @@
 //       setLikes(isDisliked ? likes : likes);
 //     }
 //   };
-
+//   useEffect(() => {
+//     setComments(video.comments || []);
+//     setIsLiked(video.isLiked || false);
+//   }, [video]);
+//   const handleAddComment = () => {
+//     if (newComment.trim() !== '') {
+//       onCommentAdd(video.id, newComment);
+//       setNewComment('');
+//     }
+//   };
   
+//   const handleLikeClick = () => {
+//     setIsLiked(!isLiked);
+//     onLikeToggle(video.id);
+//   };
 //   return (
 //     <div>
+      
+
+
 //       {/* Watch Current Video */}
 //       <div className="current-video">
 //         <div className="mb-3">
-//           <video className="video-player" controls poster={video.thumbnail}>
+//           <video key={video.id} className="video-player" controls poster={video.thumbnail}>
 //             <source src={video.videoUrl} type="video/mp4" />
 //           </video>
 //         </div>
@@ -101,7 +95,8 @@
 //         <p>{video.description}</p>
 //         <div className="d-flex justify-content-between">
 //           <span>{video.channel}
-//             {video.views} • {video.uploadDate}</span>
+//             <p> {video.views} • {video.uploadDate}</p>
+//            </span>
 //         </div>
         
 //         {/* Buttons */}
@@ -111,17 +106,17 @@
 //           </button>
 //           <button className={`btn btn-light ${isLiked ? 'active-like' : ''}`} onClick={handleLikeClick}>
 //             {likes}
-//             <img src={isLiked ? upThumbBlack : upThumb} alt="Like" className="img-fluid" />
+//             <img src={isLiked ? upThumbBlack : upThumb} alt="" className="img-fluid" />
 //           </button>
 
 //           <button className="btn btn-light">Share
-//             <img src={Share} alt="Notifications" className="img-fluid" />
+//             <img src={Share} alt="" className="img-fluid" />
 //           </button>
 //           <button className="btn btn-light">Download
-//             <img src={Download} alt="Notifications" className="img-fluid" />
+//             <img src={Download} alt="" className="img-fluid" />
 //           </button>
 //           <button className="btn btn-light">Subscribe
-//             <img src={bell} alt="Notifications" className="img-fluid" />
+//             <img src={bell} alt="" className="img-fluid" />
 //           </button>
 
 //           </div>

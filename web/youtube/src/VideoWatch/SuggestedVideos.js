@@ -2,8 +2,8 @@ import React from 'react';
 import SuggestedVideoItem from './SuggestedVideoItem';
 import './WatchVideos.css';
 import './SuggestedVideos';
-function SuggestedVideos({videoData, onVideoSelect}) {
 
+function SuggestedVideos({videoData, onVideoSelect}) {
 
 
   return (

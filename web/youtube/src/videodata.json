@@ -1,103 +1,29 @@
 [
-    {
-      "id": 1,
-      "title": "Video Title 1",
-      "channel": "Channel 1",
-      "thumbnail": "/IMG_20220513_111520_238.jpg",
-       "videoUrl": "VID_142421208_140947_463.mp4",
-        "path": "/video/1",
-        "views": "1.1M",
-        "upload": "6 year ago"
-
-    },
-    {
-      "id": 2,
-      "title": "Video Title 2",
-      "channel": "Channel 2",
-      "thumbnail": "/IMG_20220208_132548_894.jpg",
-       "videoUrl": "VID-20220414-WA0030.mp4",
-        "path": "/video/2",
-        "views": "1.1M",
-        "upload": "6 year ago"
-    },
-    {
-      "id": 3,
-      "title": "Video Title 3",
-      "channel": "Channel 3",
-      "thumbnail": "/1.jpg",
-       "videoUrl": "/path/to/video1.mp4",
-        "path": "/video/3",
-        "views": "1.1M",
-        "upload": "6 year ago"
-    },
-    {
-      "id": 4,
-      "title": "Video Title 4",
-      "channel": "Channel 4",
-      "thumbnail": "/1.jpg",
-       "videoUrl": "/path/to/video1.mp4",
-        "path": "/video/4",
-        "views": "1.1M",
-        "upload": "6 year ago"
-    },
-    {
-      "id": 5,
-      "title": "Video Title 5",
-      "channel": "Channel 5",
-      "thumbnail": "/1.jpg",
-       "videoUrl": "/path/to/video1.mp4",
-        "path": "/video/5",
-        "views": "1.1M",
-        "upload": "6 year ago"
-    },
-    {
-      "id": 6,
-      "title": "Video Title 6",
-      "channel": "Channel 6",
-      "thumbnail": "/1.jpg",
-       "videoUrl": "/path/to/video1.mp4",
-        "path": "/video/6",
-        "views": "1.1M",
-        "upload": "6 year ago"
-    },
-    {
-      "id": 7,
-      "title": "Video Title 7",
-      "channel": "Channel 7",
-      "thumbnail": "/1.jpg",
-       "videoUrl": "/path/to/video1.mp4",
-        "path": "/video/7",
-        "views": "1.1M",
-        "upload": "6 year ago"
-    },
-    {
-      "id": 8,
-      "title": "Video Title 8",
-      "channel": "Channel 8",
-      "thumbnail": "/path/to/thumbnail8.jpg",
-       "videoUrl": "/path/to/video1.mp4",
-        "path": "/video/8",
-        "views": "1.1M",
-        "upload": "6 year ago"
-    },
-    {
-      "id": 9,
-      "title": "Video Title 9",
-      "channel": "Channel 9",
-      "thumbnail": "/path/to/thumbnail9.jpg",
-       "videoUrl": "/path/to/video1.mp4",
-        "path": "/video/9",
-        "views": "1.1M",
-        "upload": "6 year ago"
-    },
-    {
-      "id": 10,
-      "title": "Video Title 10",
-      "channel": "Channel 10",
-      "thumbnail": "/path/to/thumbnail10.jpg",
-       "videoUrl": "/path/to/video1.mp4",
-        "path": "/video/10",
-        "views": "1.1M",
-        "upload": "6 year ago"
-    }
-  ]
+{
+    "id": 1,
+    "title": "Sample Video 1",
+    "description": "This is the description for sample video 1.",
+    "thumbnail": "path/to/thumbnail1.jpg",
+    "videoUrl": "VID_142421208_140947_463.mp4",
+    "channel": "Channel 1",
+    "views": 1000,
+    "uploadDate": "2023-01-01",
+    "likes": 500,
+    "comments": ["Great video!", "Loved it!"],
+    "isLiked": false
+  },
+  {
+    "id": 2,
+    "title": "Sample Video 1",
+    "description": "This is the description for sample video 1.",
+    "thumbnail": "path/to/thumbnail1.jpg",
+    "videoUrl": "VID_142421208_140947_463.mp4",
+    "channel": "Channel 1",
+    "views": 1000,
+    "uploadDate": "2023-01-01",
+    "likes": 500,
+    "comments": ["Great video!", "Loved it!"],
+    "isLiked": false
+  }
+]
+  

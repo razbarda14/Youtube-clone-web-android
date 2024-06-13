@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // Import useState
+import React, { useState, useEffect } from 'react'; // Import useState
 import './CurrentVideo.css';
 import upThumb from '../photosVideo/hand-thumbs-up.svg';
 import downThumb from '../photosVideo/hand-thumbs-down.svg';
@@ -7,16 +7,7 @@ import downThumbBlack from '../photosVideo/hand-thumbs-down-fill.svg';
 import Share from '../photosVideo/share.svg';
 import Download from '../photosVideo/download.svg';
 import bell from '../photosVideo/bell.svg';
-// const video = {
-//   id: 1,
-//   title: 'Eyal Golan',
-//   description: 'Blumfid 2024.',
-//   channel: 'Channel Name ',
-//   views: '100M views',
-//   uploadDate: '1 sec ago',
-//   videoUrl: '/VID_142421208_140947_463.mp4', // This would be a URL to the video file or video platform
-//   thumbnail: '/IMG_20220513_111520_238.jpg' // Used as a placeholder before the video plays
-// };
+
 
 function CurrentVideo({video}) { // Receive video as a prop
  // Comments State
@@ -43,7 +34,7 @@ function CurrentVideo({video}) { // Receive video as a prop
     // Clear the input field
     setNewComment('');
   };
-
+  
   const handleEditComment = (index) => {
     setEditingCommentIndex(index);
     setEditedCommentText(comments[index]);
@@ -95,14 +86,28 @@ function CurrentVideo({video}) { // Receive video as a prop
       setLikes(isDisliked ? likes : likes);
     }
   };
-
-  
+  // useEffect(() => {
+  //   setComments(video.comments || []);
+  //   setIsLiked(video.isLiked || false);
+  // }, [video]);
+  useEffect(() => {
+    setNewComment('');
+    setComments([]);
+    setEditingCommentIndex(null);
+    setEditedCommentText('');
+    setLikes(500);
+    setIsLiked(false);
+    setIsDisliked(false);
+  }, [video]);
   return (
     <div>
+      
+
+
       {/* Watch Current Video */}
       <div className="current-video">
         <div className="mb-3">
-          <video className="video-player" controls poster={video.thumbnail}>
+          <video key={video.id} className="video-player" controls poster={video.thumbnail}>
             <source src={video.videoUrl} type="video/mp4" />
           </video>
         </div>
@@ -110,7 +115,8 @@ function CurrentVideo({video}) { // Receive video as a prop
         <p>{video.description}</p>
         <div className="d-flex justify-content-between">
           <span>{video.channel}
-            {video.views} • {video.uploadDate}</span>
+            <p> {video.views} • {video.uploadDate}</p>
+           </span>
         </div>
         
         {/* Buttons */}
@@ -120,17 +126,17 @@ function CurrentVideo({video}) { // Receive video as a prop
           </button>
           <button className={`btn btn-light ${isLiked ? 'active-like' : ''}`} onClick={handleLikeClick}>
             {likes}
-            <img src={isLiked ? upThumbBlack : upThumb} alt="Like" className="img-fluid" />
+            <img src={isLiked ? upThumbBlack : upThumb} alt="" className="img-fluid" />
           </button>
 
           <button className="btn btn-light">Share
-            <img src={Share} alt="Notifications" className="img-fluid" />
+            <img src={Share} alt="" className="img-fluid" />
           </button>
           <button className="btn btn-light">Download
-            <img src={Download} alt="Notifications" className="img-fluid" />
+            <img src={Download} alt="" className="img-fluid" />
           </button>
           <button className="btn btn-light">Subscribe
-            <img src={bell} alt="Notifications" className="img-fluid" />
+            <img src={bell} alt="" className="img-fluid" />
           </button>
 
           </div>

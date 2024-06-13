@@ -11,6 +11,13 @@
     display: flex;
     align-items: flex-start;
   }
+  .current-video {
+    display: flex; 
+    /* Adjust flex direction if needed */
+    flex-direction: column; /* Stack video and details vertically */
+  }
+  
+
   
   
   
