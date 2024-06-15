@@ -1,12 +1,11 @@
 import LeftMenu from '../leftMenu/LeftMenu';
-import ShowVideos from '../showVideos/ShowVideos';
-import videoList from '../videoItem/videos'
-import videos from '../videoItem/videos'
+import VideoItem from '../videoItem/VideoItem';
+import videosLibray from '../videoLibrary/videosLibrary'
 
 
 function MainBlock() {
     
-  const videoList = videos.map((video, key) => {
+  const videosList = videosLibray.map((video, key) => {
     return <VideoItem key={key} {...video} />
   }
   );
@@ -21,7 +20,7 @@ function MainBlock() {
           <div className="row">
             <div className="container">
               <div className="row">
-                {videoList}
+                {videosList}
               </div>
             </div>
           </div>

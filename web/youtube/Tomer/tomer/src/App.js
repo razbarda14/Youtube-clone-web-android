@@ -3,6 +3,7 @@ import VideoItem from './videoItem/VideoItem';
 import UpperBar from './upperBar/UpperBar';
 import TagSuggestion from './tagSuggestion/TagSuggestion';
 import LeftMenu from './leftMenu/LeftMenu';
+import MainBlock from './mainBlock/MainBlock';
 
 function App() {
 
@@ -10,6 +11,7 @@ function App() {
     <div className="App">
       <UpperBar/>
       <TagSuggestion/>
+      <MainBlock/>
     </div>
 
   );
