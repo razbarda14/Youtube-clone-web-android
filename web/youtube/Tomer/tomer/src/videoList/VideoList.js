@@ -2,9 +2,9 @@ import VideoPreviewCard from '../videoPreviewCard/VideoPreviewCard';
 import videosLibray from '../videoLibrary/videosLibrary'
 
 
-function VideoList() {
+function VideoList({ videos }) {
 
-    const videosToShow = videosLibray.map((video, key) => {
+    const videosToShow = videos.map((video, key) => {
         return <VideoPreviewCard key={key} {...video} />
     }
     );

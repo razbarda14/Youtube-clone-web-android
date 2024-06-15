@@ -1,9 +1,14 @@
 import './UpperBar.css'; // Import the CSS file for upperBar
 import youtubeLogo from "../img/youtube-logo.jpg"
 import { Route, Routes, Link } from 'react-router-dom';
+import React from 'react';
 
+function UpperBar({ setSearchQuery }) {
 
-function UpperBar() {
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+      };
+
     return (
         <div className="container-fluid upper-bar">
 
@@ -24,7 +29,9 @@ function UpperBar() {
                             className="form-control no-outline"
                             placeholder="Search"
                             aria-label="Search"
-                            aria-describedby="button-addon2">
+                            aria-describedby="button-addon2"
+                            onChange={handleSearchChange}
+                            >
                         </input>
                         <button className="btn btn-outline-secondary custom-button" type="button" id="button-addon2">
                             <i className="bi bi-search"></i>

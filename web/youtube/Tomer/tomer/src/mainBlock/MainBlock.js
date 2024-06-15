@@ -1,14 +1,14 @@
 import LeftMenu from '../leftMenu/LeftMenu';
 import VideoList from '../videoList/VideoList';
 
-function MainBlock() {
+function MainBlock({ videos }) {
     
   return (
 
       <div className="container-fluid">
       <div className="row">
         <LeftMenu/>
-        <VideoList/>
+        <VideoList videos={videos}/>
       </div>
     </div>
     

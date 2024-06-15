@@ -2,12 +2,12 @@ import UpperBar from "../upperBar/UpperBar";
 import TagSuggestion from "../tagSuggestion/TagSuggestion";
 import MainBlock from "../mainBlock/MainBlock";
 
-function MainScreen() {
+function MainScreen({ videos }) {
     return (
 
         <div className="main-content">
             <TagSuggestion/>
-            <MainBlock/>
+            <MainBlock videos={videos}/>
         </div>
 
     );
