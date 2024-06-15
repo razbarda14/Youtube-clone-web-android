@@ -3,7 +3,7 @@ import youtubeLogo from "../img/youtube-logo.jpg";
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
-function UpperBar({ setSearchQuery }) {
+function UpperBar({ setSearchQuery, setTagFilter }) {
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (event) => {
@@ -17,6 +17,7 @@ function UpperBar({ setSearchQuery }) {
   const handleLogoClick = () => {
     setSearchQuery('');
     setInputValue('');
+    setTagFilter('all');
   };
 
   return (

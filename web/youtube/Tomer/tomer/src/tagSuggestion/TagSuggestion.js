@@ -1,25 +1,27 @@
-import './TagSuggestion.css'; // Import the CSS file for VideoPreviewCard
+import './TagSuggestion.css'; // Import the CSS file for TagSuggestion
 
-function TagSuggestion() {
-    return (
-        <div className="row" style={{ padding: '5px' }}>
+function TagSuggestion({ setTagFilter }) {
+  const handleButtonClick = (event) => {
+    const topic = event.target.textContent.toLowerCase();
+    setTagFilter(topic === 'all' ? 'all' : topic);
+  };
 
-        {/* Intentionally empty space */}
-        <div className="col-3"></div>
-
-        <div className="col-9 align-middle">
-            <div className="d-flex justify-content-evenly">
-                <button type="button" className="btn btn-dark">All</button>
-                <button type="button" className="btn btn-light" data-bs-toggle="popover">Music</button>
-                <button type="button" className="btn btn-light">Sports</button>
-                <button type="button" className="btn btn-light">Italian cuisine</button>
-                <button type="button" className="btn btn-light">News</button>
-                <button type="button" className="btn btn-light">Gaming</button>
-            </div>
+  return (
+    <div className="row" style={{ padding: '5px' }}>
+      <div className="col-1"></div>
+      <div className="col-11 align-middle">
+        <div className="d-flex justify-content-evenly">
+          <button type="button" className="btn btn-dark" onClick={handleButtonClick}>All</button>
+          <button type="button" className="btn btn-light" onClick={handleButtonClick}>Music</button>
+          <button type="button" className="btn btn-light" onClick={handleButtonClick}>Sports</button>
+          <button type="button" className="btn btn-light" onClick={handleButtonClick}>Food</button>
+          <button type="button" className="btn btn-light" onClick={handleButtonClick}>Gaming</button>
+          <button type="button" className="btn btn-light" onClick={handleButtonClick}>Languages</button>
+          <button type="button" className="btn btn-light" onClick={handleButtonClick}>Travel</button>
         </div>
-
+      </div>
     </div>
-    );
+  );
 }
 
 export default TagSuggestion;

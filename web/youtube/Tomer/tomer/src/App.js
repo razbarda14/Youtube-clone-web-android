@@ -1,35 +1,30 @@
 import './App.css';
-import React from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
-import { useState } from 'react';
 import UpperBar from './upperBar/UpperBar';
+import { Route, Routes } from 'react-router-dom';
+import React, { useState } from 'react';
 import MainScreen from './mainScreen/MainScreen';
 import UploadVideo from './uploadVideo/UploadVideo';
 import videos from './videoLibrary/videosLibrary';
 
 function App() {
-
   const [searchQuery, setSearchQuery] = useState('');
+  const [tagFilter, setTagFilter] = useState('all');
+  const [videoList, setVideoList] = useState(videos);
 
-  const filteredVideos = videos.filter(video =>
-    video.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredVideos = videoList.filter(video => {
+    const matchesTag = tagFilter === 'all' || video.topic.toLowerCase() === tagFilter.toLowerCase();
+    const matchesSearch = searchQuery === '' || video.title.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesTag && matchesSearch;
+  });
 
   return (
-
     <div className="App">
-
-      <UpperBar setSearchQuery={setSearchQuery}/>
-
+      <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter} />
       <Routes>
-      <Route path='/' element={<MainScreen videos={filteredVideos}/>} />
-      <Route path='/uploadVideo' element={<UploadVideo/>}></Route>
+        <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter} />} />
+        <Route path='/uploadVideo' element={<UploadVideo />} />
       </Routes>
-
-
-
     </div>
-
   );
 }
 
