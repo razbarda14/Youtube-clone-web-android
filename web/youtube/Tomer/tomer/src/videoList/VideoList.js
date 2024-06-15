@@ -1,11 +1,11 @@
-import VideoItem from '../videoItem/VideoItem';
+import VideoPreviewCard from '../videoPreviewCard/VideoPreviewCard';
 import videosLibray from '../videoLibrary/videosLibrary'
 
 
 function VideoList() {
 
     const videosToShow = videosLibray.map((video, key) => {
-        return <VideoItem key={key} {...video} />
+        return <VideoPreviewCard key={key} {...video} />
     }
     );
 

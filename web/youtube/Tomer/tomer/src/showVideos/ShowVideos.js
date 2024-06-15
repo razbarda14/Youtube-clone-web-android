@@ -1,9 +1,10 @@
-import videos from '../videoItem/videos'
-import VideoItem from '../videoItem/VideoItem';
+import './ShowVideos.css';
+import videos from '../videoPreviewCard/videos';
+import VideoPreviewCard from '../videoPreviewCard/VideoPreviewCard';
 
 function ShowVideos() {
     const getVideos = videos.map((video, key) => {
-        return <VideoItem key={key} {...video} />
+        return <VideoPreviewCard key={key} {...video} />
     }
     );
 

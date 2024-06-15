@@ -4,11 +4,12 @@ import MainBlock from "../mainBlock/MainBlock";
 
 function MainScreen() {
     return (
-        <div>
-            <UpperBar/>
+
+        <div className="main-content">
             <TagSuggestion/>
             <MainBlock/>
         </div>
+
     );
 }
 

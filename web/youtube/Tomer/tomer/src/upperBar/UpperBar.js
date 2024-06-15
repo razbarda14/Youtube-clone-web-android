@@ -1,23 +1,20 @@
 import './UpperBar.css'; // Import the CSS file for upperBar
 import youtubeLogo from "../img/youtube-logo.jpg"
+import { Route, Routes, Link } from 'react-router-dom';
+
 
 function UpperBar() {
     return (
-        <div className="container-fluid bg-white">
-            {/*
-              <!-- Icon, search bar, sign in bar -->
-            */}
-            <div className="row" style={{ height: '50px' }}>
+        <div className="container-fluid upper-bar">
+
+            <div className="row">
 
                 <div className="col-4">
-                    <div>
-                        <button type="button" className="btn btn-light align-middle">
-                            <i className="bi bi-list"></i>
-                        </button>
-
-                        <img src={youtubeLogo} alt="Youtube Icon" height="60px"></img>
-
-                    </div>
+                    <nav>
+                        <Link to='/'>
+                            <img src={youtubeLogo} alt="Clickable" height="60px"></img>
+                        </Link>
+                    </nav>
                 </div>
 
                 <div className="col-4">
@@ -35,19 +32,25 @@ function UpperBar() {
                     </div>
                 </div>
 
-                {/*
-                Intentionally empty space
-                */}
-                <div className="col-2"></div>
+                <div className="col-2">
+                    <nav>
+                        <Link to='/uploadVideo'>
+                            <button type="button" className="btn btn-outline-secondary">
+                                <i class="bi bi-upload"></i>
+                            </button>
+                        </Link>
+                    </nav>
+                </div>
 
                 <div className="col-2">
+
                     <button type="button" className="btn btn-outline-secondary">
                         <i className="bi bi-moon"></i>
                     </button>
                     <button type="button" className="btn btn-outline-primary align-middle">Sign in</button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

@@ -1,11 +1,27 @@
+.upper-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure it's above other content */
+  background-color: white; 
+  height: 60px;
+}
+
 .no-outline:focus {
-    outline: none;
-    box-shadow: none;
-  }
-  
+  outline: none;
+  box-shadow: none;
+}
+
 .custom-button:hover {
-    background-color: #EEEDE7
-    ; /* Change this color to your desired hover color */
-    color: black; /* Optionally change the text color */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
-  }
+  background-color: #EEEDE7;
+  color: black;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.centered-items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+

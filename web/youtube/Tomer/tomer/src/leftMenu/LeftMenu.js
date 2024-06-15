@@ -3,7 +3,7 @@ function LeftMenu() {
         <div className="col-lg-2 col-md-2 col-sm-1">
         <div className="row">
           <div className="col">
-            <ul className="list-group">
+            <ul className="list-group left-menu">
               <li className="list-group-item d-flex justify-content-between align-items-center">
                 Home
                 <i className="bi bi-house"></i>

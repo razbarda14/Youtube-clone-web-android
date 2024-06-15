@@ -1,6 +1,6 @@
-import './VideoItem.css'; // Import the CSS file for VideoItem
+import './VideoPreviewCard.css'; // Import the CSS file for VideoPreviewCard
 
-function VideoItem(video) {
+function VideoPreviewCard(video) {
     return (
         <div className="col-4">
             <div className="card card-hover-effect">
@@ -15,4 +15,4 @@ function VideoItem(video) {
     );
 }
 
-export default VideoItem;
+export default VideoPreviewCard;

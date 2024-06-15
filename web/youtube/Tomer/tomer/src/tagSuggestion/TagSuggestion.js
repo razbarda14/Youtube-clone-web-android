@@ -1,4 +1,4 @@
-import './TagSuggestion.css'; // Import the CSS file for VideoItem
+import './TagSuggestion.css'; // Import the CSS file for VideoPreviewCard
 
 function TagSuggestion() {
     return (
