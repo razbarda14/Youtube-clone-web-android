@@ -8,7 +8,8 @@ function VideoPreviewCard(video) {
                 <div className="card-body">
                     <h5 className="card-title">{video.title}</h5>
                     <p className="card-text">{video.description}</p>
-                    <p className="card-text">{video.viewsCount} views, {video.dateUploaded}</p>
+                    <p className="card-text">{video.viewsCount} views</p>
+                    <p className="card-text">Upload Date: {video.dateUploaded}</p>
                 </div>
             </div>
         </div>

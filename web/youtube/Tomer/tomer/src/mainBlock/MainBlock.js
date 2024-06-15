@@ -8,7 +8,7 @@ function MainBlock({ videos }) {
       <div className="container-fluid">
       <div className="row">
         <LeftMenu/>
-        <VideoList videos={videos}/>
+        <VideoList videos={ videos }/>
       </div>
     </div>
     
