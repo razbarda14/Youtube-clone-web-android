@@ -8,7 +8,7 @@ const videos = [
     { title: 'c', description: 'aa', viewsCount: '86k',   dateUploaded: '2a',   image: champions },
     { title: 'd', description: 'aa', viewsCount: '90k',   dateUploaded: '2a',   image: champions },
     { title: 'e', description: 'aa', viewsCount: '78k',   dateUploaded: '2a',   image: champions },
-    { title: 'f', description: 'aa', viewsCount: '150k',  dateUploaded: '2a',   image: champions }
+    { title: 'faa', description: 'aa', viewsCount: '150k',  dateUploaded: '2a',   image: champions }
   ];
 
   export default videos;
