@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
 function UpperBar({ setSearchQuery, setTagFilter }) {
+  
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (event) => {

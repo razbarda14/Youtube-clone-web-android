@@ -17,12 +17,16 @@ function App() {
     return matchesTag && matchesSearch;
   });
 
+  const addVideo = (newVideo) => {
+    setVideoList([...videoList, newVideo]);
+  };
+
   return (
     <div className="App">
       <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter} />
       <Routes>
         <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter} />} />
-        <Route path='/uploadVideo' element={<UploadVideo />} />
+        <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} />} />
       </Routes>
     </div>
   );
