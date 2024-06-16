@@ -1,217 +1,126 @@
-// import React, { useState, useEffect } from 'react'; // Import useState
-// import './CurrentVideo.css';
-// import upThumb from '../photosVideo/hand-thumbs-up.svg';
-// import downThumb from '../photosVideo/hand-thumbs-down.svg';
-// import upThumbBlack from '../photosVideo/hand-thumbs-up-fill.svg';
-// import downThumbBlack from '../photosVideo/hand-thumbs-down-fill.svg';
-// import Share from '../photosVideo/share.svg';
-// import Download from '../photosVideo/download.svg';
-// import bell from '../photosVideo/bell.svg';
+// import React, { useState, useEffect } from 'react';
 
+// function Comments({video, onCommentAdd, onCommentDelete, onCommentEdit }) { 
+//     // Comments State
+//     const [newComment, setNewComment] = useState('');
+//     const [comments, setComments] = useState(video.comments || []); 
+//     const [editingComment, setEditingComment] = useState(null); 
 
-// function CurrentVideo({video}) { // Receive video as a prop
-//  // Comments State
-//  const [newComment, setNewComment] = useState('');
-//  const [comments, setComments] = useState([]);
-//  const [editingCommentIndex, setEditingCommentIndex] = useState(null);
-//  const [editedCommentText, setEditedCommentText] = useState('');
+//     const [addCommentText, setAddCommentText] = useState(''); 
 
-//   const handleInputChange = (event) => {
-//     setNewComment(event.target.value);
-//   };
-//   // add comment
-//   const handleAddComment = () => {
-//     // Check if comment is not empty
-//     if (newComment.trim() !== '') {
-//       // Add to the end of the array
-//       setComments([...comments, newComment]);
-//       // Clear the input field
-//       setNewComment('');
-//     }
-//   };
-//   // if i want to clear the text
-//   const handleCancelComment = () => {
-//     // Clear the input field
-//     setNewComment('');
-//   };
+//     useEffect(() => {
+//         setComments(video.comments || []);
+//     }, [video]);
+
+//     // Input Change Handler for the Add Comment Field
+//     const handleAddInputChange = (event) => {
+//         setAddCommentText(event.target.value); 
+//     };
+//     // add comment
+//     const handleAddComment = () => {
+//         // Check if comment is not empty
+//         if (addCommentText.trim() !== '') {
+//             onCommentAdd(video.id, addCommentText);
+//             setAddCommentText('');
+//         }
+//     };
+//     // if i want to clear the text
+//     const handleCancelComment = () => {
+//         // Clear the input field
+//         setAddCommentText('');  // Clear the add comment field
+//         setEditingComment(null); // Clear the editing comment state
+//     };
+
+//     // Input Change Handler for the Edit Comment Field
+//     const handleEditInputChange = (event, index) => {
+//         if (editingComment && editingComment.index === index) {
+//           setEditingComment({ ...editingComment, text: event.target.value });
+//         }
+//     };
+
+//     const handleEditComment = (index, comment) => {
+//         setEditingComment({ index, text: comment });
+//     };
+//     const handleSaveComment = (index) => {
+//       if (editingComment.text.trim() !== "") { 
+//         onCommentEdit(video.id, index, editingComment.text);
+//         setEditingComment(null); 
+//       } else {
+//         alert("Comment cannot be empty."); 
+//       }
+//     };
   
-//   const handleEditComment = (index) => {
-//     setEditingCommentIndex(index);
-//     setEditedCommentText(comments[index]);
-//   };
 
-//   const handleSaveComment = () => {
-//     const updatedComments = [...comments];
-//     updatedComments[editingCommentIndex] = editedCommentText;
-//     setComments(updatedComments);
-//     setEditingCommentIndex(null);
-//     setEditedCommentText('');
-//   };
+//     const handleDeleteComment = (index) => {
+//         onCommentDelete(video.id, index);
+//     };
 
-//   const handleDeleteComment = (index) => {
-//     setComments(comments.filter((_, i) => i !== index));
-//   };
-
-//   // Likes State: initial value of 500
-//   const [likes, setLikes] = useState(500);
-//   const [isLiked, setIsLiked] = useState(false);
-//   const [isDisliked, setIsDisliked] = useState(false);
-
-//   const handleLikeClick = () => {
-//     // Toggle liked state
-//     setIsLiked(!isLiked);
-
-//     // If disliked, remove dislike and add a like
-//     if (isDisliked) {
-//       setIsDisliked(false);
-//       // +1 for new like, +1 for removing dislike
-//       setLikes(likes + 1); 
-//     } else {
-//       // Otherwise, adjust like count based on previous state
-//       setLikes(isLiked ? likes - 1 : likes + 1);
-//     }
-//   };
-
-//   const handleDislikeClick = () => {
-//     // Toggle disliked state
-//     setIsDisliked(!isDisliked);
-
-//     // If liked, remove like and add a dislike
-//     if (isLiked) {
-//       setIsLiked(false);
-//       // -1 for new dislike, -1 for removing like
-//       setLikes(likes - 1); 
-//     } else {
-//       // Otherwise, adjust like count based on previous state
-//       setLikes(isDisliked ? likes : likes);
-//     }
-//   };
-//   // useEffect(() => {
-//   //   setComments(video.comments || []);
-//   //   setIsLiked(video.isLiked || false);
-//   // }, [video]);
-//   useEffect(() => {
-//     setNewComment('');
-//     setComments([]);
-//     setEditingCommentIndex(null);
-//     setEditedCommentText('');
-//     setLikes(500);
-//     setIsLiked(false);
-//     setIsDisliked(false);
-//   }, [video]);
-//   return (
-//     <div>
-      
-
-
-//       {/* Watch Current Video */}
-//       <div className="current-video">
-//         <div className="mb-3">
-//           <video key={video.id} className="video-player" controls poster={video.thumbnail}>
-//             <source src={video.videoUrl} type="video/mp4" />
-//           </video>
-//         </div>
-//         <h3>{video.title}</h3>
-//         <p>{video.description}</p>
-//         <div className="d-flex justify-content-between">
-//           <span>{video.channel}
-//             <p> {video.views} • {video.uploadDate}</p>
-//            </span>
-//         </div>
-        
-//         {/* Buttons */}
-//         <div className="video-buttons mt-3">
-//           <button className={`btn btn-light ${isDisliked ? 'active-dislike' : ''}`} onClick={handleDislikeClick}>
-//             <img src={isDisliked ? downThumbBlack : downThumb} alt="Dislike" className="img-fluid" />
-//           </button>
-//           <button className={`btn btn-light ${isLiked ? 'active-like' : ''}`} onClick={handleLikeClick}>
-//             {likes}
-//             <img src={isLiked ? upThumbBlack : upThumb} alt="" className="img-fluid" />
-//           </button>
-
-//           <button className="btn btn-light">Share
-//             <img src={Share} alt="" className="img-fluid" />
-//           </button>
-//           <button className="btn btn-light">Download
-//             <img src={Download} alt="" className="img-fluid" />
-//           </button>
-//           <button className="btn btn-light">Subscribe
-//             <img src={bell} alt="" className="img-fluid" />
-//           </button>
-
-//           </div>
-
-
-//         {/* Comment Input and Buttons */}
-//         <div className="input-group mt-3">
-//         {editingCommentIndex !== null ? (
-//           <>
-//             <input 
-//               type="text" 
-//               className="form-control" 
-//               value={editedCommentText}
-//               onChange={(e) => setEditedCommentText(e.target.value)} 
-//             />
-//             <div className="input-group-append">
-//               <button onClick={handleSaveComment}>Save</button>
-//               <button onClick={() => setEditingCommentIndex(null)}>Cancel</button>
+//     return (
+//         <div>
+//             {/* Comment Input and Buttons */}
+//             <div className="input-group mt-3">
+//                 <input
+//                     type="text"
+//                     className="form-control"
+//                     placeholder="Add a comment..."
+//                     value={addCommentText} // Use the addCommentText state
+//                     onChange={handleAddInputChange} // Use the new input change handler
+//                 />
+//                 <div className="input-group-append">
+//                     <button
+//                         className="btn btn-outline-secondary"
+//                         type="button"
+//                         onClick={handleAddComment}
+//                         disabled={addCommentText.trim() === ''}
+//                     >
+//                         Send
+//                     </button>
+//                     <button
+//                         className="btn btn-outline-secondary"
+//                         type="button"
+//                         onClick={handleCancelComment}
+//                     >
+//                         Cancel
+//                     </button> 
+//                 </div>
 //             </div>
-//           </>
-//         ) : (
-//           <>
-//             <input
-//               type="text"
-//               className="form-control"
-//               placeholder="Add a comment..."
-//               value={newComment}
-//               onChange={handleInputChange}
-//             />
-//             <div className="input-group-append">
-//               <button 
-//                 className="btn btn-outline-secondary"
-//                 type="button"
-//                 onClick={handleAddComment}
-//                 disabled={newComment.trim() === ''}
-//               >
-//                 Send
-//               </button>
-//               <button
-//                 className="btn btn-outline-secondary"
-//                 type="button"
-//                 onClick={handleCancelComment}
-//               >
-//                 Cancel
-//               </button>
+//             {/* Comments Section */}
+//             <div className="comments-section mt-3">
+//                 {comments.map((comment, index) => (
+//                     <div key={index} className="comment-container">
+//                         {editingComment && editingComment.index === index ? ( 
+//                             <div className="d-flex">
+//                                 <input 
+//                                     type="text"
+//                                     className="form-control"
+//                                     value={editingComment.text} // Use editingComment.text
+//                                     onChange={(e) => handleEditInputChange(e, index)} // Pass index to update handler
+//                                 />
+//                                 <div className="input-group-append">
+//                                     <button 
+//                                       className="btn btn-outline-secondary" 
+//                                       onClick={() => handleSaveComment(index)}
+//                                       disabled={editingComment.text.trim() === ''} 
+//                                     >
+//                                       Save
+//                                     </button>
+//                                     <button className="btn btn-outline-secondary" onClick={() => handleCancelComment()}>Cancel</button> 
+//                                 </div>
+//                             </div>
+//                         ) : (
+//                             <>
+//                                 <p>{comment}</p>
+//                                 <div className="input-group-append">
+//                                     <button className="btn btn-outline-secondary" onClick={() => handleEditComment(index, comment)}>Edit</button>
+//                                     <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(index)}>Delete</button>
+//                                 </div>
+//                             </>
+//                         )}
+//                     </div>
+//                 ))}
 //             </div>
-//           </>
-//         )}
-//       </div>
-//         {/* Comments Section */}
-//         <div className="comments-section mt-3">
-//         {comments.map((comment, index) => (
-//           <div key={index} className="comment-container"> 
-//             {editingCommentIndex === index ? ( 
-//               <input 
-//                 type="text"
-//                 value={editedCommentText}
-//                 onChange={(e) => setEditedCommentText(e.target.value)}
-//               />
-//             ) : (
-//               <p>{comment}</p>
-//             )}
-//             {editingCommentIndex !== index && (
-//               <>
-//                 <button onClick={() => handleEditComment(index)}>Edit</button>
-//                 <button onClick={() => handleDeleteComment(index)}>Delete</button>
-//               </>
-//             )}
-//           </div>
-//         ))}
-//       </div>
-
-//       </div>
-//     </div>
-//   );
+//         </div>
+//     );
 // }
 
-// export default CurrentVideo;
+// export default Comments;

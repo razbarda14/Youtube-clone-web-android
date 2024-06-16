@@ -1,5 +1,6 @@
-import Toolbar from './Toolbar';
+// WatchVideo.js (updated)
 import React, { useState } from 'react';
+import Toolbar from './Toolbar';
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
 import './WatchVideos.css';
@@ -17,12 +18,11 @@ function WatchVideo() {
     setVideos(prevVideos =>
       prevVideos.map(video => {
         if (video.id === videoId) {
-          // Toggle isLiked, update likes, and reset isDisliked
           return {
             ...video,
             isLiked: !video.isLiked,
             likes: video.isLiked ? video.likes - 1 : video.likes + 1,
-            isDisliked: false
+            isDisliked: false 
           };
         } else {
           return video;
@@ -35,8 +35,8 @@ function WatchVideo() {
     setVideos(prevVideos =>
       prevVideos.map(video => {
         if (video.id === videoId) {
-          return {
-            ...video,
+          return { 
+            ...video, 
             isDisliked: !video.isDisliked,
             isLiked: false,
             likes: video.isLiked ? video.likes - 1 : video.likes  // Update likes if previously liked
@@ -47,6 +47,7 @@ function WatchVideo() {
       })
     );
   };
+  
   const handleCommentAdd = (videoId, comment) => {
     setVideos(prevVideos =>
       prevVideos.map(video =>
@@ -76,6 +77,7 @@ function WatchVideo() {
       )
     );
   };
+
   return (
     <div>
       <Toolbar />

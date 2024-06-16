@@ -1,111 +1,126 @@
-// Comments.js
-import React, { useState } from 'react'; // Import useState
+import React, { useState, useEffect } from 'react';
 
-function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit }) {
-  const [newComment, setNewComment] = useState('');
-  const [editingCommentIndex, setEditingCommentIndex] = useState(null);
-  const [editedCommentText, setEditedCommentText] = useState('');
+function Comments({video, onCommentAdd, onCommentDelete, onCommentEdit }) { 
+    // Comments State
+    const [newComment, setNewComment] = useState('');
+    const [comments, setComments] = useState(video.comments || []); 
+    const [editingComment, setEditingComment] = useState(null); 
 
-  const handleInputChange = (event) => {
-    setNewComment(event.target.value);
-  };
+    const [addCommentText, setAddCommentText] = useState(''); 
 
-  const handleAddComment = () => {
-    if (newComment.trim() !== '' && onCommentAdd) {
-      onCommentAdd(video.id, newComment); 
-      setNewComment('');
-    }
-  };
+    useEffect(() => {
+        setComments(video.comments || []);
+    }, [video]);
 
-  const handleCancelComment = () => {
-    setNewComment('');
-  };
+    // Input Change Handler for the Add Comment Field
+    const handleAddInputChange = (event) => {
+        setAddCommentText(event.target.value); 
+    };
+    // add comment
+    const handleAddComment = () => {
+        // Check if comment is not empty
+        if (addCommentText.trim() !== '') {
+            onCommentAdd(video.id, addCommentText);
+            setAddCommentText('');
+        }
+    };
+    // if i want to clear the text
+    const handleCancelComment = () => {
+        // Clear the input field
+        setAddCommentText('');  // Clear the add comment field
+        setEditingComment(null); // Clear the editing comment state
+    };
 
-  const handleEditComment = (index) => {
-    setEditingCommentIndex(index);
-    setEditedCommentText(video.comments[index]);
-  };
+    // Input Change Handler for the Edit Comment Field
+    const handleEditInputChange = (event, index) => {
+        if (editingComment && editingComment.index === index) {
+          setEditingComment({ ...editingComment, text: event.target.value });
+        }
+    };
 
-  const handleSaveComment = () => {
-    onCommentEdit(video.id, editingCommentIndex, editedCommentText);
-    setEditingCommentIndex(null);
-    setEditedCommentText('');
-  };
+    const handleEditComment = (index, comment) => {
+        setEditingComment({ index, text: comment });
+    };
+    const handleSaveComment = (index) => {
+      if (editingComment.text.trim() !== "") { 
+        onCommentEdit(video.id, index, editingComment.text);
+        setEditingComment(null); 
+      } else {
+        alert("Comment cannot be empty."); 
+      }
+    };
+  
 
-  const handleDeleteComment = (index) => {
-    onCommentDelete(video.id, index);
-  };
+    const handleDeleteComment = (index) => {
+        onCommentDelete(video.id, index);
+    };
 
-  return (
-    <div>
-      {/* Comment Input and Buttons */}
-      <div className="input-group mt-3">
-        {editingCommentIndex !== null ? (
-          <>
-            <input
-              type="text"
-              className="form-control"
-              value={editedCommentText}
-              onChange={(e) => setEditedCommentText(e.target.value)}
-            />
-            <div className="input-group-append">
-              <button className="btn btn-outline-secondary" onClick={handleSaveComment}>Save</button>
-              <button className="btn btn-outline-secondary" onClick={() => setEditingCommentIndex(null)}>Cancel</button>
+    return (
+        <div>
+            {/* Comment Input and Buttons */}
+            <div className="input-group mt-3">
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Add a comment..."
+                    value={addCommentText} // Use the addCommentText state
+                    onChange={handleAddInputChange} // Use the new input change handler
+                />
+                <div className="input-group-append">
+                    <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={handleAddComment}
+                        disabled={addCommentText.trim() === ''}
+                    >
+                        Send
+                    </button>
+                    <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={handleCancelComment}
+                    >
+                        Cancel
+                    </button> 
+                </div>
             </div>
-          </>
-        ) : (
-          <>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Add a comment..."
-              value={newComment}
-              onChange={handleInputChange}
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={handleAddComment}
-                disabled={newComment.trim() === ''}
-              >
-                Send
-              </button>
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={handleCancelComment}
-              >
-                Cancel
-              </button>
+            {/* Comments Section */}
+            <div className="comments-section mt-3">
+                {comments.map((comment, index) => (
+                    <div key={index} className="comment-container">
+                        {editingComment && editingComment.index === index ? ( 
+                            <div className="d-flex">
+                                <input 
+                                    type="text"
+                                    className="form-control"
+                                    value={editingComment.text} // Use editingComment.text
+                                    onChange={(e) => handleEditInputChange(e, index)} // Pass index to update handler
+                                />
+                                <div className="input-group-append">
+                                    <button 
+                                      className="btn btn-outline-secondary" 
+                                      onClick={() => handleSaveComment(index)}
+                                      disabled={editingComment.text.trim() === ''} 
+                                    >
+                                      Save
+                                    </button>
+                                    <button className="btn btn-outline-secondary" onClick={() => handleCancelComment()}>Cancel</button> 
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                <p>{comment}</p>
+                                <div className="input-group-append">
+                                    <button className="btn btn-outline-secondary" onClick={() => handleEditComment(index, comment)}>Edit</button>
+                                    <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(index)}>Delete</button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ))}
             </div>
-          </>
-        )}
-      </div>
-
-      {/* Comments Section */}
-      <div className="comments-section mt-3">
-        {video && video.comments && video.comments.map((comment, index) => (
-          <div key={index} className="comment-container">
-            {editingCommentIndex === index ? (
-              <input
-                type="text"
-                value={editedCommentText}
-                onChange={(e) => setEditedCommentText(e.target.value)}
-              />
-            ) : (
-              <p>{comment}</p>
-            )}
-            {editingCommentIndex !== index && (
-              <>
-                <button className="btn btn-outline-secondary" onClick={() => handleEditComment(index)}>Edit</button>
-                <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(index)}>Delete</button>
-              </>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
+
 export default Comments;

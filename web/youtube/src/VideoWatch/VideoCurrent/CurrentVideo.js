@@ -5,11 +5,10 @@ import Comments from './UserOption/Comments';
 import ScreenVideo from './ScreenVideo';
 
 
-function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCommentDelete, onCommentEdit }) { // Receive video as a prop
+function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCommentDelete, onCommentEdit }) {
 
   return (
     <div>
-
       <ScreenVideo
         video={video}
       />
