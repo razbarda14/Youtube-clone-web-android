@@ -14,7 +14,7 @@ function UploadVideo({ addVideo }) {
 
     // Check if title is provided
     if (!title.trim()) {
-      setErrorMessage('Title is required');
+      setErrorMessage('Please enter a title for the video.');
       return;
     }
 
@@ -27,6 +27,7 @@ function UploadVideo({ addVideo }) {
       image: 'default.jpg', // Placeholder image, update this as needed
       topic
     };
+
     addVideo(newVideo);
     // Show success message
     setSuccessMessage(true);
@@ -77,6 +78,10 @@ function UploadVideo({ addVideo }) {
               required
             />
           </div>
+
+          {/* <div className="mb-3">
+            <input className="form-control" type="file" id="formFile"></input>
+          </div> */}
 
           <div className="mb-3">
             <label className="form-label">Description</label>

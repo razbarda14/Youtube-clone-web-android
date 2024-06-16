@@ -1,5 +1,6 @@
-import TagSuggestion from "../tagSuggestion/TagSuggestion";
-import MainBlock from "../mainBlock/MainBlock";
+import './MainScreen.css';
+import TagSuggestion from '../tagSuggestion/TagSuggestion';
+import MainBlock from '../mainBlock/MainBlock';
 
 function MainScreen({ videos, setTagFilter }) {
   return (
