@@ -14,20 +14,22 @@ function App() {
       <div className={darkMode ? 'dark-mode' : 'light-mode'}>
         <DarkModeToggle />
         <Routes>
-          <Route path="/WatchVideo" element={<WatchVideo />} /> 
-          {videoData.map(video => (
-            <Route 
-              key={video.id} 
-              path={video.path} // Use the path from your video data
-              element={<WatchVideo video={video} />} 
-            />
-          ))}
-         
+          <Route path="/WatchVideo" element={<WatchVideo />} />         
         </Routes>
       </div>
+      
     </div>
 
   );
 }
 
 export default App;
+
+
+// {videoData.map(video => (
+//   <Route 
+//     key={video.id} 
+//     path={video.path} // Use the path from your video data
+//     element={<WatchVideo video={video} />} 
+//   />
+// ))}

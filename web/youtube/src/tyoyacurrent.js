@@ -19,13 +19,22 @@
 //   const handleInputChange = (event) => {
 //     setNewComment(event.target.value);
 //   };
- 
+//   // add comment
+//   const handleAddComment = () => {
+//     // Check if comment is not empty
+//     if (newComment.trim() !== '') {
+//       // Add to the end of the array
+//       setComments([...comments, newComment]);
+//       // Clear the input field
+//       setNewComment('');
+//     }
+//   };
 //   // if i want to clear the text
 //   const handleCancelComment = () => {
 //     // Clear the input field
 //     setNewComment('');
 //   };
-
+  
 //   const handleEditComment = (index) => {
 //     setEditingCommentIndex(index);
 //     setEditedCommentText(comments[index]);
@@ -48,7 +57,20 @@
 //   const [isLiked, setIsLiked] = useState(false);
 //   const [isDisliked, setIsDisliked] = useState(false);
 
-  
+//   const handleLikeClick = () => {
+//     // Toggle liked state
+//     setIsLiked(!isLiked);
+
+//     // If disliked, remove dislike and add a like
+//     if (isDisliked) {
+//       setIsDisliked(false);
+//       // +1 for new like, +1 for removing dislike
+//       setLikes(likes + 1); 
+//     } else {
+//       // Otherwise, adjust like count based on previous state
+//       setLikes(isLiked ? likes - 1 : likes + 1);
+//     }
+//   };
 
 //   const handleDislikeClick = () => {
 //     // Toggle disliked state
@@ -64,21 +86,19 @@
 //       setLikes(isDisliked ? likes : likes);
 //     }
 //   };
+//   // useEffect(() => {
+//   //   setComments(video.comments || []);
+//   //   setIsLiked(video.isLiked || false);
+//   // }, [video]);
 //   useEffect(() => {
-//     setComments(video.comments || []);
-//     setIsLiked(video.isLiked || false);
+//     setNewComment('');
+//     setComments([]);
+//     setEditingCommentIndex(null);
+//     setEditedCommentText('');
+//     setLikes(500);
+//     setIsLiked(false);
+//     setIsDisliked(false);
 //   }, [video]);
-//   const handleAddComment = () => {
-//     if (newComment.trim() !== '') {
-//       onCommentAdd(video.id, newComment);
-//       setNewComment('');
-//     }
-//   };
-  
-//   const handleLikeClick = () => {
-//     setIsLiked(!isLiked);
-//     onLikeToggle(video.id);
-//   };
 //   return (
 //     <div>
       
