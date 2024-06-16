@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
 function UpperBar({ setSearchQuery, setTagFilter }) {
-  
+
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (event) => {
@@ -23,16 +23,14 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
 
   return (
     <div className="container-fluid upper-bar">
-      <div className="row">
-        <div className="col-4">
-          <nav>
-            <Link to='/' onClick={handleLogoClick}>
-              <img src={youtubeLogo} alt="Clickable" height="60px" />
-            </Link>
-          </nav>
+      <div className="row align-items-center">
+        <div className="col-4 d-flex align-items-center my-height">
+          <Link to='/' onClick={handleLogoClick}>
+            <img src={youtubeLogo} alt="Clickable" height="60px" />
+          </Link>
         </div>
-        <div className="col-4">
-          <div className="input-group mb-3 p-2">
+        <div className="col-4 d-flex align-items-center justify-content-center my-height">
+          <div className="input-group mb-3 push-down">
             <input
               type="text"
               className="form-control no-outline"
@@ -52,17 +50,15 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
             </button>
           </div>
         </div>
-        <div className="col-2">
-          <nav>
-            <Link to='/uploadVideo'>
-              <button type="button" className="btn btn-outline-secondary">
-                <i className="bi bi-upload"></i>
-              </button>
-            </Link>
-          </nav>
+        <div className="col-2 d-flex align-items-center justify-content-center my-height">
+          <Link to='/uploadVideo'>
+            <button type="button" className="btn btn-outline-secondary">
+              <i className="bi bi-upload"></i>
+            </button>
+          </Link>
         </div>
-        <div className="col-2">
-          <button type="button" className="btn btn-outline-secondary">
+        <div className="col-2 d-flex align-items-center justify-content-center my-height">
+          <button type="button" className="btn btn-outline-secondary me-2">
             <i className="bi bi-moon"></i>
           </button>
           <button type="button" className="btn btn-outline-primary align-middle">Sign in</button>
