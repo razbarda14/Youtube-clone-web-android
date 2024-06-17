@@ -79,10 +79,6 @@ function UploadVideo({ addVideo }) {
             />
           </div>
 
-          {/* <div className="mb-3">
-            <input className="form-control" type="file" id="formFile"></input>
-          </div> */}
-
           <div className="mb-3">
             <label className="form-label">Description</label>
             <input
