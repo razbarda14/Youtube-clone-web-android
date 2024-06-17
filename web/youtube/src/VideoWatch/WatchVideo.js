@@ -13,6 +13,13 @@ function WatchVideo() {
   const handleVideoSelect = (video) => {
     setSelectedVideoId(video.id);
     setResetComments(true);
+
+    // Increment the view count for the selected video
+    setVideos(prevVideos =>
+      prevVideos.map(v =>
+        v.id === video.id ? { ...v, views: v.views + 1 } : v
+      )
+    );
   };
 
   const handleLikeToggle = (videoId) => {
