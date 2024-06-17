@@ -1,14 +1,12 @@
 import './App.css';
-import React, { useEffect } from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
-import AuthBox from './AuthBox';
-import Login from './Login';
+import UpperBar from './upperBar/UpperBar';
+import { Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import MainScreen from './mainScreen/MainScreen';
 import UploadVideo from './uploadVideo/UploadVideo';
 import videoData from './videosLibrary/VideosLibrary.json'; // Import the JSON file
 
 function App() {
-  
   const [searchQuery, setSearchQuery] = useState('');
   const [tagFilter, setTagFilter] = useState('all');
   const [videoList, setVideoList] = useState([]);
@@ -31,15 +29,9 @@ function App() {
   return (
     <div className="App">
       <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter} />
-      <nav>
-        <Link to="/register">Register</Link>
-        <Link to="/login">Login</Link>
-      </nav>
       <Routes>
         <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter} />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} />} />
-          <Route path="/register" element={<AuthBox />} />
-        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   );
