@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './AuthBox.css';
+import '../registeration.css';
 
 function AuthBox() {
   const [userName, setUserName] = useState('');

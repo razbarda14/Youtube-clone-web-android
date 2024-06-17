@@ -1,9 +1,9 @@
 import './App.css';
-import UpperBar from './upperBar/UpperBar';
+import UpperBar from '../../../src/upperBar/UpperBar';
 import { Route, Routes } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import MainScreen from './mainScreen/MainScreen';
-import UploadVideo from './uploadVideo/UploadVideo';
+import UploadVideo from '../../../src/uploadVideo/UploadVideo';
 import videoData from './videosLibrary/VideosLibrary.json'; // Import the JSON file
 
 function App() {
