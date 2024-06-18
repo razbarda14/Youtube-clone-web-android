@@ -6,7 +6,6 @@ import downThumbBlack from '../../photosVideo/hand-thumbs-down-fill.svg';
 import Share from '../../photosVideo/share.svg';
 import Download from '../../photosVideo/download.svg';
 import bell from '../../photosVideo/bell.svg';
-
 function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
   // Likes State: initial value of 500
   const [, setLikes] = useState(video.likes);
@@ -18,21 +17,11 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
     setIsLiked(false);
     setIsDisliked(false);
   }, [video]);
-
-  const handleShare = () => {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-      alert('Link copied to clipboard!');
-    }, (err) => {
-      console.error('Could not copy text: ', err);
-    });
-  };
-
   return (
     <div>
       {/* Buttons */}
       <div className="video-buttons mt-3">
-        <button 
+      <button 
           className={`btn btn-light ${video.isDisliked ? 'active-dislike' : ''}`} 
           onClick={() => onDislikeToggle(video.id)} 
         >
@@ -43,18 +32,18 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
           onClick={() => onLikeToggle(video.id)}
         >
           {video.likes}
-          <img src={video.isLiked ? upThumbBlack : upThumb} alt="Like" className="img-fluid" />
+          <img src={video.isLiked ? upThumbBlack : upThumb} alt="" className="img-fluid" />
         </button>
 
-        <button className="btn btn-light" onClick={handleShare}>Share
-          <img src={Share} alt="Share" className="img-fluid" />
+        <button className="btn btn-light">Share
+          <img src={Share} alt="" className="img-fluid" />
         </button>
         <button className="btn btn-light">Subscribe
-          <img src={bell} alt="Subscribe" className="img-fluid" />
+          <img src={bell} alt="" className="img-fluid" />
         </button>
       </div>
     </div>
-  );
+  )
 }
 
 export default ButtonsVideo;
