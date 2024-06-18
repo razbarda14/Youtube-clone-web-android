@@ -4,8 +4,8 @@ import WatchVideo from './VideoWatch/WatchVideo';
 import DarkModeToggle from './ScreenMode/DarkModeToggle';
 import { useTheme } from './ScreenMode/ThemeContext';
 import { Route, Routes, Link } from 'react-router-dom';
-import AuthBox from './register/authbox/AuthBox';
-import Login from './register/login/Login';
+import RegisterBox from './registerBox/RegisterBox';
+import SignInBox from './signInBox/SignInBox'
 import MainScreen from './mainScreen/MainScreen';
 import UploadVideo from './uploadVideo/UploadVideo';
 import videoData from './videosLibrary/VideosLibrary.json'; // Import the JSON file
@@ -43,8 +43,8 @@ function App() {
       <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter} />
       <Routes>
         <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter} />} />
-        <Route path="/register" element={<AuthBox />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterBox />} />
+        <Route path="/signIn" element={<SignInBox />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} />} />
         <Route path="/WatchVideo/:videoId" element={<WatchVideo />} />
         <Route path="/WatchVideo" element={<WatchVideo />} />

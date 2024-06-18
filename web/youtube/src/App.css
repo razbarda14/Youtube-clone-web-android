@@ -13,7 +13,7 @@
   height: 100%;
   width: 100%;
    background-color: #ffffff;
-  color: black; Default text color for light mode
+  color: black;
 } */
 
 /* .dark-mode {
@@ -23,7 +23,18 @@
   ;
 } */
 
-body {
+.main-content {
   margin-top: 60px;
+}
+
+#sign-in-register-card {
+  width: 40rem;
+  border-radius: 15px; 
+  background-color:#F3F7EC
+}
+
+#form-row {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 

@@ -1,4 +1,3 @@
-import './MainScreen.css';
 import TagSuggestion from '../tagSuggestion/TagSuggestion';
 import MainBlock from '../mainBlock/MainBlock';
 

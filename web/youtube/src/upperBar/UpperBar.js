@@ -61,8 +61,8 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
           <button type="button" className="btn btn-outline-secondary me-2">
             <i className="bi bi-moon"></i>
           </button>
-          <Link to='/login'>
-            <button type="button" className="btn btn-outline-primary align-middle">Login</button>
+          <Link to='/signIn'>
+            <button type="button" className="btn btn-outline-primary align-middle">Sign In</button>
           </Link>
         </div>
       </div>

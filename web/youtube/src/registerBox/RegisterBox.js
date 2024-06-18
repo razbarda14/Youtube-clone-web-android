@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../registeration.css';
+import youtubeIcon from "../img/youtube-icon.png";
 
-function AuthBox() {
+
+function RegisterBox() {
+
   const [userName, setUserName] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
@@ -46,39 +48,39 @@ function AuthBox() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const isUserNameValidFinal = /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(userName);
     const isDisplayNameValidFinal = displayName.trim() !== '';
     const isPasswordValidFinal = password.length >= 8;
     const doPasswordsMatchFinal = password === verifyPassword;
-  
+
     setIsUserNameValid(isUserNameValidFinal);
     setIsDisplayNameValid(isDisplayNameValidFinal);
     setIsPasswordValid(isPasswordValidFinal);
     setDoPasswordsMatch(doPasswordsMatchFinal);
-  
+
     if (!isUserNameValidFinal || !isDisplayNameValidFinal || !isPasswordValidFinal || !doPasswordsMatchFinal) {
       return;
     }
-  
+
     // Retrieve existing users from localStorage
     const users = JSON.parse(localStorage.getItem('users')) || [];
-  
+
     const newUser = {
       userName,
       displayName,
       password,
       photo: photo ? URL.createObjectURL(photo) : null,
     };
-  
+
     // Add new user to the array and save
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
-  
+
     alert('Registration successful!');
   };
-  
-  
+
+
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -105,7 +107,7 @@ function AuthBox() {
       setIsUserNameValid(false);
       return;
     }
-    
+
     // Check if the password is already used by another user
     const passwordExists = users.some(user => user.password === password);
     if (passwordExists) {
@@ -125,23 +127,29 @@ function AuthBox() {
   return (
     <div className="position-absolute top-50 start-50 translate-middle main-content">
       <div className='container'>
-        <div className="card">
+        <div id="sign-in-register-card" className="card">
           <div className="card-body">
             <div className="container overflow-hidden text-center">
+
               <div className="row gy-5">
+
                 <div className="col-6">
                   <div className="p-3 text-start">
-                    <h5 className="card-title">Register / Login</h5>
+                    <h5 className="card-title">Register</h5>
                     <p className="card-text">To continue to YouTube</p>
+                    <div className='col-8 d-flex align-items-center justify-content-center'>
+                      <img src={youtubeIcon} alt="Clickable" height="80px" />
+                    </div>
                   </div>
                 </div>
+
                 <div className="col-6">
                   <div className="p-3">
                     <form noValidate onSubmit={handleSubmit}>
                       {step === 1 && (
                         <>
-                          <div className="form-floating">
-                            <input 
+                          <div className="form-floating mb-3">
+                            <input
                               type="text"
                               className={`form-control ${!isUserNameValid ? 'is-invalid' : ''}`}
                               id="userName"
@@ -152,11 +160,11 @@ function AuthBox() {
                             />
                             <label htmlFor="userName">Username</label>
                             <div className="invalid-feedback">
-                            {userNameError || 'Username must contain both letters and numbers.'}
+                              {userNameError || 'Username must contain both letters and numbers.'}
+                            </div>
                           </div>
-                          </div>
-                          <div className="form-floating">
-                            <input 
+                          <div className="form-floating mb-3">
+                            <input
                               type="password"
                               className={`form-control ${!isPasswordValid ? 'is-invalid' : ''}`}
                               id="password"
@@ -170,8 +178,8 @@ function AuthBox() {
                               {passwordError || 'Password must be at least 8 characters long.'}
                             </div>
                           </div>
-                          <div className="form-floating">
-                            <input 
+                          <div className="form-floating mb-3">
+                            <input
                               type="password"
                               className={`form-control ${!doPasswordsMatch ? 'is-invalid' : ''}`}
                               id="verifyPassword"
@@ -184,21 +192,26 @@ function AuthBox() {
                             <div className="invalid-feedback">Passwords do not match.</div>
                           </div>
                           <div className="mt-3">
-                            <div className="btn-group">
-                              <button type="button" className="btn btn-primary" onClick={handleNext}>
-                                Next
-                              </button>
-                              <button type="button" className="btn btn-light" onClick={() => navigate('/login')}>
-                                Login
-                              </button>
+
+                            <div className='row'>
+                              <div className='col-6'>
+                                <button type="button" className="btn btn-light" onClick={() => navigate('/signIn')}>
+                                  Sign In
+                                </button>
+                              </div>
+                              <div className='col-6'>
+                                <button type="button" className="btn btn-primary" onClick={handleNext}>
+                                  Next
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </>
                       )}
                       {step === 2 && (
                         <>
-                          <div className="form-floating">
-                            <input 
+                          <div className="form-floating mb-3">
+                            <input
                               type="text"
                               className={`form-control ${!isDisplayNameValid ? 'is-invalid' : ''}`}
                               id="displayName"
@@ -212,7 +225,7 @@ function AuthBox() {
                           </div>
                           <div className="mb-3">
                             <label htmlFor="photo" className="form-label">Profile Photo</label>
-                            <input 
+                            <input
                               type="file"
                               className="form-control"
                               id="photo"
@@ -243,10 +256,6 @@ function AuthBox() {
                     </form>
                   </div>
                 </div>
-                <div className="col-6">
-                  <div className="p-3">
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -256,4 +265,4 @@ function AuthBox() {
   );
 }
 
-export default AuthBox;
+export default RegisterBox;
