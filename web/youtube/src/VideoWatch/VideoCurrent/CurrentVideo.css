@@ -1,0 +1,24 @@
+.video-player {
+    width: 1300px; /* Make the video fill the width of its container */
+     /* Optional: Set a maximum width for larger screens */
+    height: 400px;  /* Maintain aspect ratio */
+  } 
+  .video-buttons img {
+    width: 100px;      /* Adjust image size if needed */
+    height: 35px;
+  }
+  .comment-container {
+    display: flex;
+    align-items: flex-start;
+  }
+  .current-video {
+    display: flex; 
+    /* Adjust flex direction if needed */
+    flex-direction: column; /* Stack video and details vertically */
+  }
+  
+
+  
+  
+  
+  
