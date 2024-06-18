@@ -1,0 +1,33 @@
+
+#upperRow{
+    position: fixed;
+}
+
+.row{
+    margin-bottom: 20px;
+}
+
+.card {
+    width: 18rem;
+    margin-bottom: 20px;
+    border-radius: 15px; 
+    transition: background-color 0.3s ease;
+}
+
+.card:hover{
+    background-color: #e0e1dc; /* Light background color */
+}
+
+@media (prefers-color-scheme: dark) {
+    .card:hover {
+      background-color: #343a40; /* Dark background color for dark mode */
+    }
+}
+
+.card > img{
+    height: 170px;
+    border-radius: 5%;
+}
+  
+  
+
