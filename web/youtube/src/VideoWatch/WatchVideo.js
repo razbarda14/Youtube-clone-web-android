@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Toolbar from './Toolbar';
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
@@ -6,20 +7,30 @@ import './WatchVideos.css';
 import videoData from '../videodata.json';
 
 function WatchVideo() {
+  const { videoId } = useParams();
   const [videos, setVideos] = useState(videoData);
-  const [selectedVideoId, setSelectedVideoId] = useState(videoData[0].id);
+  const [selectedVideoId, setSelectedVideoId] = useState(null);
   const [resetComments, setResetComments] = useState(false);
+  const [incrementedVideoId, setIncrementedVideoId] = useState(null);
+
+  useEffect(() => {
+    const id = videoId ? parseInt(videoId) : videoData[0].id;
+    setSelectedVideoId(id);
+    setResetComments(true);
+
+    if (incrementedVideoId !== id) {
+      setVideos(prevVideos =>
+        prevVideos.map(v =>
+          v.id === id ? { ...v, views: v.views + 1 } : v
+        )
+      );
+      setIncrementedVideoId(id);
+    }
+  }, [videoId, incrementedVideoId]);
 
   const handleVideoSelect = (video) => {
     setSelectedVideoId(video.id);
     setResetComments(true);
-
-    // Increment the view count for the selected video
-    setVideos(prevVideos =>
-      prevVideos.map(v =>
-        v.id === video.id ? { ...v, views: v.views + 1 } : v
-      )
-    );
   };
 
   const handleLikeToggle = (videoId) => {
@@ -93,16 +104,18 @@ function WatchVideo() {
         <div className="row">
           <div className="col-md-8">
             <div className="current-video-padding">
-              <CurrentVideo
-                video={videos.find(video => video.id === selectedVideoId)}
-                onLikeToggle={handleLikeToggle}
-                onDislikeToggle={handleDislikeToggle}
-                onCommentAdd={handleCommentAdd}
-                onCommentDelete={handleCommentDelete}
-                onCommentEdit={handleCommentEdit}
-                resetComments={resetComments}
-                setResetComments={setResetComments}
-              />
+              {selectedVideoId && (
+                <CurrentVideo
+                  video={videos.find(video => video.id === selectedVideoId)}
+                  onLikeToggle={handleLikeToggle}
+                  onDislikeToggle={handleDislikeToggle}
+                  onCommentAdd={handleCommentAdd}
+                  onCommentDelete={handleCommentDelete}
+                  onCommentEdit={handleCommentEdit}
+                  resetComments={resetComments}
+                  setResetComments={setResetComments}
+                />
+              )}
             </div>
           </div>
           <div className="col-md-4">

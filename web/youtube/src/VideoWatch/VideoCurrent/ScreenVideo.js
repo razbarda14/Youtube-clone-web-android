@@ -1,28 +1,43 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 function ScreenVideo({ video, videoRef }) {
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load();
+    }
+  }, [video, videoRef]);
+
   return (
     <div>
       <div className="current-video">
         <div className="mb-3">
-          <video
-            ref={videoRef}
-            key={video.id}
-            className="video-player"
-            controls
-            poster={video.thumbnail}
-          >
-            <source src={video.videoUrl} type="video/mp4" />
-          </video>
+          {video ? (
+            <video
+              ref={videoRef}
+              key={video.id}
+              className="video-player"
+              controls
+              poster={video.thumbnail}
+            >
+              <source src={video.videoUrl} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <p>Loading...</p>
+          )}
         </div>
-        <h3>{video.title}</h3>
-        <p>{video.description}</p>
-        <div className="d-flex justify-content-between">
-          <span>
-            {video.channel}
-            <p> {video.views} • {video.uploadDate}</p>
-          </span>
-        </div>
+        {video && (
+          <>
+            <h3>{video.title}</h3>
+            <p>{video.description}</p>
+            <div className="d-flex justify-content-between">
+              <span>
+                {video.channel}
+                <p> {video.views} • {video.uploadDate}</p>
+              </span>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
