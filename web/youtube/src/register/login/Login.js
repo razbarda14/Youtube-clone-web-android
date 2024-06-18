@@ -34,7 +34,7 @@ function Login() {
   };
 
   return (
-    <div className="position-absolute top-50 start-50 translate-middle">
+    <div className="position-absolute top-50 start-50 translate-middle main-content">
       <div className='container'>
         <div className="card">
           <div className="card-body">

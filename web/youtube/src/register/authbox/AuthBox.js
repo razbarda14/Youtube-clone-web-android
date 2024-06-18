@@ -123,7 +123,7 @@ function AuthBox() {
   };
 
   return (
-    <div className="position-absolute top-50 start-50 translate-middle">
+    <div className="position-absolute top-50 start-50 translate-middle main-content">
       <div className='container'>
         <div className="card">
           <div className="card-body">
@@ -131,7 +131,7 @@ function AuthBox() {
               <div className="row gy-5">
                 <div className="col-6">
                   <div className="p-3 text-start">
-                    <h5 className="card-title">Sign in / Register</h5>
+                    <h5 className="card-title">Register / Login</h5>
                     <p className="card-text">To continue to YouTube</p>
                   </div>
                 </div>
