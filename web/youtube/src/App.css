@@ -1,20 +1,23 @@
 /* App.css */
 :root {
-  --light-input-background-color: #F1F8E8;
+  --light-input-background-color: white;
   --light-input-text-color: black;
   --light-input-border-color: #474747;
   --light-input-focus-background-color: white;
+  --light-button-background-color: #EEEEEF;
 
   --dark-input-background-color: #2b2b2b;
   --dark-input-text-color: white;
   --dark-input-border-color: #474747;
   --dark-input-focus-background-color: #474747;
+  --dark-button-background-color: #474747;
 
-  --input-focus-border-color: #474747; /* Change this to your desired color */
+  --input-focus-border-color: #474747;
+  /* Change this to your desired color */
 
   --primary-color: #007bff;
   --secondary-color: #6c757d;
-  
+
 }
 
 body {
@@ -40,9 +43,15 @@ body {
   --input-focus-background-color: var(--dark-input-focus-background-color);
 }
 
-
 .main-content {
   margin-top: 60px;
+}
+
+.no-underline {
+  text-decoration: none;
+  /* Remove the underline */
+  color: inherit;
+  /* Inherit text color to avoid default link color */
 }
 
 .form-control {
@@ -55,13 +64,12 @@ body {
 .form-control:focus {
   background-color: var(--input-focus-background-color);
   border-color: var(--input-focus-border-color);
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 #sign-in-register-card {
   width: 40rem;
-  border-radius: 15px; 
-  background-color:#F3F7EC
+  border-radius: 15px;
+  background-color: #F3F7EC
 }
 
 #form-row {

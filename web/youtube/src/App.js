@@ -51,7 +51,6 @@ function App() {
         <Route path="/signIn" element={<SignInBox />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} />} />
         <Route path="/WatchVideo/:videoId" element={<WatchVideo />} />
-        <Route path="/WatchVideo" element={<WatchVideo />} />
       </Routes>
     </div>
   );

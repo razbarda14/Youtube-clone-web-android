@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Toolbar from './Toolbar';
+
+import './WatchVideos.css';
+
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
-import './WatchVideos.css';
 import videoData from '../videodata.json';
 
 function WatchVideo() {
@@ -98,11 +99,12 @@ function WatchVideo() {
   };
 
   return (
-    <div>
-      <Toolbar />
-      <div className="container mt-4">
+      <div className="container-fluid">
+        
         <div className="row">
-          <div className="col-md-8">
+
+          <div className="col-8">
+
             <div className="current-video-padding">
               {selectedVideoId && (
                 <CurrentVideo
@@ -118,12 +120,12 @@ function WatchVideo() {
               )}
             </div>
           </div>
-          <div className="col-md-4">
+        
+          <div className="col-4">
             <SuggestedVideos onVideoSelect={handleVideoSelect} videoData={videos} />
           </div>
         </div>
       </div>
-    </div>
   );
 }
 

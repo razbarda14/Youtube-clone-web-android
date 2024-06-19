@@ -7,7 +7,7 @@ function SuggestedVideos({videoData, onVideoSelect}) {
 
 
   return (
-    <div className='suggested-videos'> 
+    <div className='main-content'> 
       <h4>Suggested Videos</h4>
       {videoData.map(video => (
         <SuggestedVideoItem 

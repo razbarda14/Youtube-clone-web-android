@@ -1,17 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import './SuggestedVideoItem.css';
+
 function SuggestedVideoItem({ video, onVideoClick }) {
+
   return (
-    <div className="card mb-2" onClick={() => onVideoClick(video)}> 
-      <Link to={`/WatchVideo/${video.id}`}> {/* Use capital 'L' for Link */}
-        <img src={video.thumbnail} className="card-img-top" alt={video.title}></img>
+
+    <div>
+      <Link to={`/WatchVideo/${video.id}`} className='no-underline'>
+        
+        <div className="card" onClick={() => onVideoClick(video)}>
+          <img src={video.thumbnail} className="card-img" alt={video.title}></img>
+          <div className="sug-card-body">
+            <h5 className="card-title">{video.title}</h5>
+            <div>{video.channel}</div>
+            <p className="card-text"></p>
+          </div>
+        </div>
+    
       </Link>
-      <div className="card-body">
-        <h5 className="card-title">{video.title} , {video.channel}</h5>
-        <p className="card-text"></p>
-      </div>
-    </div>  
+    </div>
   );
 }
 

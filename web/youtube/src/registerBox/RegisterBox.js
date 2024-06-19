@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import youtubeIcon from "../img/youtube-icon.png";
-import './RegiterBox.css';
+import './RegisterBox.css';
 import { useTheme } from '../themeContext/ThemeContext';
 
 function RegisterBox() {

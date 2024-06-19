@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import './CurrentVideo.css';
+import ScreenVideo from './ScreenVideo';
 import ButtonsVideo from './UserOption/ButtonsVideo';
 import Comments from './UserOption/Comments';
-import ScreenVideo from './ScreenVideo';
 
 function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCommentDelete, onCommentEdit, resetComments, setResetComments }) {
   const videoRef = useRef(null);
