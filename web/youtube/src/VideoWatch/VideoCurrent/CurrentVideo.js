@@ -21,7 +21,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
   }, [video, resetComments, setResetComments]);
 
   return (
-    <div>
+    <div className='main-content'>
       <ScreenVideo video={video} videoRef={videoRef} />
       <ButtonsVideo video={video} onLikeToggle={onLikeToggle} onDislikeToggle={onDislikeToggle} />
       <Comments

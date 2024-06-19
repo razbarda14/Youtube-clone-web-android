@@ -32,12 +32,7 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
     <div>
       {/* Buttons */}
       <div className="video-buttons mt-3">
-        <button 
-          className={`btn btn-light ${video.isDisliked ? 'active-dislike' : ''}`} 
-          onClick={() => onDislikeToggle(video.id)} 
-        >
-          <img src={video.isDisliked ? downThumbBlack : downThumb} alt="Dislike" className="img-fluid" />
-        </button>
+
         <button
           className={`btn btn-light ${video.isLiked ? 'active-like' : ''}`}
           onClick={() => onLikeToggle(video.id)}
@@ -46,11 +41,21 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
           <img src={video.isLiked ? upThumbBlack : upThumb} alt="Like" className="img-fluid" />
         </button>
 
-        <button className="btn btn-light" onClick={handleShare}>Share
-          <img src={Share} alt="Share" className="img-fluid" />
+        <button
+          className={`btn btn-light ${video.isDisliked ? 'active-dislike' : ''}`}
+          onClick={() => onDislikeToggle(video.id)}
+        >
+          <img src={video.isDisliked ? downThumbBlack : downThumb} alt="Dislike" className="img-fluid" />
         </button>
-        <button className="btn btn-light">Subscribe
-          <img src={bell} alt="Subscribe" className="img-fluid" />
+
+        <button className="btn btn-light" onClick={handleShare}>
+          <div>Share</div>
+        <i class="bi bi-share"></i>
+        </button>
+        
+        <button className="btn btn-light">
+        <div>Subscribe</div>
+        <i class="bi bi-bell"></i>
         </button>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import WatchVideo from './VideoWatch/WatchVideo';
+import WatchVideo from './videoWatch/WatchVideo';
 import DarkModeToggle from './ScreenMode/DarkModeToggle';
 import { useTheme } from './ScreenMode/ThemeContext';
 import { Route, Routes, Link } from 'react-router-dom';
