@@ -1,14 +1,14 @@
+// src/App.js
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import WatchVideo from './videoWatch/WatchVideo';
-import DarkModeToggle from './ScreenMode/DarkModeToggle';
-import { useTheme } from './ScreenMode/ThemeContext';
-import { Route, Routes, Link } from 'react-router-dom';
+import { useTheme } from './themeContext/ThemeContext';
+import { Route, Routes } from 'react-router-dom';
 import RegisterBox from './registerBox/RegisterBox';
-import SignInBox from './signInBox/SignInBox'
+import SignInBox from './signInBox/SignInBox';
 import MainScreen from './mainScreen/MainScreen';
 import UploadVideo from './uploadVideo/UploadVideo';
-import videoData from './videosLibrary/VideosLibrary.json'; // Import the JSON file
+import videoData from './videosLibrary/VideosLibrary.json';
 import UpperBar from './upperBar/UpperBar';
 
 function App() {
@@ -18,7 +18,6 @@ function App() {
   const [videoList, setVideoList] = useState([]);
 
   useEffect(() => {
-    // Load the video data from the imported JSON file
     setVideoList(videoData);
   }, []);
 
@@ -32,14 +31,19 @@ function App() {
     setVideoList([...videoList, newVideo]);
   };
 
+  // Apply the dark-mode or light-mode class to the body tag
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+      document.body.classList.remove('light-mode');
+    } else {
+      document.body.classList.add('light-mode');
+      document.body.classList.remove('dark-mode');
+    }
+  }, [darkMode]);
+
   return (
-
     <div className="App">
-
-      {/* <div className={darkMode ? 'dark-mode' : 'light-mode'}>
-        <DarkModeToggle />
-      </div> */}
-
       <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter} />
       <Routes>
         <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter} />} />
@@ -49,7 +53,6 @@ function App() {
         <Route path="/WatchVideo/:videoId" element={<WatchVideo />} />
         <Route path="/WatchVideo" element={<WatchVideo />} />
       </Routes>
-
     </div>
   );
 }

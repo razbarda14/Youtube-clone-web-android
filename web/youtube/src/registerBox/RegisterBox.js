@@ -1,10 +1,12 @@
+// RegisterBox.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import youtubeIcon from "../img/youtube-icon.png";
-
+import './RegiterBox.css';
+import { useTheme } from '../themeContext/ThemeContext';
 
 function RegisterBox() {
-
+  const { darkMode } = useTheme();
   const [userName, setUserName] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
@@ -17,7 +19,6 @@ function RegisterBox() {
   const [step, setStep] = useState(1);
   const [userNameError, setUserNameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-
 
   const navigate = useNavigate();
 
@@ -80,8 +81,6 @@ function RegisterBox() {
     alert('Registration successful!');
   };
 
-
-
   const handleNext = (e) => {
     e.preventDefault();
 
@@ -125,14 +124,12 @@ function RegisterBox() {
   };
 
   return (
-    <div className="position-absolute top-50 start-50 translate-middle main-content">
+    <div className={`position-absolute top-50 start-50 translate-middle main-content ${darkMode ? 'dark-mode' : 'light-mode'}`}>
       <div className='container'>
         <div id="sign-in-register-card" className="card">
           <div className="card-body">
             <div className="container overflow-hidden text-center">
-
               <div className="row gy-5">
-
                 <div className="col-6">
                   <div className="p-3 text-start">
                     <h5 className="card-title">Register</h5>
@@ -142,7 +139,6 @@ function RegisterBox() {
                     </div>
                   </div>
                 </div>
-
                 <div className="col-6">
                   <div className="p-3">
                     <form noValidate onSubmit={handleSubmit}>
@@ -192,7 +188,6 @@ function RegisterBox() {
                             <div className="invalid-feedback">Passwords do not match.</div>
                           </div>
                           <div className="mt-3">
-
                             <div className='row'>
                               <div className='col-6'>
                                 <button type="button" className="btn btn-light" onClick={() => navigate('/signIn')}>

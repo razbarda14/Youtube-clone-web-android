@@ -1,30 +1,61 @@
-/* .App {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  background-color: rgb(236, 245, 248);
-  font-family: Arial, sans-serif;
-  margin: 0;
-} */
+/* App.css */
+:root {
+  --light-input-background-color: #F1F8E8;
+  --light-input-text-color: black;
+  --light-input-border-color: #474747;
+  --light-input-focus-background-color: white;
 
-/* body, html {
-  height: 100%;
-  width: 100%;
-   background-color: #ffffff;
-  color: black;
-} */
+  --dark-input-background-color: #2b2b2b;
+  --dark-input-text-color: white;
+  --dark-input-border-color: #474747;
+  --dark-input-focus-background-color: #474747;
 
-/* .dark-mode {
-  background-color: #222222 !important;
-  ;
-  color: white !important;
-  ;
-} */
+  --input-focus-border-color: #474747; /* Change this to your desired color */
+
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.light-mode {
+  --background-color: white;
+  --text-color: black;
+  --input-background-color: var(--light-input-background-color);
+  --input-text-color: var(--light-input-text-color);
+  --input-border-color: var(--light-input-border-color);
+  --input-focus-background-color: var(--light-input-focus-background-color);
+}
+
+.dark-mode {
+  --background-color: #121212;
+  --text-color: #e0e0e0;
+  --input-background-color: var(--dark-input-background-color);
+  --input-text-color: var(--dark-input-text-color);
+  --input-border-color: var(--dark-input-border-color);
+  --input-focus-background-color: var(--dark-input-focus-background-color);
+}
+
 
 .main-content {
   margin-top: 60px;
+}
+
+.form-control {
+  background-color: var(--input-background-color);
+  color: var(--input-text-color);
+  border: 1px solid var(--input-border-color);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.form-control:focus {
+  background-color: var(--input-focus-background-color);
+  border-color: var(--input-focus-border-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 #sign-in-register-card {
@@ -37,4 +68,3 @@
   margin-top: 5px;
   margin-bottom: 5px;
 }
-

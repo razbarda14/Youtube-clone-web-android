@@ -115,13 +115,7 @@ function SignInBox() {
                             Sign In
                           </button>
                         </div>
-
-
-
                       </div>
-
-
-
                     </div>
                   </div>
 

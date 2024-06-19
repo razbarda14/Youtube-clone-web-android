@@ -1,7 +1,7 @@
 import React from 'react';
 import './Toolbar.css';
 import youTubeIcon from './photosVideo/youtube.svg';
-import { useTheme } from '../ScreenMode/ThemeContext';
+import { useTheme } from '../themeContext/ThemeContext';
 
 function Toolbar() {
   const { darkMode } = useTheme(); // Access the darkMode state

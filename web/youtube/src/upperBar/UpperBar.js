@@ -1,10 +1,13 @@
-import './UpperBar.css'; // Import the CSS file for upperBar
-import youtubeLogo from "../img/youtube-logo.jpg";
+// src/upperBar/UpperBar.js
+import './UpperBar.css';
+import youtubeLogoLight from "../img/youtube-logo-light-mode.png";
+import youtubeLogoDark from "../img/youtube-logo-dark-mode.png";
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
+import { useTheme } from '../themeContext/ThemeContext';
 
 function UpperBar({ setSearchQuery, setTagFilter }) {
-
+  const { darkMode, toggleTheme } = useTheme();
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (event) => {
@@ -26,7 +29,7 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
       <div className="row align-items-center">
         <div className="col-4 d-flex align-items-center my-height">
           <Link to='/' onClick={handleLogoClick}>
-            <img src={youtubeLogo} alt="Clickable" height="60px" />
+          <img src={darkMode ? youtubeLogoDark : youtubeLogoLight} alt="Clickable" height="25px" />
           </Link>
         </div>
         <div className="col-4 d-flex align-items-center justify-content-center my-height">
@@ -58,8 +61,8 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
           </Link>
         </div>
         <div className="col-2 d-flex align-items-center justify-content-center my-height">
-          <button type="button" className="btn btn-outline-secondary me-2">
-            <i className="bi bi-moon"></i>
+          <button type="button" className="btn btn-outline-secondary me-2" onClick={toggleTheme}>
+            <i className={`bi ${darkMode ? 'bi-sun' : 'bi-moon'}`}></i>
           </button>
           <Link to='/signIn'>
             <button type="button" className="btn btn-outline-primary align-middle">Sign In</button>
