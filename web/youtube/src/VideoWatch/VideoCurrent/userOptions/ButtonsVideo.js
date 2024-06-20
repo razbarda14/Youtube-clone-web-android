@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from 'react'; // Import useState
-import upThumb from '../../photosVideo/hand-thumbs-up.svg';
-import downThumb from '../../photosVideo/hand-thumbs-down.svg';
-import upThumbBlack from '../../photosVideo/hand-thumbs-up-fill.svg';
-import downThumbBlack from '../../photosVideo/hand-thumbs-down-fill.svg';
-
+import React, { useState, useEffect } from 'react';
+import { useTheme } from '../../../themeContext/ThemeContext';
 
 function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
-  // Likes State: initial value of 500
   const [, setLikes] = useState(video.likes);
   const [, setIsLiked] = useState(false);
   const [, setIsDisliked] = useState(false);
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     setLikes(video.likes);
-    setIsLiked(false);
-    setIsDisliked(false);
+    setIsLiked(video.isLiked);
+    setIsDisliked(video.isDisliked);
   }, [video]);
 
   const handleShare = () => {
@@ -27,41 +23,29 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
   };
 
   return (
-
     <div>
-      {/* Buttons */}
-      <div className="video-buttons mt-3">
+      <button
+        className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} ${video.isLiked ? 'active-like' : ''}`}
+        onClick={() => onLikeToggle(video.id)}
+      >
+        {video.likes}
+        <i className={`bi ${video.isLiked ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'} img-fluid`}></i>
+      </button>
 
-        {/* Like button */}
-        <button
-          className={`btn btn-light ${video.isLiked ? 'active-like' : ''}`}
-          onClick={() => onLikeToggle(video.id)}
-        >
-          {video.likes}
-          <img src={video.isLiked ? upThumbBlack : upThumb} alt="Like" className="img-fluid" />
-        </button>
+      <button
+        className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} ${video.isDisliked ? 'active-dislike' : ''}`}
+        onClick={() => onDislikeToggle(video.id)}
+      >
+        <i className={`bi ${video.isDisliked ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down'} img-fluid`}></i>
+      </button>
 
-        {/* Dislike button */}
-        <button
-          className={`btn btn-light ${video.isDisliked ? 'active-dislike' : ''}`}
-          onClick={() => onDislikeToggle(video.id)}
-        >
-          <img src={video.isDisliked ? downThumbBlack : downThumb} alt="Dislike" className="img-fluid" />
-        </button>
+      <button className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'}`} onClick={handleShare}>
+        <i className="bi bi-share"></i>
+      </button>
 
-        {/* Share button */}
-        <button className="btn btn-light" onClick={handleShare}>
-          <div>Share</div>
-        <i class="bi bi-share"></i>
-        </button>
-        
-        {/* Subscribe button */}
-        <button className="btn btn-light">
-        <div>Subscribe</div>
-        <i class="bi bi-bell"></i>
-        </button>
-
-      </div>
+      <button className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'}`}>
+        <i className="bi bi-bell"></i>
+      </button>
     </div>
   );
 }

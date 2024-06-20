@@ -8,6 +8,7 @@ import CurrentVideo from './VideoCurrent/CurrentVideo';
 import videoData from '../videodata.json';
 
 function WatchVideo() {
+
   const { videoId } = useParams();
   const [videos, setVideos] = useState(videoData);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
@@ -99,6 +100,7 @@ function WatchVideo() {
   };
 
   return (
+    
       <div className="container-fluid">
         
         <div className="row">

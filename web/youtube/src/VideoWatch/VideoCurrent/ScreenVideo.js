@@ -28,12 +28,12 @@ function ScreenVideo({ video, videoRef }) {
         </div>
         {video && (
           <>
-            <h3>{video.title}</h3>
+            <h4>{video.title}</h4>
+            <p>{video.channel}</p>
             <p>{video.description}</p>
             <div className="d-flex justify-content-between">
               <span>
-                {video.channel}
-                <p> {video.views} • {video.uploadDate}</p>
+                <p>Uploaded: {video.uploadDate} • {video.views} views</p>
               </span>
             </div>
           </>

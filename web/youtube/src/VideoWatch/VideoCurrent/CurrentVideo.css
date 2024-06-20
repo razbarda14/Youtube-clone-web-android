@@ -1,25 +1,23 @@
 .video-player {
-  width: 800px;  
-  height: 500px;  /* Maintain aspect ratio */
-  } 
-  .video-buttons img {
-    width: 100px;      /* Adjust image size if needed */
-    height: 35px;
-  }
-  .comment-container {
-    display: flex;
-    align-items: flex-start;
-  }
-  .current-video {
-    /* display: flex;  */
-    /* Adjust flex direction if needed */
-    flex-direction: column; /* Stack video and details vertically */
-  }
+  width: 800px;
+  height: 500px;
+  border-radius: 2%;
+}
 
+.video-buttons img {
+  width: 100px;
+  /* Adjust image size if needed */
+  height: 35px;
+}
 
-  
+.comment-container {
+  display: flex;
+  align-items: flex-start;
+}
 
-  
-  
-  
-  
+.current-video {
+  /* display: flex;  */
+  /* Adjust flex direction if needed */
+  flex-direction: column;
+  /* Stack video and details vertically */
+}

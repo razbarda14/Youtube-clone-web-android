@@ -44,13 +44,13 @@ function App() {
 
   return (
     <div className="App">
-      <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter} />
+      <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter}/>
       <Routes>
-        <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter} />} />
-        <Route path="/register" element={<RegisterBox />} />
-        <Route path="/signIn" element={<SignInBox />} />
-        <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} />} />
-        <Route path="/WatchVideo/:videoId" element={<WatchVideo />} />
+        <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter}/>}/>
+        <Route path="/register" element={<RegisterBox/>} />
+        <Route path="/signIn" element={<SignInBox />}/>
+        <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo}/>} />
+        <Route path="/WatchVideo/:videoId" element={<WatchVideo/>} />
       </Routes>
     </div>
   );

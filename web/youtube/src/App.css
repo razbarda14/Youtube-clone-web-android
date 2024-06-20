@@ -5,23 +5,21 @@
   --light-input-border-color: #474747;
   --light-input-focus-background-color: white;
   --light-button-background-color: #EEEEEF;
-  --light-button-icon-color: black;
+  --light-button-text-color: black;
 
   --dark-input-background-color: #2b2b2b;
   --dark-input-text-color: white;
   --dark-input-border-color: #474747;
   --dark-input-focus-background-color: #474747;
   --dark-button-background-color: #474747;
-  --dark-button-icon-color: white;
+  --dark-button-text-color: white;
   --dark-button-hover-background-color: #1f1f1f;
 
   --input-focus-border-color: #474747;
+  /* Change this to your desired color */
 
   --primary-color: #007bff;
   --secondary-color: #6c757d;
-
-  --light-btn-outline-secondary-color: black;
-  --dark-btn-outline-secondary-color: white;
 }
 
 body {
@@ -36,8 +34,8 @@ body {
   --input-text-color: var(--light-input-text-color);
   --input-border-color: var(--light-input-border-color);
   --input-focus-background-color: var(--light-input-focus-background-color);
-  --btn-outline-secondary-color: var(--light-btn-outline-secondary-color);
-  --button-icon-color: var(--light-button-icon-color);
+  --button-background-color: var(--light-button-background-color);
+  --button-text-color: var(--light-button-text-color);
 }
 
 .dark-mode {
@@ -47,8 +45,8 @@ body {
   --input-text-color: var(--dark-input-text-color);
   --input-border-color: var(--dark-input-border-color);
   --input-focus-background-color: var(--dark-input-focus-background-color);
-  --btn-outline-secondary-color: var(--dark-btn-outline-secondary-color);
-  --button-icon-color: var(--dark-button-icon-color);
+  --button-background-color: var(--dark-button-background-color);
+  --button-text-color: var(--dark-button-text-color);
   --button-hover-background-color: var(--dark-button-hover-background-color);
 }
 
@@ -95,16 +93,25 @@ button:focus {
 }
 
 button i {
-  color: var(--button-icon-color);
+  color: var(--button-text-color);
 }
 
-/* Specific styles for .btn-outline-secondary in dark mode */
-.dark-mode .btn-outline-secondary {
-  color: var(--btn-outline-secondary-color);
-  border-color: var(--btn-outline-secondary-color);
+/* Light mode button styles */
+.btn-light-mode {
+  background-color: var(--button-background-color);
+  color: var(--button-text-color);
 }
 
-.dark-mode .btn-outline-secondary:hover {
+.btn-light-mode:hover {
+  background-color: #f0f0f0;
+}
+
+/* Dark mode button styles */
+.btn-dark-mode {
+  background-color: var(--button-background-color);
+  color: var(--button-text-color);
+}
+
+.btn-dark-mode:hover {
   background-color: var(--button-hover-background-color);
-  color: var(--background-color);
 }
