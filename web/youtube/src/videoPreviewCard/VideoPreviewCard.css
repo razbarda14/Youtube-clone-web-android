@@ -6,6 +6,10 @@
     background-color: var(--card-background-color);
     color: var(--card-text-color);
   }
+
+  .video-preview-card video {
+    display: block;
+  }
   
   .card:hover {
     background-color: var(--card-hover-background-color);
