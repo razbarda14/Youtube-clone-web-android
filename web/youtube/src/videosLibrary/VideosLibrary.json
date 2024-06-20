@@ -5,14 +5,12 @@
     "description": "Learn how to use Ableton Live for music production", 
     "viewsCount": "100k", 
     "dateUploaded": "01/01/2024", 
-    "image": "img/ableton.jpeg",
     "videoPath": "/videoFiles/ableton.mp4",
-    "topic": "Music"
-    ,
-    "likes": 1500,
-    "comments": ["Great video!", "Loved it!"],
+    "topic": "Music",
+    "likes": 3333,
+    "comments": ["such a good way to create music", "my grandpa was a dj"],
     "isLiked": false,
-    "channel": "Channel 1"
+    "channel": "Music man"
     
   },
 
@@ -21,15 +19,13 @@
     "title": "Bitcoin Basics", 
     "description": "An introduction to Bitcoin and cryptocurrency", 
     "viewsCount": "52k", 
-    "dateUploaded": "01/01/2024", 
-    "image": "/img/btc.jpeg", 
+    "dateUploaded": "25/02/2024", 
     "videoPath": "/videoFiles/bitcoin.mp4",
-    "topic": "Finance" 
-    ,
-    "likes": 1500,
-    "comments": ["Great video!", "Loved it!"],
+    "topic": "Finance",
+    "likes": 98,
+    "comments": ["Great video!", "gonna make a lot of money now"],
     "isLiked": false,
-    "channel": "Channel 1"
+    "channel": "money maker"
   },
   
   { 
@@ -37,14 +33,13 @@
     "title": "Champions League Highlights", 
     "description": "Top moments from the Champions League", 
     "viewsCount": "86k", 
-    "dateUploaded": "21/05/2024", 
-    "image": "/img/champions.jpeg", 
+    "dateUploaded": "16/05/2024", 
     "videoPath": "/videoFiles/champions.mp4",
     "topic": "Sports" ,
-    "likes": 1500,
+    "likes": 12,
     "comments": ["Great video!", "Loved it!"],
     "isLiked": false,
-    "channel": "Channel 1"
+    "channel": "UEFA"
   },
   
   { 
@@ -52,14 +47,13 @@
     "title": "FIFA 24 Tips and Tricks", 
     "description": "Improve your game in FIFA 24 with these tips", 
     "viewsCount": "90k", 
-    "dateUploaded": "01/01/2024", 
-    "image": "/img/fc24.jpeg", 
+    "dateUploaded": "18/06/2024", 
     "videoPath": "/videoFiles/fc24.mp4",
     "topic": "Gaming" ,
-    "likes": 1500,
-    "comments": ["Great video!", "Loved it!"],
+    "likes": 181,
+    "comments": ["best graphics so far", "Loved it!", "PS5 is great"],
     "isLiked": false,
-    "channel": "Channel 1"
+    "channel": "Goalee"
   },
   
   { 
@@ -68,13 +62,12 @@
     "description": "A travel guide to the beautiful city of Lagos", 
     "viewsCount": "78k", 
     "dateUploaded": "01/01/2024", 
-    "image": "img/lagos.jpeg", 
     "videoPath": "/videoFiles/lagos.mp4",
     "topic": "Travel",
     "likes": 1500,
     "comments": ["Great video!", "Loved it!"],
     "isLiked": false,
-    "channel": "Channel 1" 
+    "channel": "The Good Life"
   },
   
   { 
@@ -82,14 +75,13 @@
     "title": "Live Music Performances", 
     "description": "Enjoy live performances from various artists", 
     "viewsCount": "150k", 
-    "dateUploaded": "01/01/2024", 
-    "image": "img/live-music.png", 
+    "dateUploaded": "02/02/2023", 
     "videoPath": "/videoFiles/liveMusic.mp4",
     "topic": "Music" ,
-    "likes": 1500,
-    "comments": ["Great video!", "Loved it!"],
+    "likes": 789,
+    "comments": ["good song", "i play guiter too"],
     "isLiked": false,
-    "channel": "Channel 1"
+    "channel": "KEXP"
   },
   
   { 
@@ -98,13 +90,12 @@
     "description": "Step-by-step guide to making delicious pizza at home", 
     "viewsCount": "65k", 
     "dateUploaded": "01/01/2024", 
-    "image": "img/pizza.jpeg", 
     "videoPath": "/videoFiles/pizza.mp4",
     "topic": "Food" ,
-    "likes": 1500,
-    "comments": ["Great video!", "Loved it!"],
+    "likes": 12,
+    "comments": ["looks yammy"],
     "isLiked": false,
-    "channel": "Channel 1"
+    "channel": "Vito Pizza"
   },
   
   { 
@@ -113,13 +104,12 @@
     "description": "Essential tips and tricks for learning Spanish quickly", 
     "viewsCount": "110k", 
     "dateUploaded": "01/01/2024", 
-    "image": "img/spanish.jpg", 
     "videoPath": "/videoFiles/spanish.mp4",
     "topic": "Languages" ,
     "likes": 1500,
-    "comments": ["Great video!", "Loved it!"],
+    "comments": ["me llamo pedro", "Hola!", "estoy de acuredo"],
     "isLiked": false,
-    "channel": "Channel 1"
+    "channel": "Doulingo"
   },
   
   { 
@@ -128,13 +118,12 @@
     "description": "Improve your tennis skills with these techniques", 
     "viewsCount": "95k", 
     "dateUploaded": "01/01/2024", 
-    "image": "img/tennis.jpeg", 
     "videoPath": "/videoFiles/tennis.mp4",
     "topic": "Sports" ,
     "likes": 1500,
-    "comments": ["Wimbeldon", "fantastic player"],
+    "comments": ["Wimbeldon", "fantastic player", "NEXT NUMBER ONE RANKED PLAYER IN THE WORLD"],
     "isLiked": false,
-    "channel": "Channel 1"
+    "channel": "ATP"
   },
   
   { 
@@ -143,12 +132,11 @@
     "description": "Explore the top travel destinations for 2024", 
     "viewsCount": "120k", 
     "dateUploaded": "01/01/2024", 
-    "image": "img/travel.jpeg", 
     "videoPath": "/videoFiles/sanSebastian.mp4",
     "topic": "Travel" ,
     "likes": 1500,
-    "comments": ["Amazing place", "perfect vacation"],
+    "comments": ["Amazing place", "I've been there, perfect vacation"],
     "isLiked": false,
-    "channel": "Channel 1"
+    "channel": "The Good Life"
   }
 ]

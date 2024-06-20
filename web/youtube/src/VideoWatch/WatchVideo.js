@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
 import './WatchVideos.css';
-
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
 import videoData from '../videosLibrary/VideosLibrary.json';
 
 function WatchVideo() {
-
   const { videoId } = useParams();
   const [videos, setVideos] = useState(videoData);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
@@ -29,6 +26,12 @@ function WatchVideo() {
       setIncrementedVideoId(id);
     }
   }, [videoId, incrementedVideoId]);
+
+  useEffect(() => {
+    if (selectedVideoId) {
+      window.scrollTo(0, 0); // Scroll to top when selectedVideoId changes
+    }
+  }, [selectedVideoId]);
 
   const handleVideoSelect = (video) => {
     setSelectedVideoId(video.id);
@@ -100,34 +103,29 @@ function WatchVideo() {
   };
 
   return (
-    
-      <div className="container-fluid">
-        
-        <div className="row">
-
-          <div className="col-8">
-
-            <div className="current-video-padding">
-              {selectedVideoId && (
-                <CurrentVideo
-                  video={videos.find(video => video.id === selectedVideoId)}
-                  onLikeToggle={handleLikeToggle}
-                  onDislikeToggle={handleDislikeToggle}
-                  onCommentAdd={handleCommentAdd}
-                  onCommentDelete={handleCommentDelete}
-                  onCommentEdit={handleCommentEdit}
-                  resetComments={resetComments}
-                  setResetComments={setResetComments}
-                />
-              )}
-            </div>
-          </div>
-        
-          <div className="col-4">
-            <SuggestedVideos onVideoSelect={handleVideoSelect} videoData={videos} />
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-8">
+          <div className="current-video-padding">
+            {selectedVideoId && (
+              <CurrentVideo
+                video={videos.find(video => video.id === selectedVideoId)}
+                onLikeToggle={handleLikeToggle}
+                onDislikeToggle={handleDislikeToggle}
+                onCommentAdd={handleCommentAdd}
+                onCommentDelete={handleCommentDelete}
+                onCommentEdit={handleCommentEdit}
+                resetComments={resetComments}
+                setResetComments={setResetComments}
+              />
+            )}
           </div>
         </div>
+        <div className="col-4">
+          <SuggestedVideos onVideoSelect={handleVideoSelect} videoData={videos} />
+        </div>
       </div>
+    </div>
   );
 }
 

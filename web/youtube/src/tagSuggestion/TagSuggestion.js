@@ -1,4 +1,3 @@
-// TagSuggestion.js
 import './TagSuggestion.css';
 import { useTheme } from '../themeContext/ThemeContext';
 
