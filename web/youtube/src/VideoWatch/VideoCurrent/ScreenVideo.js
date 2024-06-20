@@ -19,7 +19,7 @@ function ScreenVideo({ video, videoRef }) {
               controls
               poster={video.thumbnail}
             >
-              <source src={video.videoUrl} type="video/mp4" />
+              <source src={video.videoPath} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           ) : (
@@ -33,7 +33,7 @@ function ScreenVideo({ video, videoRef }) {
             <p>{video.description}</p>
             <div className="d-flex justify-content-between">
               <span>
-                <p>Uploaded: {video.uploadDate} • {video.views} views</p>
+                <p>Uploaded: {video.dateUploaded} • {video.viewsCount} views</p>
               </span>
             </div>
           </>
