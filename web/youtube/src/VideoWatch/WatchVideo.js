@@ -5,7 +5,7 @@ import './WatchVideos.css';
 
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
-import videoData from '../videodata.json';
+import videoData from '../videosLibrary/VideosLibrary.json';
 
 function WatchVideo() {
 

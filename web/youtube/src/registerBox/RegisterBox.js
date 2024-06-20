@@ -107,14 +107,6 @@ function RegisterBox() {
       return;
     }
 
-    // Check if the password is already used by another user
-    const passwordExists = users.some(user => user.password === password);
-    if (passwordExists) {
-      setPasswordError('Password already taken. Please choose another one.');
-      setIsPasswordValid(false);
-      return;
-    }
-
     setStep(2);
   };
 
