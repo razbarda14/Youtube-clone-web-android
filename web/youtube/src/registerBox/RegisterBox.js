@@ -124,7 +124,7 @@ function RegisterBox() {
   };
 
   return (
-    <div className={`position-absolute top-50 start-50 translate-middle main-content ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+    <div className={`position-absolute top-50 start-50 translate-middle main-content-register ${darkMode ? 'dark-mode' : 'light-mode'}`}>
       <div className='container'>
         <div id="sign-in-register-card" className="card">
           <div className="card-body">

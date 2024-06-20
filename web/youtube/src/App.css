@@ -5,19 +5,23 @@
   --light-input-border-color: #474747;
   --light-input-focus-background-color: white;
   --light-button-background-color: #EEEEEF;
+  --light-button-icon-color: black;
 
   --dark-input-background-color: #2b2b2b;
   --dark-input-text-color: white;
   --dark-input-border-color: #474747;
   --dark-input-focus-background-color: #474747;
   --dark-button-background-color: #474747;
+  --dark-button-icon-color: white;
+  --dark-button-hover-background-color: #1f1f1f;
 
   --input-focus-border-color: #474747;
-  /* Change this to your desired color */
 
   --primary-color: #007bff;
   --secondary-color: #6c757d;
 
+  --light-btn-outline-secondary-color: black;
+  --dark-btn-outline-secondary-color: white;
 }
 
 body {
@@ -32,6 +36,8 @@ body {
   --input-text-color: var(--light-input-text-color);
   --input-border-color: var(--light-input-border-color);
   --input-focus-background-color: var(--light-input-focus-background-color);
+  --btn-outline-secondary-color: var(--light-btn-outline-secondary-color);
+  --button-icon-color: var(--light-button-icon-color);
 }
 
 .dark-mode {
@@ -41,6 +47,9 @@ body {
   --input-text-color: var(--dark-input-text-color);
   --input-border-color: var(--dark-input-border-color);
   --input-focus-background-color: var(--dark-input-focus-background-color);
+  --btn-outline-secondary-color: var(--dark-btn-outline-secondary-color);
+  --button-icon-color: var(--dark-button-icon-color);
+  --button-hover-background-color: var(--dark-button-hover-background-color);
 }
 
 .main-content {
@@ -49,9 +58,7 @@ body {
 
 .no-underline {
   text-decoration: none;
-  /* Remove the underline */
   color: inherit;
-  /* Inherit text color to avoid default link color */
 }
 
 .form-control {
@@ -75,4 +82,29 @@ body {
 #form-row {
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+button {
+  border: 1px solid var(--button-border-color);
+  transition: border-color 0.3s ease;
+}
+
+button:focus {
+  outline: none;
+  border-color: transparent;
+}
+
+button i {
+  color: var(--button-icon-color);
+}
+
+/* Specific styles for .btn-outline-secondary in dark mode */
+.dark-mode .btn-outline-secondary {
+  color: var(--btn-outline-secondary-color);
+  border-color: var(--btn-outline-secondary-color);
+}
+
+.dark-mode .btn-outline-secondary:hover {
+  background-color: var(--button-hover-background-color);
+  color: var(--background-color);
 }

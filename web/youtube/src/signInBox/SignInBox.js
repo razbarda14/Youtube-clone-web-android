@@ -36,7 +36,7 @@ function SignInBox() {
   };
 
   return (
-    <div className="position-absolute top-50 start-50 translate-middle main-content">
+    <div className="position-absolute top-50 start-50 translate-middle main-content-sign-in">
       <div className="container">
         <div id="sign-in-register-card" className="card">
           <div className="card-body">

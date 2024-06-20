@@ -3,9 +3,7 @@ import upThumb from '../../photosVideo/hand-thumbs-up.svg';
 import downThumb from '../../photosVideo/hand-thumbs-down.svg';
 import upThumbBlack from '../../photosVideo/hand-thumbs-up-fill.svg';
 import downThumbBlack from '../../photosVideo/hand-thumbs-down-fill.svg';
-import Share from '../../photosVideo/share.svg';
-import Download from '../../photosVideo/download.svg';
-import bell from '../../photosVideo/bell.svg';
+
 
 function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
   // Likes State: initial value of 500
@@ -29,10 +27,12 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
   };
 
   return (
+
     <div>
       {/* Buttons */}
       <div className="video-buttons mt-3">
 
+        {/* Like button */}
         <button
           className={`btn btn-light ${video.isLiked ? 'active-like' : ''}`}
           onClick={() => onLikeToggle(video.id)}
@@ -41,6 +41,7 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
           <img src={video.isLiked ? upThumbBlack : upThumb} alt="Like" className="img-fluid" />
         </button>
 
+        {/* Dislike button */}
         <button
           className={`btn btn-light ${video.isDisliked ? 'active-dislike' : ''}`}
           onClick={() => onDislikeToggle(video.id)}
@@ -48,15 +49,18 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
           <img src={video.isDisliked ? downThumbBlack : downThumb} alt="Dislike" className="img-fluid" />
         </button>
 
+        {/* Share button */}
         <button className="btn btn-light" onClick={handleShare}>
           <div>Share</div>
         <i class="bi bi-share"></i>
         </button>
         
+        {/* Subscribe button */}
         <button className="btn btn-light">
         <div>Subscribe</div>
         <i class="bi bi-bell"></i>
         </button>
+
       </div>
     </div>
   );

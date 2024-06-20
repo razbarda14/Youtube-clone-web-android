@@ -85,49 +85,60 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
       <div className="comments-section mt-3">
         {comments.map((comment, index) => (
           <div className='container-fluid'>
+
             <div className='row'>
-              <i class="bi bi-person-circle"></i>
-              <div>@username</div>
-            </div>
-            <div className='row'>
-              <div key={index} className="comment-container">
-                {editingComment && editingComment.index === index ? (
-                  <div className="d-flex">
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={editingComment.text}
-                      onChange={(e) => handleEditInputChange(e, index)}
-                    />
-                    <div className="input-group-append">
-                      <button
-                        className="btn btn-outline-secondary"
-                        onClick={() => handleSaveComment(index)}
-                        disabled={editingComment.text.trim() === ''}
-                      >
-                        Save
-                      </button>
-                      <button
-                        className="btn btn-outline-secondary"
-                        onClick={() => handleCancelComment()}
-                      >
-                        Cancel
-                      </button>
-                    </div>
+
+              <div className='col-1 align-items-center'>
+                <i class="bi bi-person-circle"></i>
+              </div>
+
+              <div className='col-4'>
+
+                <div className='row'>
+                  @username
+                </div>
+                
+                <div className='row'>
+                  <div key={index} className="comment-container">
+                    {editingComment && editingComment.index === index ? (
+                      <div className="d-flex">
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={editingComment.text}
+                          onChange={(e) => handleEditInputChange(e, index)}
+                        />
+                        <div className="input-group-append">
+                          <button
+                            className="btn btn-outline-secondary"
+                            onClick={() => handleSaveComment(index)}
+                            disabled={editingComment.text.trim() === ''}
+                          >
+                            Save
+                          </button>
+                          <button
+                            className="btn btn-outline-secondary"
+                            onClick={() => handleCancelComment()}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <p>{comment}</p>
+                        <div className="input-group-append">
+                          <button className="btn btn-outline-secondary" onClick={() => handleEditComment(index, comment)}>
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                          <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(index)}>
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
-                ) : (
-                  <>
-                    <p>{comment}</p>
-                    <div className="input-group-append">
-                      <button className="btn btn-outline-secondary" onClick={() => handleEditComment(index, comment)}>
-                        Edit
-                      </button>
-                      <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(index)}>
-                        Delete
-                      </button>
-                    </div>
-                  </>
-                )}
+                </div>
               </div>
             </div>
           </div>
