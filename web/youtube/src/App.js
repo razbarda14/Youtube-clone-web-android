@@ -1,5 +1,4 @@
 import './App.css';
-
 import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTheme } from './themeContext/ThemeContext';
@@ -13,14 +12,18 @@ import videoData from './videosLibrary/VideosLibrary.json';
 import UpperBar from './upperBar/UpperBar';
 
 function App() {
-
   const { darkMode } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [tagFilter, setTagFilter] = useState('all');
   const [videoList, setVideoList] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     setVideoList(videoData);
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (loggedInUser) {
+      setUser(loggedInUser);
+    }
   }, []);
 
   const filteredVideos = videoList.filter(video => {
@@ -44,19 +47,15 @@ function App() {
   }, [darkMode]);
 
   return (
-
     <div className="App">
-    
-      <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter}/>
-    
+      <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter} user={user} setUser={setUser}/>
       <Routes>
         <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter}/>}/>
-        <Route path="/register" element={<RegisterBox/>} />
-        <Route path="/signIn" element={<SignInBox />}/>
-        <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo}/>} />
-        <Route path="/WatchVideo/:videoId" element={<WatchVideo/>} />
+        <Route path="/register" element={<RegisterBox setUser={setUser}/>}/>
+        <Route path="/signIn" element={<SignInBox setUser={setUser}/>}/>
+        <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} user={user}/>}/>
+        <Route path="/WatchVideo/:videoId" element={<WatchVideo/>}/>
       </Routes>
-    
     </div>
   );
 }

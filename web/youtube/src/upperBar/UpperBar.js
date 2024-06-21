@@ -6,7 +6,7 @@ import { useTheme } from '../themeContext/ThemeContext';
 import youtubeLogoLight from "../img/youtube-logo-light-mode.png";
 import youtubeLogoDark from "../img/youtube-logo-dark-mode.png";
 
-function UpperBar({ setSearchQuery, setTagFilter }) {
+function UpperBar({ setSearchQuery, setTagFilter, user, setUser }) {
   const { darkMode, toggleTheme } = useTheme();
   const [inputValue, setInputValue] = useState('');
 
@@ -22,6 +22,11 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
     setSearchQuery('');
     setInputValue('');
     setTagFilter('all');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('loggedInUser');
+    setUser(null);
   };
 
   return (
@@ -66,9 +71,13 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
           <button type="button" className="btn btn-outline-secondary me-2" onClick={toggleTheme}>
             <i className={`bi ${darkMode ? 'bi-sun' : 'bi-moon'}`}></i>
           </button>
-          <Link to='/signIn'>
-            <button type="button" className="btn btn-outline-primary align-middle">Sign In</button>
-          </Link>
+          {user ? (
+            <button type="button" className="btn btn-outline-primary" onClick={handleLogout}>Log Out</button>
+          ) : (
+            <Link to='/signIn'>
+              <button type="button" className="btn btn-outline-primary">Sign In</button>
+            </Link>
+          )}
         </div>
       </div>
     </div>
