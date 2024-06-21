@@ -13,7 +13,6 @@ import videoData from './videosLibrary/VideosLibrary.json';
 import UpperBar from './upperBar/UpperBar';
 
 function App() {
-
   const { darkMode } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [tagFilter, setTagFilter] = useState('all');
@@ -33,7 +32,6 @@ function App() {
     setVideoList([...videoList, newVideo]);
   };
 
-  // Apply the dark-mode or light-mode class to the body tag
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark-mode');
@@ -45,11 +43,8 @@ function App() {
   }, [darkMode]);
 
   return (
-
     <div className="App">
-    
       <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter}/>
-    
       <Routes>
         <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter}/>}/>
         <Route path="/register" element={<RegisterBox/>} />
@@ -57,7 +52,6 @@ function App() {
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo}/>} />
         <Route path="/WatchVideo/:videoId" element={<WatchVideo/>} />
       </Routes>
-    
     </div>
   );
 }

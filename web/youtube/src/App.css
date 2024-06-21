@@ -16,7 +16,6 @@
   --dark-button-hover-background-color: #1f1f1f;
 
   --input-focus-border-color: #474747;
-  /* Change this to your desired color */
 
   --primary-color: #007bff;
   --secondary-color: #6c757d;
@@ -69,6 +68,14 @@ body {
 .form-control:focus {
   background-color: var(--input-focus-background-color);
   border-color: var(--input-focus-border-color);
+}
+
+.form-control-dark-mode:focus {
+  color: white;
+}
+
+.form-control-light-mode:focus {
+  color: black;
 }
 
 #sign-in-register-card {

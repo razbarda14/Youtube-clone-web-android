@@ -1,5 +1,4 @@
 import './UpperBar.css';
-
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { useTheme } from '../themeContext/ThemeContext';
@@ -7,9 +6,7 @@ import { useTheme } from '../themeContext/ThemeContext';
 import youtubeLogoLight from "../img/youtube-logo-light-mode.png";
 import youtubeLogoDark from "../img/youtube-logo-dark-mode.png";
 
-
 function UpperBar({ setSearchQuery, setTagFilter }) {
-
   const { darkMode, toggleTheme } = useTheme();
   const [inputValue, setInputValue] = useState('');
 
@@ -28,19 +25,18 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
   };
 
   return (
-
     <div className="container-fluid upper-bar">
       <div className="row align-items-center">
         <div className="col-4 d-flex align-items-center my-height">
           <Link to='/' onClick={handleLogoClick}>
-          <img src={darkMode ? youtubeLogoDark : youtubeLogoLight} alt="Clickable" height="25px" />
+            <img src={darkMode ? youtubeLogoDark : youtubeLogoLight} alt="Clickable" height="25px" />
           </Link>
         </div>
         <div className="col-4 d-flex align-items-center justify-content-center my-height">
           <div className="input-group mb-3 push-down">
             <input
               type="text"
-              className="form-control no-outline"
+              className={`form-control no-outline ${darkMode ? 'form-control-dark-mode' : 'form-control-light-mode'}`}
               placeholder="Search"
               aria-label="Search"
               aria-describedby="button-addon2"
@@ -67,16 +63,12 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
         </div>
         
         <div className="col-2 d-flex align-items-center justify-content-center my-height">
-          
           <button type="button" className="btn btn-outline-secondary me-2" onClick={toggleTheme}>
             <i className={`bi ${darkMode ? 'bi-sun' : 'bi-moon'}`}></i>
-         
           </button>
-         
           <Link to='/signIn'>
             <button type="button" className="btn btn-outline-primary align-middle">Sign In</button>
           </Link>
-        
         </div>
       </div>
     </div>
