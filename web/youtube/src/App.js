@@ -2,6 +2,7 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTheme } from './themeContext/ThemeContext';
+
 import WatchVideo from './videoWatch/WatchVideo';
 import RegisterBox from './registerBox/RegisterBox';
 import SignInBox from './signInBox/SignInBox';
@@ -20,11 +21,6 @@ function App() {
   const [comments, setComments] = useState({});
 
   useEffect(() => {
-    const initialComments = videoData.reduce((acc, video) => {
-      acc[video.id] = video.comments || [];
-      return acc;
-    }, {});
-    setComments(initialComments);
     setVideoList(videoData);
   }, []);
 
@@ -58,21 +54,23 @@ function App() {
   const addComment = (videoId, comment) => {
     setComments(prevComments => ({
       ...prevComments,
-      [videoId]: [...prevComments[videoId], comment],
+      [videoId]: [...(prevComments[videoId] || []), comment]
     }));
   };
 
-  const editComment = (videoId, index, newText) => {
+  const editComment = (videoId, commentIndex, newComment) => {
     setComments(prevComments => ({
       ...prevComments,
-      [videoId]: prevComments[videoId].map((comment, i) => i === index ? { ...comment, text: newText } : comment),
+      [videoId]: prevComments[videoId].map((comment, index) =>
+        index === commentIndex ? newComment : comment
+      )
     }));
   };
 
-  const deleteComment = (videoId, index) => {
+  const deleteComment = (videoId, commentIndex) => {
     setComments(prevComments => ({
       ...prevComments,
-      [videoId]: prevComments[videoId].filter((_, i) => i !== index),
+      [videoId]: prevComments[videoId].filter((_, index) => index !== commentIndex)
     }));
   };
 
@@ -99,18 +97,7 @@ function App() {
         <Route path="/register" element={<RegisterBox registerUser={registerUser} users={users} />} />
         <Route path="/signIn" element={<SignInBox loginUser={loginUser} />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} user={currentUser} />} />
-        <Route 
-          path="/WatchVideo/:videoId" 
-          element={
-            <WatchVideo 
-              comments={comments} 
-              addComment={addComment} 
-              editComment={editComment} 
-              deleteComment={deleteComment} 
-              currentUser={currentUser} 
-            />
-          } 
-        />
+        <Route path="/WatchVideo/:videoId" element={<WatchVideo comments={comments} addComment={addComment} editComment={editComment} deleteComment={deleteComment} currentUser={currentUser} videoList={videoList} />} />
       </Routes>
     </div>
   );

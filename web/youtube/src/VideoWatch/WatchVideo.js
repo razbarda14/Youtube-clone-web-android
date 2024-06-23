@@ -5,71 +5,65 @@ import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
 import videoData from '../videosLibrary/VideosLibrary.json';
 
-function WatchVideo({ comments, addComment, editComment, deleteComment, currentUser }) {
+function WatchVideo({ comments, addComment, editComment, deleteComment, currentUser, videoList }) {
   const { videoId } = useParams();
-  const [videos, setVideos] = useState(videoData);
-  const [selectedVideoId, setSelectedVideoId] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const [resetComments, setResetComments] = useState(false);
   const [incrementedVideoId, setIncrementedVideoId] = useState(null);
 
   useEffect(() => {
     const id = videoId ? parseInt(videoId) : videoData[0].id;
-    setSelectedVideoId(id);
+    const video = videoList.find(v => v.id === id);
+    setSelectedVideo(video);
     setResetComments(true);
 
     if (incrementedVideoId !== id) {
-      setVideos(prevVideos =>
-        prevVideos.map(v =>
-          v.id === id ? { ...v, views: v.views + 1 } : v
-        )
+      videoList = videoList.map(v =>
+        v.id === id ? { ...v, viewsCount: (parseInt(v.viewsCount) + 1).toString() } : v
       );
       setIncrementedVideoId(id);
     }
-  }, [videoId, incrementedVideoId]);
+  }, [videoId, incrementedVideoId, videoList]);
 
   useEffect(() => {
-    if (selectedVideoId) {
-      window.scrollTo(0, 0); // Scroll to top when selectedVideoId changes
+    if (selectedVideo) {
+      window.scrollTo(0, 0); // Scroll to top when selectedVideo changes
     }
-  }, [selectedVideoId]);
+  }, [selectedVideo]);
 
   const handleVideoSelect = (video) => {
-    setSelectedVideoId(video.id);
+    setSelectedVideo(video);
     setResetComments(true);
   };
 
   const handleLikeToggle = (videoId) => {
-    setVideos(prevVideos =>
-      prevVideos.map(video => {
-        if (video.id === videoId) {
-          return {
-            ...video,
-            isLiked: !video.isLiked,
-            likes: video.isLiked ? video.likes - 1 : video.likes + 1,
-            isDisliked: false
-          };
-        } else {
-          return video;
-        }
-      })
-    );
+    videoList = videoList.map(video => {
+      if (video.id === videoId) {
+        return {
+          ...video,
+          isLiked: !video.isLiked,
+          likes: video.isLiked ? video.likes - 1 : video.likes + 1,
+          isDisliked: false
+        };
+      } else {
+        return video;
+      }
+    });
   };
 
   const handleDislikeToggle = (videoId) => {
-    setVideos(prevVideos =>
-      prevVideos.map(video => {
-        if (video.id === videoId) {
-          return {
-            ...video,
-            isDisliked: !video.isDisliked,
-            isLiked: false,
-            likes: video.isLiked ? video.likes - 1 : video.likes // Update likes if previously liked
-          };
-        } else {
-          return video;
-        }
-      })
-    );
+    videoList = videoList.map(video => {
+      if (video.id === videoId) {
+        return {
+          ...video,
+          isDisliked: !video.isDisliked,
+          isLiked: false,
+          likes: video.isLiked ? video.likes - 1 : video.likes // Update likes if previously liked
+        };
+      } else {
+        return video;
+      }
+    });
   };
 
   const handleCommentAdd = (videoId, comment) => {
@@ -89,9 +83,9 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
       <div className="row">
         <div className="col-8">
           <div className="current-video-padding">
-            {selectedVideoId && (
+            {selectedVideo && (
               <CurrentVideo
-                video={videos.find(video => video.id === selectedVideoId)}
+                video={selectedVideo}
                 onLikeToggle={handleLikeToggle}
                 onDislikeToggle={handleDislikeToggle}
                 onCommentAdd={handleCommentAdd}
@@ -100,13 +94,13 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
                 resetComments={resetComments}
                 setResetComments={setResetComments}
                 currentUser={currentUser}
-                comments={comments[selectedVideoId] || []}
+                comments={comments[selectedVideo.id] || []}
               />
             )}
           </div>
         </div>
         <div className="col-4">
-          <SuggestedVideos onVideoSelect={handleVideoSelect} videoData={videos} />
+          <SuggestedVideos onVideoSelect={handleVideoSelect} videoData={videoList} />
         </div>
       </div>
     </div>

@@ -29,12 +29,13 @@ function UploadVideo({ addVideo, user }) {
       description,
       viewsCount: '0',
       dateUploaded: new Date().toLocaleDateString('en-GB'),
-      videoPath: URL.createObjectURL(videoFile),
+      thumbnail: URL.createObjectURL(videoFile),
       topic,
+      channel: user.displayName,
+      videoPath: URL.createObjectURL(videoFile),
+      isLiked: false,
       likes: 0,
       comments: [],
-      isLiked: false,
-      channel: user.displayName,
     };
 
     addVideo(newVideo);

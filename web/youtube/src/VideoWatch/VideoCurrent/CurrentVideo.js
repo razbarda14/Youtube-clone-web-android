@@ -7,8 +7,8 @@ import Comments from './userOptions/Comments';
 function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCommentDelete, onCommentEdit, resetComments, setResetComments, currentUser, onDeleteVideo, onEditVideo, comments }) {
   const videoRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(video.title);
-  const [editedDescription, setEditedDescription] = useState(video.description);
+  const [editedTitle, setEditedTitle] = useState(video?.title || '');
+  const [editedDescription, setEditedDescription] = useState(video?.description || '');
 
   useEffect(() => {
     if (resetComments) {
@@ -41,6 +41,10 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
   const handleDeleteClick = () => {
     onDeleteVideo(video.id);
   };
+
+  if (!video) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className='main-content justify-content-center'>
