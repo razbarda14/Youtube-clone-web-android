@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../themeContext/ThemeContext';
 
-function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
+function ButtonsVideo({ video, onLikeToggle, onDislikeToggle, currentUser }) {
   const [, setLikes] = useState(video.likes);
   const [, setIsLiked] = useState(false);
   const [, setIsDisliked] = useState(false);
@@ -26,7 +26,7 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
     <div>
       <button
         className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} ${video.isLiked ? 'active-like' : ''}`}
-        onClick={() => onLikeToggle(video.id)}
+        onClick={() => currentUser && onLikeToggle(video.id)}
       >
         {video.likes}
         <i className={`bi ${video.isLiked ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'} img-fluid`}></i>
@@ -34,7 +34,7 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle }) {
 
       <button
         className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} ${video.isDisliked ? 'active-dislike' : ''}`}
-        onClick={() => onDislikeToggle(video.id)}
+        onClick={() => currentUser && onDislikeToggle(video.id)}
       >
         <i className={`bi ${video.isDisliked ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down'} img-fluid`}></i>
       </button>

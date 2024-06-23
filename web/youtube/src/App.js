@@ -49,6 +49,20 @@ function App() {
     setCurrentUser(null);
   };
 
+  const deleteVideo = (videoId) => {
+    setVideoList(prevVideos => prevVideos.filter(video => video.id !== videoId));
+  };
+
+  const editVideo = (videoId, newTitle, newDescription) => {
+    setVideoList(prevVideos =>
+      prevVideos.map(video =>
+        video.id === videoId
+          ? { ...video, title: newTitle, description: newDescription }
+          : video
+      )
+    );
+  };
+
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark-mode');
@@ -72,7 +86,7 @@ function App() {
         <Route path="/register" element={<RegisterBox registerUser={registerUser} users={users} />} />
         <Route path="/signIn" element={<SignInBox loginUser={loginUser} />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} user={currentUser} />} />
-        <Route path="/WatchVideo/:videoId" element={<WatchVideo videoList={videoList} />} />
+        <Route path="/WatchVideo/:videoId" element={<WatchVideo videoList={videoList} currentUser={currentUser} onDeleteVideo={deleteVideo} onEditVideo={editVideo} />} />
       </Routes>
     </div>
   );

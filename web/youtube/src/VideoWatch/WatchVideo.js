@@ -4,7 +4,7 @@ import './WatchVideos.css';
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
 
-function WatchVideo({ videoList }) {
+function WatchVideo({ videoList, currentUser, onDeleteVideo, onEditVideo }) {
   const { videoId } = useParams();
   const [videos, setVideos] = useState(videoList);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
@@ -116,6 +116,9 @@ function WatchVideo({ videoList }) {
                 onCommentEdit={handleCommentEdit}
                 resetComments={resetComments}
                 setResetComments={setResetComments}
+                currentUser={currentUser}
+                onDeleteVideo={onDeleteVideo}
+                onEditVideo={onEditVideo}
               />
             )}
           </div>
