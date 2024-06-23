@@ -6,6 +6,7 @@ function UploadVideo({ addVideo, user }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [topic, setTopic] = useState('');
+  const [videoFile, setVideoFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -14,6 +15,11 @@ function UploadVideo({ addVideo, user }) {
 
     if (!title.trim()) {
       setErrorMessage('Please enter a title for the video.');
+      return;
+    }
+
+    if (!videoFile) {
+      setErrorMessage('Please choose a video file.');
       return;
     }
 
@@ -26,6 +32,7 @@ function UploadVideo({ addVideo, user }) {
       image: 'default.jpg',
       topic,
       uploader: user.userName,
+      videoFile: URL.createObjectURL(videoFile),
     };
 
     addVideo(newVideo);
@@ -33,6 +40,7 @@ function UploadVideo({ addVideo, user }) {
     setTitle('');
     setDescription('');
     setTopic('');
+    setVideoFile(null);
     setErrorMessage('');
   };
 
@@ -103,6 +111,17 @@ function UploadVideo({ addVideo, user }) {
                   className="form-control"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Video File (MP4 only)</label>
+                <input
+                  className="form-control"
+                  type="file"
+                  accept="video/mp4"
+                  onChange={(e) => setVideoFile(e.target.files[0])}
+                  required
                 />
               </div>
 

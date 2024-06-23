@@ -5,14 +5,12 @@ import './RegisterBox.css';
 import { useTheme } from '../themeContext/ThemeContext';
 
 function RegisterBox({ registerUser, users }) {
-
   const { darkMode } = useTheme();
 
   const [userName, setUserName] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
-  
   const [photo, setPhoto] = useState(null);
   const [isUserNameValid, setIsUserNameValid] = useState(true);
   const [isDisplayNameValid, setIsDisplayNameValid] = useState(true);
@@ -47,8 +45,14 @@ function RegisterBox({ registerUser, users }) {
   };
 
   const handlePhotoChange = (e) => {
-    setPhoto(e.target.files[0]);
-    setIsPhotoValid(e.target.files[0] !== null);
+    const file = e.target.files[0];
+    if (file && ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
+      setPhoto(file);
+      setIsPhotoValid(true);
+    } else {
+      setPhoto(null);
+      setIsPhotoValid(false);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -212,15 +216,16 @@ function RegisterBox({ registerUser, users }) {
                             <div className="invalid-feedback">Display Name is required.</div>
                           </div>
                           <div className="mb-3">
-                            <label htmlFor="photo" className="form-label">Profile Photo</label>
+                            <label htmlFor="photo" className="form-label">Profile Photo (jpeg, jpg, png)</label>
                             <input
                               type="file"
                               className={`form-control ${!isPhotoValid ? 'is-invalid' : ''}`}
                               id="photo"
+                              accept="image/jpeg, image/jpg, image/png"
                               onChange={handlePhotoChange}
                               required
                             />
-                            <div className="invalid-feedback">Please upload a photo.</div>
+                            <div className="invalid-feedback">Please upload a valid photo (jpeg, jpg, png).</div>
                             {photo && (
                               <div className="mt-3">
                                 <img
