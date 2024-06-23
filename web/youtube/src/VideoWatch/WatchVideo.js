@@ -3,29 +3,28 @@ import { useParams } from 'react-router-dom';
 import './WatchVideos.css';
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
-import videoData from '../videosLibrary/VideosLibrary.json';
 
-function WatchVideo() {
+function WatchVideo({ videoList }) {
   const { videoId } = useParams();
-  const [videos, setVideos] = useState(videoData);
+  const [videos, setVideos] = useState(videoList);
   const [selectedVideoId, setSelectedVideoId] = useState(null);
   const [resetComments, setResetComments] = useState(false);
   const [incrementedVideoId, setIncrementedVideoId] = useState(null);
 
   useEffect(() => {
-    const id = videoId ? parseInt(videoId) : videoData[0].id;
+    const id = videoId ? parseInt(videoId) : videoList[0].id;
     setSelectedVideoId(id);
     setResetComments(true);
 
     if (incrementedVideoId !== id) {
       setVideos(prevVideos =>
         prevVideos.map(v =>
-          v.id === id ? { ...v, views: v.views + 1 } : v
+          v.id === id ? { ...v, viewsCount: parseInt(v.viewsCount) + 1 } : v
         )
       );
       setIncrementedVideoId(id);
     }
-  }, [videoId, incrementedVideoId]);
+  }, [videoId, incrementedVideoId, videoList]);
 
   useEffect(() => {
     if (selectedVideoId) {

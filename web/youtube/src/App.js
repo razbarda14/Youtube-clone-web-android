@@ -1,9 +1,7 @@
 import './App.css';
-
 import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTheme } from './themeContext/ThemeContext';
-
 import WatchVideo from './videoWatch/WatchVideo';
 import RegisterBox from './registerBox/RegisterBox';
 import SignInBox from './signInBox/SignInBox';
@@ -31,7 +29,7 @@ function App() {
   });
 
   const addVideo = (newVideo) => {
-    setVideoList([...videoList, newVideo]);
+    setVideoList(prevVideos => [...prevVideos, newVideo]);
   };
 
   const registerUser = (newUser) => {
@@ -74,7 +72,7 @@ function App() {
         <Route path="/register" element={<RegisterBox registerUser={registerUser} users={users} />} />
         <Route path="/signIn" element={<SignInBox loginUser={loginUser} />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} user={currentUser} />} />
-        <Route path="/WatchVideo/:videoId" element={<WatchVideo />} />
+        <Route path="/WatchVideo/:videoId" element={<WatchVideo videoList={videoList} />} />
       </Routes>
     </div>
   );
