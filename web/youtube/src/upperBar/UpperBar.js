@@ -58,7 +58,7 @@ function UpperBar({ setSearchQuery, setTagFilter, currentUser, logoutUser }) {
           </div>
         </div>
         
-        <div className="col-2 d-flex align-items-center justify-content-center my-height">
+        <div className="col-1 d-flex align-items-center justify-content-center my-height">
           <Link to='/uploadVideo'>
             <button type="button" className="btn btn-outline-secondary">
               <i className="bi bi-upload"></i>
@@ -66,7 +66,7 @@ function UpperBar({ setSearchQuery, setTagFilter, currentUser, logoutUser }) {
           </Link>
         </div>
         
-        <div className="col-2 d-flex align-items-center justify-content-center my-height">
+        <div className="col-3 d-flex align-items-center justify-content-center my-height">
           <button type="button" className="btn btn-outline-secondary me-2" onClick={toggleTheme}>
             <i className={`bi ${darkMode ? 'bi-sun' : 'bi-moon'}`}></i>
           </button>
@@ -79,7 +79,7 @@ function UpperBar({ setSearchQuery, setTagFilter, currentUser, logoutUser }) {
                 src={currentUser.photo}
                 alt="User Profile"
                 className="rounded-circle me-2"
-                style={{ width: '30px', height: '30px' }}
+                style={{ width: '30px', height: '30px', marginLeft : '7px' }}
               />
             </>
           ) : (

@@ -5,11 +5,14 @@ import './RegisterBox.css';
 import { useTheme } from '../themeContext/ThemeContext';
 
 function RegisterBox({ registerUser, users }) {
+
   const { darkMode } = useTheme();
+
   const [userName, setUserName] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
+  
   const [photo, setPhoto] = useState(null);
   const [isUserNameValid, setIsUserNameValid] = useState(true);
   const [isDisplayNameValid, setIsDisplayNameValid] = useState(true);
@@ -63,7 +66,11 @@ function RegisterBox({ registerUser, users }) {
     setDoPasswordsMatch(doPasswordsMatchFinal);
     setIsPhotoValid(isPhotoValidFinal);
 
-    if (!isUserNameValidFinal || !isDisplayNameValidFinal || !isPasswordValidFinal || !doPasswordsMatchFinal || !isPhotoValidFinal) {
+    if (!isUserNameValidFinal ||
+        !isDisplayNameValidFinal || 
+        !isPasswordValidFinal || 
+        !doPasswordsMatchFinal || 
+        !isPhotoValidFinal) {
       return;
     }
 

@@ -24,7 +24,8 @@ function UploadVideo({ addVideo, user }) {
       viewsCount: '0',
       dateUploaded: new Date().toLocaleDateString('en-GB'),
       image: 'default.jpg',
-      topic
+      topic,
+      uploader: user.userName,
     };
 
     addVideo(newVideo);
