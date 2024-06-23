@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import youtubeIcon from "../img/youtube-icon.png";
 
-
-function SignInBox() {
+function SignInBox({ loginUser }) {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginValid, setIsLoginValid] = useState(true);
@@ -25,8 +24,9 @@ function SignInBox() {
     // Validate login credentials
     const isValid = loginUser(userName, password);
 
-    if (user) {
+    if (isValid) {
       alert('Login successful!');
+      navigate('/'); // Redirect to the main page
     } else {
       setIsLoginValid(false);
     }
@@ -79,9 +79,7 @@ function SignInBox() {
                     </div>
                   </div>
                   <div className="col-6">
-                    <div className="p-3">
-                      {/* Placeholder div for alignment */}
-                    </div>
+                    <div className="p-3"></div>
                   </div>
                   <div className="col-6">
                     <div className="p-3">

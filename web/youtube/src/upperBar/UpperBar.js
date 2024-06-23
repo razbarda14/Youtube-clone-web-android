@@ -6,7 +6,7 @@ import { useTheme } from '../themeContext/ThemeContext';
 import youtubeLogoLight from "../img/youtube-logo-light-mode.png";
 import youtubeLogoDark from "../img/youtube-logo-dark-mode.png";
 
-function UpperBar({ setSearchQuery, setTagFilter }) {
+function UpperBar({ setSearchQuery, setTagFilter, currentUser, logoutUser }) {
   const { darkMode, toggleTheme } = useTheme();
   const [inputValue, setInputValue] = useState('');
 
@@ -22,6 +22,10 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
     setSearchQuery('');
     setInputValue('');
     setTagFilter('all');
+  };
+
+  const handleSignOut = () => {
+    logoutUser();
   };
 
   return (
@@ -66,9 +70,23 @@ function UpperBar({ setSearchQuery, setTagFilter }) {
           <button type="button" className="btn btn-outline-secondary me-2" onClick={toggleTheme}>
             <i className={`bi ${darkMode ? 'bi-sun' : 'bi-moon'}`}></i>
           </button>
-          <Link to='/signIn'>
-            <button type="button" className="btn btn-outline-primary align-middle">Sign In</button>
-          </Link>
+          {currentUser ? (
+            <>
+              <button type="button" className="btn btn-outline-primary align-middle" onClick={handleSignOut}>
+                Sign Out
+              </button>
+              <img
+                src={currentUser.photo}
+                alt="User Profile"
+                className="rounded-circle me-2"
+                style={{ width: '30px', height: '30px' }}
+              />
+            </>
+          ) : (
+            <Link to='/signIn'>
+              <button type="button" className="btn btn-outline-primary align-middle">Sign In</button>
+            </Link>
+          )}
         </div>
       </div>
     </div>
