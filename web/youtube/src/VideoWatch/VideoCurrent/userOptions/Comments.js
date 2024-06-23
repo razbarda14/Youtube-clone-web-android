@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import './Comments.css';
 
-function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetComments, currentUser }) {
+function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetComments, currentUser, comments }) {
   const [newComment, setNewComment] = useState('');
-  const [comments, setComments] = useState(video.comments || []);
+  const [localComments, setLocalComments] = useState(comments);
   const [editingComment, setEditingComment] = useState(null);
   const [addCommentText, setAddCommentText] = useState('');
+  const [showOptions, setShowOptions] = useState(null);
 
   useEffect(() => {
-    setComments(video.comments || []);
+    setLocalComments(comments);
     if (resetComments) {
       setNewComment('');
       setEditingComment(null);
       setAddCommentText('');
     }
-  }, [video, resetComments]);
+  }, [comments, resetComments]);
 
   const handleAddInputChange = (event) => {
     setAddCommentText(event.target.value);
@@ -21,7 +23,15 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
 
   const handleAddComment = () => {
     if (addCommentText.trim() !== '') {
-      onCommentAdd(video.id, addCommentText);
+      const comment = {
+        text: addCommentText,
+        username: currentUser?.userName || 'username',
+        userProfilePicture: currentUser?.photo || '/img/default-user.png',
+        time: new Date().toLocaleDateString('en-GB'),
+      };
+      const updatedComments = [...localComments, comment];
+      setLocalComments(updatedComments);
+      onCommentAdd(video.id, comment);
       setAddCommentText('');
     }
   };
@@ -38,11 +48,15 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
   };
 
   const handleEditComment = (index, comment) => {
-    setEditingComment({ index, text: comment });
+    setEditingComment({ index, text: comment.text });
   };
 
   const handleSaveComment = (index) => {
     if (editingComment.text.trim() !== '') {
+      const updatedComments = localComments.map((comment, i) =>
+        i === index ? { ...comment, text: editingComment.text } : comment
+      );
+      setLocalComments(updatedComments);
       onCommentEdit(video.id, index, editingComment.text);
       setEditingComment(null);
     } else {
@@ -51,11 +65,18 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
   };
 
   const handleDeleteComment = (index) => {
+    const updatedComments = localComments.filter((_, i) => i !== index);
+    setLocalComments(updatedComments);
     onCommentDelete(video.id, index);
+  };
+
+  const toggleOptions = (index) => {
+    setShowOptions(showOptions === index ? null : index);
   };
 
   return (
     <div>
+      <h5>{localComments.length} comments</h5>
       {currentUser && (
         <div className="input-group mt-3">
           <input
@@ -88,60 +109,55 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
         <h5>Please sign in to like a video or write a comment</h5>
       )}
       <div className="comments-section mt-3">
-        {comments.map((comment, index) => (
-          <div className='container-fluid' key={index}>
-            <div className='row'>
-              <div className='col-1 align-items-center'>
-                <i className="bi bi-person-circle"></i>
+        {localComments.map((comment, index) => (
+          <div className="comment-container" key={index}>
+            <div className="comment-header">
+              <img
+                src={comment.userProfilePicture || '/img/default-user.png'}
+                alt="Profile"
+                className="profile-picture"
+              />
+              <div>
+                <span className="username">@{comment.username || 'username'}</span>
+                <span className="comment-time">{comment.time}</span>
               </div>
-              <div className='col-4'>
-                <div className='row'>
-                  @username
+              {currentUser && (
+                <div className="options-container">
+                  <i className="bi bi-three-dots" onClick={() => toggleOptions(index)}></i>
+                  {showOptions === index && (
+                    <div className="options-menu">
+                      <button onClick={() => handleEditComment(index, comment)}>Edit</button>
+                      <button onClick={() => handleDeleteComment(index)}>Delete</button>
+                    </div>
+                  )}
                 </div>
-                <div className='row'>
-                  <div className="comment-container">
-                    {editingComment && editingComment.index === index ? (
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={editingComment.text}
-                          onChange={(e) => handleEditInputChange(e, index)}
-                        />
-                        <div className="input-group-append">
-                          <button
-                            className="btn btn-outline-secondary"
-                            onClick={() => handleSaveComment(index)}
-                            disabled={editingComment.text.trim() === ''}
-                          >
-                            Save
-                          </button>
-                          <button
-                            className="btn btn-outline-secondary"
-                            onClick={() => handleCancelComment()}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <p>{comment}</p>
-                        {currentUser && (
-                          <div className="input-group-append">
-                            <button className="btn btn-outline-secondary" onClick={() => handleEditComment(index, comment)}>
-                              <i className="bi bi-pencil"></i>
-                            </button>
-                            <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(index)}>
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </div>
-                        )}
-                      </>
-                    )}
+              )}
+            </div>
+            <div className="comment-body">
+              {editingComment && editingComment.index === index ? (
+                <div className="edit-comment">
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={editingComment.text}
+                    onChange={(e) => handleEditInputChange(e, index)}
+                  />
+                  <div className="edit-buttons">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleSaveComment(index)}
+                      disabled={editingComment.text.trim() === ''}
+                    >
+                      Save
+                    </button>
+                    <button className="btn btn-secondary" onClick={() => handleCancelComment()}>
+                      Cancel
+                    </button>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <p>{comment.text}</p>
+              )}
             </div>
           </div>
         ))}

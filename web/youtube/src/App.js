@@ -17,8 +17,14 @@ function App() {
   const [videoList, setVideoList] = useState([]);
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [comments, setComments] = useState({});
 
   useEffect(() => {
+    const initialComments = videoData.reduce((acc, video) => {
+      acc[video.id] = video.comments || [];
+      return acc;
+    }, {});
+    setComments(initialComments);
     setVideoList(videoData);
   }, []);
 
@@ -29,7 +35,7 @@ function App() {
   });
 
   const addVideo = (newVideo) => {
-    setVideoList(prevVideos => [...prevVideos, newVideo]);
+    setVideoList([...videoList, newVideo]);
   };
 
   const registerUser = (newUser) => {
@@ -49,18 +55,25 @@ function App() {
     setCurrentUser(null);
   };
 
-  const deleteVideo = (videoId) => {
-    setVideoList(prevVideos => prevVideos.filter(video => video.id !== videoId));
+  const addComment = (videoId, comment) => {
+    setComments(prevComments => ({
+      ...prevComments,
+      [videoId]: [...prevComments[videoId], comment],
+    }));
   };
 
-  const editVideo = (videoId, newTitle, newDescription, newTopic) => {
-    setVideoList(prevVideos =>
-      prevVideos.map(video =>
-        video.id === videoId
-          ? { ...video, title: newTitle, description: newDescription, topic: newTopic }
-          : video
-      )
-    );
+  const editComment = (videoId, index, newText) => {
+    setComments(prevComments => ({
+      ...prevComments,
+      [videoId]: prevComments[videoId].map((comment, i) => i === index ? { ...comment, text: newText } : comment),
+    }));
+  };
+
+  const deleteComment = (videoId, index) => {
+    setComments(prevComments => ({
+      ...prevComments,
+      [videoId]: prevComments[videoId].filter((_, i) => i !== index),
+    }));
   };
 
   useEffect(() => {
@@ -86,7 +99,18 @@ function App() {
         <Route path="/register" element={<RegisterBox registerUser={registerUser} users={users} />} />
         <Route path="/signIn" element={<SignInBox loginUser={loginUser} />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} user={currentUser} />} />
-        <Route path="/WatchVideo/:videoId" element={<WatchVideo videoList={videoList} currentUser={currentUser} onDeleteVideo={deleteVideo} onEditVideo={editVideo} />} />
+        <Route 
+          path="/WatchVideo/:videoId" 
+          element={
+            <WatchVideo 
+              comments={comments} 
+              addComment={addComment} 
+              editComment={editComment} 
+              deleteComment={deleteComment} 
+              currentUser={currentUser} 
+            />
+          } 
+        />
       </Routes>
     </div>
   );

@@ -4,12 +4,11 @@ import ScreenVideo from './ScreenVideo';
 import ButtonsVideo from './userOptions/ButtonsVideo';
 import Comments from './userOptions/Comments';
 
-function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCommentDelete, onCommentEdit, resetComments, setResetComments, currentUser, onDeleteVideo, onEditVideo }) {
+function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCommentDelete, onCommentEdit, resetComments, setResetComments, currentUser, onDeleteVideo, onEditVideo, comments }) {
   const videoRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(video.title);
   const [editedDescription, setEditedDescription] = useState(video.description);
-  const [editedTopic, setEditedTopic] = useState(video.topic);
 
   useEffect(() => {
     if (resetComments) {
@@ -29,14 +28,13 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
   };
 
   const handleSaveClick = () => {
-    onEditVideo(video.id, editedTitle, editedDescription, editedTopic);
+    onEditVideo(video.id, editedTitle, editedDescription);
     setIsEditing(false);
   };
 
   const handleCancelClick = () => {
     setEditedTitle(video.title);
     setEditedDescription(video.description);
-    setEditedTopic(video.topic);
     setIsEditing(false);
   };
 
@@ -49,33 +47,18 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
       <ScreenVideo video={video} videoRef={videoRef} />
       <div className='row'>
         <div className='col-7'>
-          {isEditing ? (
-            <input
-              type="text"
-              className="form-control mb-2"
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-            />
-          ) : (
-            <div className="video-header">
-              <h4>{video.title}</h4>
-              <p>{video.channel}</p>
-            </div>
-          )}
+          <div className="video-header">
+            <h4>{video.title}</h4>
+            <p>{video.channel}</p>
+          </div>
         </div>
         <div className='col-5'>
-          <ButtonsVideo video={video} onLikeToggle={onLikeToggle} onDislikeToggle={onDislikeToggle} currentUser={currentUser} />
+        <ButtonsVideo video={video} onLikeToggle={onLikeToggle} onDislikeToggle={onDislikeToggle} currentUser={currentUser} />
         </div>
       </div>
       <div className="video-details-box p-3 mb-3">
         {isEditing ? (
           <div>
-            <input
-              type="text"
-              className="form-control mb-2"
-              value={editedTopic}
-              onChange={(e) => setEditedTopic(e.target.value)}
-            />
             <textarea
               className="form-control mb-2"
               value={editedDescription}
@@ -86,8 +69,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
           </div>
         ) : (
           <div>
-            <p className="text-bold">{video.viewsCount} views • Uploaded: {video.dateUploaded} </p>
-            <p>{video.topic}</p>
+            <p className="text-bold">Uploaded: {video.dateUploaded} • {video.viewsCount} views</p>
             <p>{video.description}</p>
             {currentUser && (
               <div>
@@ -105,6 +87,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
         onCommentEdit={onCommentEdit}
         resetComments={resetComments}
         currentUser={currentUser}
+        comments={comments}
       />
     </div>
   );
