@@ -13,11 +13,12 @@ import videoData from './videosLibrary/VideosLibrary.json';
 import UpperBar from './upperBar/UpperBar';
 
 function App() {
-
   const { darkMode } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [tagFilter, setTagFilter] = useState('all');
   const [videoList, setVideoList] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     setVideoList(videoData);
@@ -33,6 +34,23 @@ function App() {
     setVideoList([...videoList, newVideo]);
   };
 
+  const registerUser = (newUser) => {
+    setUsers([...users, newUser]);
+  };
+
+  const loginUser = (userName, password) => {
+    const user = users.find(user => user.userName === userName && user.password === password);
+    if (user) {
+      setCurrentUser(user);
+      return true;
+    }
+    return false;
+  };
+
+  const logoutUser = () => {
+    setCurrentUser(null);
+  };
+
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark-mode');
@@ -44,19 +62,20 @@ function App() {
   }, [darkMode]);
 
   return (
-
     <div className="App">
-    
-      <UpperBar setSearchQuery={setSearchQuery} setTagFilter={setTagFilter}/>
-    
+      <UpperBar
+        setSearchQuery={setSearchQuery}
+        setTagFilter={setTagFilter}
+        currentUser={currentUser}
+        logoutUser={logoutUser}
+      />
       <Routes>
-        <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter}/>}/>
-        <Route path="/register" element={<RegisterBox/>} />
-        <Route path="/signIn" element={<SignInBox />}/>
-        <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo}/>} />
-        <Route path="/WatchVideo/:videoId" element={<WatchVideo/>} />
+        <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter} />} />
+        <Route path="/register" element={<RegisterBox registerUser={registerUser} users={users} />} />
+        <Route path="/signIn" element={<SignInBox loginUser={loginUser} />} />
+        <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} />} />
+        <Route path="/WatchVideo/:videoId" element={<WatchVideo />} />
       </Routes>
-    
     </div>
   );
 }

@@ -1,11 +1,10 @@
-// RegisterBox.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import youtubeIcon from "../img/youtube-icon.png";
 import './RegisterBox.css';
 import { useTheme } from '../themeContext/ThemeContext';
 
-function RegisterBox() {
+function RegisterBox({ registerUser, users }) {
   const { darkMode } = useTheme();
   const [userName, setUserName] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -16,6 +15,7 @@ function RegisterBox() {
   const [isDisplayNameValid, setIsDisplayNameValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [doPasswordsMatch, setDoPasswordsMatch] = useState(true);
+  const [isPhotoValid, setIsPhotoValid] = useState(true);
   const [step, setStep] = useState(1);
   const [userNameError, setUserNameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -24,7 +24,7 @@ function RegisterBox() {
 
   const handleUserNameChange = (e) => {
     setUserName(e.target.value);
-    setIsUserNameValid(/^(?=.*[a-zA-Z])(?=.*[0-9])/.test(e.target.value));
+    setIsUserNameValid(e.target.value.trim() !== '');
   };
 
   const handleDisplayNameChange = (e) => {
@@ -45,46 +45,51 @@ function RegisterBox() {
 
   const handlePhotoChange = (e) => {
     setPhoto(e.target.files[0]);
+    setIsPhotoValid(e.target.files[0] !== null);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const isUserNameValidFinal = /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(userName);
+    const isUserNameValidFinal = userName.trim() !== '';
     const isDisplayNameValidFinal = displayName.trim() !== '';
     const isPasswordValidFinal = password.length >= 8;
     const doPasswordsMatchFinal = password === verifyPassword;
+    const isPhotoValidFinal = photo !== null;
 
     setIsUserNameValid(isUserNameValidFinal);
     setIsDisplayNameValid(isDisplayNameValidFinal);
     setIsPasswordValid(isPasswordValidFinal);
     setDoPasswordsMatch(doPasswordsMatchFinal);
+    setIsPhotoValid(isPhotoValidFinal);
 
-    if (!isUserNameValidFinal || !isDisplayNameValidFinal || !isPasswordValidFinal || !doPasswordsMatchFinal) {
+    if (!isUserNameValidFinal || !isDisplayNameValidFinal || !isPasswordValidFinal || !doPasswordsMatchFinal || !isPhotoValidFinal) {
       return;
     }
 
-    // Retrieve existing users from localStorage
-    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const userExists = users.some(user => user.userName === userName);
+    if (userExists) {
+      setUserNameError('Username already taken. Please choose another one.');
+      setIsUserNameValid(false);
+      return;
+    }
 
     const newUser = {
       userName,
       displayName,
       password,
-      photo: photo ? URL.createObjectURL(photo) : null,
+      photo: URL.createObjectURL(photo),
     };
 
-    // Add new user to the array and save
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-
+    registerUser(newUser);
     alert('Registration successful!');
+    navigate('/signIn');
   };
 
   const handleNext = (e) => {
     e.preventDefault();
 
-    const isUserNameValidFinal = /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(userName);
+    const isUserNameValidFinal = userName.trim() !== '';
     const isPasswordValidFinal = password.length >= 8;
     const doPasswordsMatchFinal = password === verifyPassword;
 
@@ -93,17 +98,6 @@ function RegisterBox() {
     setDoPasswordsMatch(doPasswordsMatchFinal);
 
     if (!isUserNameValidFinal || !isPasswordValidFinal || !doPasswordsMatchFinal) {
-      return;
-    }
-
-    // Retrieve existing users from localStorage
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-
-    // Check if the username already exists
-    const userExists = users.some(user => user.userName === userName);
-    if (userExists) {
-      setUserNameError('Username already taken. Please choose another one.');
-      setIsUserNameValid(false);
       return;
     }
 
@@ -148,7 +142,7 @@ function RegisterBox() {
                             />
                             <label htmlFor="userName">Username</label>
                             <div className="invalid-feedback">
-                              {userNameError || 'Username must contain both letters and numbers.'}
+                              {userNameError || 'Username is required.'}
                             </div>
                           </div>
                           <div className="form-floating mb-3">
@@ -208,17 +202,18 @@ function RegisterBox() {
                               required
                             />
                             <label htmlFor="displayName">Display Name</label>
-                            <div className="invalid-feedback">Please enter a display name.</div>
+                            <div className="invalid-feedback">Display Name is required.</div>
                           </div>
                           <div className="mb-3">
                             <label htmlFor="photo" className="form-label">Profile Photo</label>
                             <input
                               type="file"
-                              className="form-control"
+                              className={`form-control ${!isPhotoValid ? 'is-invalid' : ''}`}
                               id="photo"
                               onChange={handlePhotoChange}
                               required
                             />
+                            <div className="invalid-feedback">Please upload a photo.</div>
                             {photo && (
                               <div className="mt-3">
                                 <img
