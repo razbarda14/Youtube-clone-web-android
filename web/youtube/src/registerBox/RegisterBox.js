@@ -4,7 +4,7 @@ import youtubeIcon from "../img/youtube-icon.png";
 import './RegisterBox.css';
 import { useTheme } from '../themeContext/ThemeContext';
 
-function RegisterBox({ registerUser, users }) {
+function RegisterBox() {
   const { darkMode } = useTheme();
   const [userName, setUserName] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -24,7 +24,7 @@ function RegisterBox({ registerUser, users }) {
 
   const handleUserNameChange = (e) => {
     setUserName(e.target.value);
-    setIsUserNameValid(e.target.value.trim() !== '');
+    setIsUserNameValid(/^(?=.*[a-zA-Z])(?=.*[0-9])/.test(e.target.value));
   };
 
   const handleDisplayNameChange = (e) => {
@@ -34,7 +34,7 @@ function RegisterBox({ registerUser, users }) {
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setIsPasswordValid(e.target.value.length >= 8);
+    setIsPasswordValid(/^(?=.*[a-zA-Z])(?=.*[0-9])/.test(e.target.value) && e.target.value.length >= 8);
     setDoPasswordsMatch(e.target.value === verifyPassword);
   };
 
@@ -51,28 +51,23 @@ function RegisterBox({ registerUser, users }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const isUserNameValidFinal = userName.trim() !== '';
+    const isUserNameValidFinal = /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(userName);
     const isDisplayNameValidFinal = displayName.trim() !== '';
-    const isPasswordValidFinal = password.length >= 8;
+    const isPasswordValidFinal = /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password) && password.length >= 8;
     const doPasswordsMatchFinal = password === verifyPassword;
     const isPhotoValidFinal = photo !== null;
 
-    setIsUserNameValid(isUserNameValidFinal);
     setIsDisplayNameValid(isDisplayNameValidFinal);
     setIsPasswordValid(isPasswordValidFinal);
     setDoPasswordsMatch(doPasswordsMatchFinal);
     setIsPhotoValid(isPhotoValidFinal);
 
-    if (!isUserNameValidFinal || !isDisplayNameValidFinal || !isPasswordValidFinal || !doPasswordsMatchFinal || !isPhotoValidFinal) {
+    if (!isUserNameValidFinal || !isDisplayNameValidFinal || !isPasswordValidFinal || !doPasswordsMatchFinal) {
       return;
     }
 
-    const userExists = users.some(user => user.userName === userName);
-    if (userExists) {
-      setUserNameError('Username already taken. Please choose another one.');
-      setIsUserNameValid(false);
-      return;
-    }
+    // Retrieve existing users from localStorage
+    const users = JSON.parse(localStorage.getItem('users')) || [];
 
     const newUser = {
       userName,
@@ -81,23 +76,35 @@ function RegisterBox({ registerUser, users }) {
       photo: URL.createObjectURL(photo),
     };
 
-    registerUser(newUser);
+    // Add new user to the array and save
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+
     alert('Registration successful!');
-    navigate('/signIn');
   };
 
   const handleNext = (e) => {
     e.preventDefault();
 
-    const isUserNameValidFinal = userName.trim() !== '';
+    const isUserNameValidFinal = /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(userName);
     const isPasswordValidFinal = password.length >= 8;
     const doPasswordsMatchFinal = password === verifyPassword;
 
-    setIsUserNameValid(isUserNameValidFinal);
     setIsPasswordValid(isPasswordValidFinal);
     setDoPasswordsMatch(doPasswordsMatchFinal);
 
-    if (!isUserNameValidFinal || !isPasswordValidFinal || !doPasswordsMatchFinal) {
+    if (!isPasswordValidFinal || !doPasswordsMatchFinal) {
+      return;
+    }
+
+    // Retrieve existing users from localStorage
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+
+    // Check if the username already exists
+    const userExists = users.some(user => user.userName === userName);
+    if (userExists) {
+      setUserNameError('Username already taken. Please choose another one.');
+      setIsUserNameValid(false);
       return;
     }
 
@@ -142,7 +149,7 @@ function RegisterBox({ registerUser, users }) {
                             />
                             <label htmlFor="userName">Username</label>
                             <div className="invalid-feedback">
-                              {userNameError || 'Username is required.'}
+                              {userNameError || 'Username must contain both letters and numbers.'}
                             </div>
                           </div>
                           <div className="form-floating mb-3">
@@ -157,7 +164,7 @@ function RegisterBox({ registerUser, users }) {
                             />
                             <label htmlFor="password">Password</label>
                             <div className="invalid-feedback">
-                              {passwordError || 'Password must be at least 8 characters long.'}
+                              {passwordError || 'Password must be at least 8 characters long and contain both letters and numbers.'}
                             </div>
                           </div>
                           <div className="form-floating mb-3">
