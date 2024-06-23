@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../themeContext/ThemeContext';
+import './ButtonsVideo.css';
 
 function ButtonsVideo({ video, onLikeToggle, onDislikeToggle, currentUser }) {
   const [, setLikes] = useState(video.likes);
@@ -23,9 +24,9 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle, currentUser }) {
   };
 
   return (
-    <div>
+    <div id="buttons-video" className="button-group">
       <button
-        className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} ${video.isLiked ? 'active-like' : ''}`}
+        className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} ${video.isLiked ? 'active-like' : ''} rounded-button`}
         onClick={() => currentUser && onLikeToggle(video.id)}
       >
         {video.likes}
@@ -33,17 +34,17 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle, currentUser }) {
       </button>
 
       <button
-        className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} ${video.isDisliked ? 'active-dislike' : ''}`}
+        className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} ${video.isDisliked ? 'active-dislike' : ''} rounded-button`}
         onClick={() => currentUser && onDislikeToggle(video.id)}
       >
         <i className={`bi ${video.isDisliked ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down'} img-fluid`}></i>
       </button>
 
-      <button className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'}`} onClick={handleShare}>
-        <i className="bi bi-share"></i>
+      <button className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} rounded-button`} onClick={handleShare}>
+        <i class="bi bi-link"></i>
       </button>
 
-      <button className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'}`}>
+      <button className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} rounded-button`}>
         <i className="bi bi-bell"></i>
       </button>
     </div>

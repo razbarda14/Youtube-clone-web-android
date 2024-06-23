@@ -85,7 +85,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
         </div>
       )}
       {!currentUser && (
-        <p className="mt-3">Please sign in to write a comment.</p>
+        <h5>Please sign in to like a video or write a comment</h5>
       )}
       <div className="comments-section mt-3">
         {comments.map((comment, index) => (

@@ -79,7 +79,7 @@ function UpperBar({ setSearchQuery, setTagFilter, currentUser, logoutUser }) {
                 src={currentUser.photo}
                 alt="User Profile"
                 className="rounded-circle me-2"
-                style={{ width: '30px', height: '30px', marginLeft : '7px' }}
+                style={{ width: '35px', height: '35px', marginLeft : '7px' }}
               />
             </>
           ) : (

@@ -53,11 +53,11 @@ function App() {
     setVideoList(prevVideos => prevVideos.filter(video => video.id !== videoId));
   };
 
-  const editVideo = (videoId, newTitle, newDescription) => {
+  const editVideo = (videoId, newTitle, newDescription, newTopic) => {
     setVideoList(prevVideos =>
       prevVideos.map(video =>
         video.id === videoId
-          ? { ...video, title: newTitle, description: newDescription }
+          ? { ...video, title: newTitle, description: newDescription, topic: newTopic }
           : video
       )
     );

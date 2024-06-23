@@ -68,14 +68,19 @@ body {
 .form-control:focus {
   background-color: var(--input-focus-background-color);
   border-color: var(--input-focus-border-color);
+  color: var(--input-text-color); /* Ensure text color is set on focus */
+}
+
+.form-control-dark-mode {
+  color: var(--dark-input-text-color);
 }
 
 .form-control-dark-mode:focus {
-  color: white;
+  color: var(--dark-input-text-color); /* Ensure text color is white on focus */
 }
 
 .form-control-light-mode:focus {
-  color: black;
+  color: var(--light-input-text-color); /* Ensure text color is black on focus */
 }
 
 #sign-in-register-card {
