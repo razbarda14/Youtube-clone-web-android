@@ -29,10 +29,12 @@ function UploadVideo({ addVideo, user }) {
       description,
       viewsCount: '0',
       dateUploaded: new Date().toLocaleDateString('en-GB'),
-      image: 'default.jpg',
+      videoPath: URL.createObjectURL(videoFile),
       topic,
-      uploader: user.userName,
-      videoFile: URL.createObjectURL(videoFile),
+      likes: 0,
+      comments: [],
+      isLiked: false,
+      channel: user.displayName,
     };
 
     addVideo(newVideo);
@@ -115,7 +117,7 @@ function UploadVideo({ addVideo, user }) {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Video File (MP4 only)</label>
+                <label className="form-label">Video File (mp4 only)</label>
                 <input
                   className="form-control"
                   type="file"
