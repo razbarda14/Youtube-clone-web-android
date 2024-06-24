@@ -37,19 +37,25 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
     setEditingComment(null);
   };
 
-  const handleEditInputChange = (event, index) => {
-    if (editingComment && editingComment.index === index) {
-      setEditingComment({ ...editingComment, text: event.target.value });
-    }
+  const handleEditInputChange = (event) => {
+    setEditingComment({ ...editingComment, text: event.target.value });
   };
 
   const handleEditComment = (index, comment) => {
-    setEditingComment({ index, text: comment });
+    setEditingComment({ index, ...comment });
   };
 
   const handleSaveComment = (index) => {
     if (editingComment.text.trim() !== '') {
-      onCommentEdit(video.id, index, editingComment.text);
+      const updatedComment = {
+        ...editingComment,
+        user: {
+          displayName: editingComment.user.displayName,
+          photo: editingComment.user.photo || 'default-user.png'
+        },
+        text: editingComment.text
+      };
+      onCommentEdit(video.id, index, updatedComment);
       setEditingComment(null);
     } else {
       alert('Comment cannot be empty.');
@@ -99,7 +105,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
             <div className='row'>
               <div className='col-1 align-items-center'>
                 <img
-                  src={comment.user.photo}
+                  src={comment.user?.photo || 'default-user.png'}
                   alt="User"
                   className="rounded-circle"
                   width="40"
@@ -107,7 +113,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
               </div>
               <div className='col-4'>
                 <div className='row'>
-                  @{comment.user.displayName}
+                  @{comment.user?.displayName || 'Unknown'}
                 </div>
                 <div className='row'>
                   <div className="comment-container">
@@ -117,7 +123,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
                           type="text"
                           className="form-control"
                           value={editingComment.text}
-                          onChange={(e) => handleEditInputChange(e, index)}
+                          onChange={handleEditInputChange}
                         />
                         <div className="input-group-append">
                           <button
@@ -140,7 +146,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
                         <p>{comment.text}</p>
                         {currentUser && (
                           <div className="input-group-append">
-                            <button className="btn btn-outline-secondary" onClick={() => handleEditComment(index, comment.text)}>
+                            <button className="btn btn-outline-secondary" onClick={() => handleEditComment(index, comment)}>
                               <i className="bi bi-pencil"></i>
                             </button>
                             <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(index)}>
