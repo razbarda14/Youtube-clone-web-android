@@ -19,6 +19,7 @@ function RegisterBox({ registerUser, users }) {
   const [isPhotoValid, setIsPhotoValid] = useState(true);
   const [step, setStep] = useState(1);
   const [userNameError, setUserNameError] = useState('');
+  const [displayNameError, setDisplayNameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
   const navigate = useNavigate();
@@ -55,48 +56,6 @@ function RegisterBox({ registerUser, users }) {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const isUserNameValidFinal = userName.trim() !== '';
-    const isDisplayNameValidFinal = displayName.trim() !== '';
-    const isPasswordValidFinal = password.length >= 8;
-    const doPasswordsMatchFinal = password === verifyPassword;
-    const isPhotoValidFinal = photo !== null;
-
-    setIsUserNameValid(isUserNameValidFinal);
-    setIsDisplayNameValid(isDisplayNameValidFinal);
-    setIsPasswordValid(isPasswordValidFinal);
-    setDoPasswordsMatch(doPasswordsMatchFinal);
-    setIsPhotoValid(isPhotoValidFinal);
-
-    if (!isUserNameValidFinal ||
-        !isDisplayNameValidFinal || 
-        !isPasswordValidFinal || 
-        !doPasswordsMatchFinal || 
-        !isPhotoValidFinal) {
-      return;
-    }
-
-    const userExists = users.some(user => user.userName === userName);
-    if (userExists) {
-      setUserNameError('Username already taken. Please choose another one.');
-      setIsUserNameValid(false);
-      return;
-    }
-
-    const newUser = {
-      userName,
-      displayName,
-      password,
-      photo: URL.createObjectURL(photo),
-    };
-
-    registerUser(newUser);
-    alert('Registration successful!');
-    navigate('/signIn');
-  };
-
   const handleNext = (e) => {
     e.preventDefault();
 
@@ -112,12 +71,54 @@ function RegisterBox({ registerUser, users }) {
       return;
     }
 
+    const lowerUserName = userName.toLowerCase();
+    const userExists = users.some(user => user.userName.toLowerCase() === lowerUserName);
+
+    if (userExists) {
+      setUserNameError('Username already taken. Please choose another one.');
+      setIsUserNameValid(false);
+      return;
+    }
+
     setStep(2);
   };
 
   const handleBack = (e) => {
     e.preventDefault();
     setStep(1);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const isDisplayNameValidFinal = displayName.trim() !== '';
+    const isPhotoValidFinal = photo !== null;
+
+    setIsDisplayNameValid(isDisplayNameValidFinal);
+    setIsPhotoValid(isPhotoValidFinal);
+
+    if (!isDisplayNameValidFinal || !isPhotoValidFinal) {
+      return;
+    }
+
+    const displayNameExists = users.some(user => user.displayName === displayName);
+
+    if (displayNameExists) {
+      setDisplayNameError('Display name already taken. Please choose another one.');
+      setIsDisplayNameValid(false);
+      return;
+    }
+
+    const newUser = {
+      userName: userName.toLowerCase(),
+      displayName,
+      password,
+      photo: URL.createObjectURL(photo),
+    };
+
+    registerUser(newUser);
+    alert('Registration successful!');
+    navigate('/signIn');
   };
 
   return (
@@ -213,7 +214,9 @@ function RegisterBox({ registerUser, users }) {
                               required
                             />
                             <label htmlFor="displayName">Display Name</label>
-                            <div className="invalid-feedback">Display Name is required.</div>
+                            <div className="invalid-feedback">
+                              {displayNameError || 'Display Name is required.'}
+                            </div>
                           </div>
                           <div className="mb-3">
                             <label htmlFor="photo" className="form-label">Profile Photo (jpeg, jpg, png)</label>

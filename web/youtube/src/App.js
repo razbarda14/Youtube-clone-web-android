@@ -39,7 +39,8 @@ function App() {
   };
 
   const loginUser = (userName, password) => {
-    const user = users.find(user => user.userName === userName && user.password === password);
+    const lowerUserName = userName.toLowerCase();
+    const user = users.find(user => user.userName.toLowerCase() === lowerUserName && user.password === password);
     if (user) {
       setCurrentUser(user);
       return true;
