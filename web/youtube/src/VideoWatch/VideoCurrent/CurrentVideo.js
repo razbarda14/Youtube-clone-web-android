@@ -16,6 +16,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
     }
 
     // Pause the video when the component unmounts or when a new video is selected
+    
     return () => {
       if (videoRef.current) {
         videoRef.current.pause();
@@ -73,7 +74,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
           </div>
         ) : (
           <div>
-            <p className="text-bold">Uploaded: {video.dateUploaded} • {video.viewsCount} views</p>
+            <p className="text-bold">  {video.viewsCount} views • {video.dateUploaded} </p>
             <p>{video.description}</p>
             {currentUser && (
               <div>
