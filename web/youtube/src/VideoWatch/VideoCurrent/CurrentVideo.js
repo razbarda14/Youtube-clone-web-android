@@ -73,7 +73,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
           </div>
         ) : (
           <div>
-            <p className="text-bold">Uploaded: {video.dateUploaded} • {video.viewsCount} views</p>
+            <p className="text-bold">  {video.viewsCount} views • {video.dateUploaded} </p>
             <p>{video.description}</p>
             {currentUser && (
               <div>
