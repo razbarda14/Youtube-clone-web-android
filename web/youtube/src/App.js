@@ -74,6 +74,26 @@ function App() {
     }));
   };
 
+  const deleteVideo = (videoId) => {
+    setVideoList(prevVideoList => prevVideoList.filter(video => video.id !== videoId));
+  };
+
+  const editVideo = (videoId, newTitle, newDescription) => {
+    setVideoList(prevVideoList =>
+      prevVideoList.map(video => {
+        if (video.id === videoId) {
+          return {
+            ...video,
+            title: newTitle,
+            description: newDescription
+          };
+        } else {
+          return video;
+        }
+      })
+    );
+  };
+
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark-mode');
@@ -97,7 +117,7 @@ function App() {
         <Route path="/register" element={<RegisterBox registerUser={registerUser} users={users} />} />
         <Route path="/signIn" element={<SignInBox loginUser={loginUser} />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} user={currentUser} />} />
-        <Route path="/WatchVideo/:videoId" element={<WatchVideo comments={comments} addComment={addComment} editComment={editComment} deleteComment={deleteComment} currentUser={currentUser} videoList={videoList} />} />
+        <Route path="/WatchVideo/:videoId" element={<WatchVideo comments={comments} addComment={addComment} editComment={editComment} deleteComment={deleteComment} currentUser={currentUser} videoList={videoList} deleteVideo={deleteVideo} editVideo={editVideo} setVideoList={setVideoList} />} />
       </Routes>
     </div>
   );

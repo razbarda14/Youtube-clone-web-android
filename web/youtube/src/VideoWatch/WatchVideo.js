@@ -5,7 +5,7 @@ import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
 import videoData from '../videosLibrary/VideosLibrary.json';
 
-function WatchVideo({ comments, addComment, editComment, deleteComment, currentUser, videoList }) {
+function WatchVideo({ comments, addComment, editComment, deleteComment, currentUser, videoList, deleteVideo, editVideo, setVideoList }) {
   const { videoId } = useParams();
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [resetComments, setResetComments] = useState(false);
@@ -18,12 +18,12 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
     setResetComments(true);
 
     if (incrementedVideoId !== id) {
-      videoList = videoList.map(v =>
+      setVideoList(videoList.map(v =>
         v.id === id ? { ...v, viewsCount: (parseInt(v.viewsCount) + 1).toString() } : v
-      );
+      ));
       setIncrementedVideoId(id);
     }
-  }, [videoId, incrementedVideoId, videoList]);
+  }, [videoId, incrementedVideoId, videoList, setVideoList]);
 
   useEffect(() => {
     if (selectedVideo) {
@@ -37,33 +37,37 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
   };
 
   const handleLikeToggle = (videoId) => {
-    videoList = videoList.map(video => {
-      if (video.id === videoId) {
-        return {
-          ...video,
-          isLiked: !video.isLiked,
-          likes: video.isLiked ? video.likes - 1 : video.likes + 1,
-          isDisliked: false
-        };
-      } else {
-        return video;
-      }
-    });
+    setVideoList(prevVideoList =>
+      prevVideoList.map(video => {
+        if (video.id === videoId) {
+          return {
+            ...video,
+            isLiked: !video.isLiked,
+            likes: video.isLiked ? video.likes - 1 : video.likes + 1,
+            isDisliked: false
+          };
+        } else {
+          return video;
+        }
+      })
+    );
   };
 
   const handleDislikeToggle = (videoId) => {
-    videoList = videoList.map(video => {
-      if (video.id === videoId) {
-        return {
-          ...video,
-          isDisliked: !video.isDisliked,
-          isLiked: false,
-          likes: video.isLiked ? video.likes - 1 : video.likes // Update likes if previously liked
-        };
-      } else {
-        return video;
-      }
-    });
+    setVideoList(prevVideoList =>
+      prevVideoList.map(video => {
+        if (video.id === videoId) {
+          return {
+            ...video,
+            isDisliked: !video.isDisliked,
+            isLiked: false,
+            likes: video.isLiked ? video.likes - 1 : video.likes // Update likes if previously liked
+          };
+        } else {
+          return video;
+        }
+      })
+    );
   };
 
   const handleCommentAdd = (videoId, comment) => {
@@ -95,6 +99,8 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
                 setResetComments={setResetComments}
                 currentUser={currentUser}
                 comments={comments[selectedVideo.id] || []}
+                onDeleteVideo={deleteVideo} // Pass the deleteVideo function
+                onEditVideo={editVideo} // Pass the editVideo function
               />
             )}
           </div>

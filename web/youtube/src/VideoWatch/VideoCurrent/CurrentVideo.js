@@ -15,8 +15,6 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
       setResetComments(false);
     }
 
-    // Pause the video when the component unmounts or when a new video is selected
-    
     return () => {
       if (videoRef.current) {
         videoRef.current.pause();
@@ -58,12 +56,17 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
           </div>
         </div>
         <div className='col-5'>
-        <ButtonsVideo video={video} onLikeToggle={onLikeToggle} onDislikeToggle={onDislikeToggle} currentUser={currentUser} />
+          <ButtonsVideo video={video} onLikeToggle={onLikeToggle} onDislikeToggle={onDislikeToggle} currentUser={currentUser} />
         </div>
       </div>
       <div className="video-details-box p-3 mb-3">
         {isEditing ? (
           <div>
+            <textarea
+              className="form-control mb-2"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+            ></textarea>
             <textarea
               className="form-control mb-2"
               value={editedDescription}
