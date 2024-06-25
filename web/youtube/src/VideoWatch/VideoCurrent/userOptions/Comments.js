@@ -108,7 +108,8 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
                   src={comment.user?.photo || 'default-user.png'}
                   alt="User"
                   className="rounded-circle"
-                  width="40"
+                  width="35px"
+                  height="35px"
                 />
               </div>
               <div className='col-4'>
