@@ -2,7 +2,6 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTheme } from './themeContext/ThemeContext';
-
 import WatchVideo from './videoWatch/WatchVideo';
 import RegisterBox from './registerBox/RegisterBox';
 import SignInBox from './signInBox/SignInBox';
@@ -12,6 +11,7 @@ import videoData from './videosLibrary/VideosLibrary.json';
 import UpperBar from './upperBar/UpperBar';
 
 function App() {
+  
   const { darkMode } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [tagFilter, setTagFilter] = useState('all');
