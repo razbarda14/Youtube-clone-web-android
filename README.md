@@ -28,13 +28,13 @@ Link to Jira: https://tomerbarak2.atlassian.net/jira/software/projects/YOUT/boar
 
 To get started with the project, follow these steps:
 
-1.	**Clone the repository**
+1.	**Clone the repository:**
 get to your desired folder and clone the repository with the following command:
-git clone https://github.com/guybaruch1/Youtube.git
-3.	**Install dependencies**
-cd Youtube/web/youtube
-npm install
-4. **Run the project**
+#### git clone https://github.com/guybaruch1/Youtube.git
+3.	**Install dependencies:**
+#### cd Youtube/web/youtube
+#### npm install
+4. **Run the project:**
 Start the development server:
 npm start
 
