@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './WatchVideos.css';
 import SuggestedVideos from './SuggestedVideos';
-import CurrentVideo from './VideoCurrent/CurrentVideo';
+import CurrentVideo from './videoCurrent/CurrentVideo';
 import videoData from '../videosLibrary/VideosLibrary.json';
 
 function WatchVideo({ comments, addComment, editComment, deleteComment, currentUser, videoList, deleteVideo, editVideo, setVideoList }) {
