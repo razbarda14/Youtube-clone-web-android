@@ -1,12 +1,15 @@
 import './UploadVideo.css';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../themeContext/ThemeContext';
 
 function UploadVideo({ addVideo, user }) {
+  const { darkMode } = useTheme();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [topic, setTopic] = useState('');
   const [videoFile, setVideoFile] = useState(null);
+  const [thumbnailFile, setThumbnailFile] = useState(null); // Add state for thumbnail file
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -29,7 +32,7 @@ function UploadVideo({ addVideo, user }) {
       description,
       viewsCount: '0',
       dateUploaded: new Date().toLocaleDateString('en-GB'),
-      thumbnail: URL.createObjectURL(videoFile),
+      thumbnailPath: thumbnailFile ? URL.createObjectURL(thumbnailFile) : null, // Use thumbnail file if provided
       topic,
       channel: user.displayName,
       videoPath: URL.createObjectURL(videoFile),
@@ -44,6 +47,7 @@ function UploadVideo({ addVideo, user }) {
     setDescription('');
     setTopic('');
     setVideoFile(null);
+    setThumbnailFile(null); // Reset thumbnail file state
     setErrorMessage('');
   };
 
@@ -54,7 +58,7 @@ function UploadVideo({ addVideo, user }) {
   return (
     <div className="position-absolute top-50 start-50 translate-middle main-content">
       {!user ? (
-        <div className="alert alert-warning text-center">
+        <div className={`alert alert-warning text-center ${darkMode ? 'alert-dark-mode' : ''}`}>
           Please sign in to upload a video.
           <div className="mt-3">
             <Link to="/signIn">
@@ -125,6 +129,16 @@ function UploadVideo({ addVideo, user }) {
                   accept="video/mp4"
                   onChange={(e) => setVideoFile(e.target.files[0])}
                   required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Thumbnail Image (optional)</label>
+                <input
+                  className="form-control"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setThumbnailFile(e.target.files[0])}
                 />
               </div>
 
