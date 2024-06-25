@@ -1,6 +1,7 @@
 # 89-3210 Course - Youtube Project
 
-This project is a simplified version of YouTube, allowing users to watch videos as a guest or even register and upload, comment and like videos.
+This project is a simplified version of YouTube, allowing users to watch videos as a guest or a registered user so you can upload, comment and like videos.
+
 For now, this project has 2 different stand-alone applications (and it’s not yet connected to a server):
 1. Web application - created using React
 2. Android application – created using Android Studio
