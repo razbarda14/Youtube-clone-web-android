@@ -49,8 +49,11 @@ Navigate to your desired folder and clone the repository with the following comm
 ##### git clone https://github.com/guybaruch1/Youtube.git
 
 **2. Open the project in Android Studio:**
+
 Launch Android Studio.
+
 Select "Open an existing Android Studio project."
+
 Navigate to the cloned repository directory, then open the Youtube/android folder.
 
 **3. Build the project:**
