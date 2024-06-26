@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/down_bar"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="?attr/colorPrimary"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="16dp">
+
+    <!-- Home Button -->
+    <ImageButton
+        android:id="@+id/home_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Home"
+        android:src="@android:drawable/ic_menu_view" />
+
+    <!-- Add Button -->
+    <ImageButton
+        android:id="@+id/add_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Add"
+        android:src="@android:drawable/ic_input_add" />
+
+    <!-- You Button -->
+    <ImageButton
+        android:id="@+id/you_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="You"
+        android:src="@android:drawable/ic_menu_myplaces" />
+</LinearLayout>
