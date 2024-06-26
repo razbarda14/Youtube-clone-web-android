@@ -42,3 +42,26 @@ The application should now be running on [http://localhost:3000](http://localhos
 
 ### Android:
 
+To get started with the project, follow these steps:
+
+**1. Clone the repository:**
+Navigate to your desired folder and clone the repository with the following command:
+##### git clone https://github.com/guybaruch1/Youtube.git
+
+**2. Open the project in Android Studio:**
+Launch Android Studio.
+Select "Open an existing Android Studio project."
+Navigate to the cloned repository directory, then open the Youtube/android folder.
+
+**3. Build the project:**
+Once the project is opened in Android Studio, it will begin to sync and build the project. If it doesn't start automatically, you can sync the project with Gradle files by clicking on the "Sync Project with Gradle Files" button (usually found in the toolbar).
+
+**4. Install dependencies:**
+Android Studio will handle most dependencies automatically. Ensure you have an internet connection for Gradle to download any necessary dependencies.
+
+**5. Run the project:**
+Connect an Android device to your computer or set up an Android Virtual Device (AVD) through Android Studio.
+Click on the "Run" button (the green play button in the toolbar) or select Run > Run 'app' from the top menu.
+Choose your connected device or AVD from the list and click OK.
+
+The application should now be running on your selected Android device or emulator.
