@@ -107,6 +107,7 @@ function App() {
 
   return (
     <div className="App">
+
       <UpperBar
         setSearchQuery={setSearchQuery}
         setTagFilter={setTagFilter}
