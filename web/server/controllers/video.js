@@ -1,7 +1,12 @@
 const videoService = require('../services/video');
 
 const getAllVideos = async (req, res) => {
-  res.json(await videoService.getAllVideos());
+  try {
+    const videos = await videoService.getAllVideos();
+    res.json(videos);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 };
 
 module.exports = { getAllVideos };

@@ -21,9 +21,19 @@ function App() {
   const [comments, setComments] = useState({});
 
   useEffect(() => {
-    setVideoList(videoData);
-  }, []);
+    const fetchVideos = async () => {
+      try {
+        const response = await fetch('http://localhost:8081/api/videos');
+        const data = await response.json();
+        setVideoList(data);
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      }
+    };
 
+    fetchVideos();
+  }, []);
+  
   const filteredVideos = videoList.filter(video => {
     const matchesTag = tagFilter === 'all' || video.topic.toLowerCase() === tagFilter.toLowerCase();
     const matchesSearch = searchQuery === '' || video.title.toLowerCase().includes(searchQuery.toLowerCase());
