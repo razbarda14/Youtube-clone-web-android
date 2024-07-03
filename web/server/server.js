@@ -29,4 +29,9 @@ server.use('/users', users);
 //server.use(express.static('public'));
 server.use(cors());
 
+// Catch-all handler to serve the React app for any route not handled by API routes
+server.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../youtube/build', 'index.html'));
+});
+
 server.listen(process.env.PORT);

@@ -2,8 +2,9 @@ import './SignInBox.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import youtubeIcon from "../img/youtube-icon.png";
+import { loginUser } from '../services/authService'; // Adjust the path as needed
 
-function SignInBox({ loginUser }) {
+function SignInBox() {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginValid, setIsLoginValid] = useState(true);
@@ -18,13 +19,13 @@ function SignInBox({ loginUser }) {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate login credentials
-    const isValid = loginUser(userName, password);
+    const userId = await loginUser(userName, password);
 
-    if (isValid) {
+    if (userId) {
       alert('Login successful!');
       navigate('/'); // Redirect to the main page
     } else {
