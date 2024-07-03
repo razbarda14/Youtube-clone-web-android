@@ -20,18 +20,13 @@ customEnv.env(process.env.NODE_ENV, './config');
 console.log(process.env.CONNECTION_STRING);
 console.log(process.env.PORT);
 
-mongoose.connect(process.env.CONNECTION_STRING,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
-);
+mongoose.connect(process.env.CONNECTION_STRING);
 
 const users = require('./routes/user');
 server.use('/users', users);
 
 // Serve static files from the public folder
-server.use(express.static('public'));
+//server.use(express.static('public'));
 server.use(cors());
 
 server.listen(process.env.PORT);
