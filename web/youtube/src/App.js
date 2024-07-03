@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await fetch('http://localhost:8081/api/videos');
+        const response = await fetch('http://localhost:8080/videos');
         const data = await response.json();
         setVideoList(data);
       } catch (error) {
@@ -33,7 +33,7 @@ function App() {
 
     fetchVideos();
   }, []);
-  
+
   const filteredVideos = videoList.filter(video => {
     const matchesTag = tagFilter === 'all' || video.topic.toLowerCase() === tagFilter.toLowerCase();
     const matchesSearch = searchQuery === '' || video.title.toLowerCase().includes(searchQuery.toLowerCase());

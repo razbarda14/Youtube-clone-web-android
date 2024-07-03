@@ -28,7 +28,7 @@ mongoose.connect(process.env.CONNECTION_STRING,
 );
 
 const videoRoutes = require('./routes/video');
-server.use('/api/videos', videoRoutes);
+server.use('/videos', videoRoutes);
 
 // Serve static files from the public folder
 server.use(express.static('public'));
