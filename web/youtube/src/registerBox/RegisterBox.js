@@ -88,38 +88,55 @@ function RegisterBox({ registerUser, users }) {
     setStep(1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const isDisplayNameValidFinal = displayName.trim() !== '';
-    const isPhotoValidFinal = photo !== null;
-
-    setIsDisplayNameValid(isDisplayNameValidFinal);
-    setIsPhotoValid(isPhotoValidFinal);
-
-    if (!isDisplayNameValidFinal || !isPhotoValidFinal) {
+  
+    // Validate that userName and displayName are defined
+    if (!userName || !displayName) {
+      alert('Username and Display Name are required.');
       return;
     }
-
+  
     const displayNameExists = users.some(user => user.displayName === displayName);
-
+  
     if (displayNameExists) {
       setDisplayNameError('Display name already taken. Please choose another one.');
       setIsDisplayNameValid(false);
       return;
     }
-
+  
     const newUser = {
-      userName: userName.toLowerCase(),
-      displayName,
-      password,
-      photo: URL.createObjectURL(photo),
+      username: userName,
+      display_name: displayName,
+      password: password
     };
-
-    registerUser(newUser);
-    alert('Registration successful!');
-    navigate('/signIn');
+  
+    try {
+      const response = await fetch('http://localhost:8080/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newUser),
+      });
+  
+      if (response.ok) {
+        const user = await response.json();
+        console.log(user);
+        registerUser(user);
+        alert('Registration successful!');
+        navigate('/signIn');
+      } else {
+        console.error('Failed to register:', response.statusText);
+        alert('Failed to register. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
+  
+  
 
   return (
     <div className={`position-absolute top-50 start-50 translate-middle main-content-register ${darkMode ? 'dark-mode' : 'light-mode'}`}>
