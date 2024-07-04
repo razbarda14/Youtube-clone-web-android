@@ -5,4 +5,5 @@ const router = express.Router();
 
 router.route('/').get(videoController.getAllVideos);
 
+
 module.exports = router;

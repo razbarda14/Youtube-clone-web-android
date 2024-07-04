@@ -6,6 +6,7 @@ import CurrentVideo from './VideoCurrent/CurrentVideo';
 import videoData from '../videosLibrary/VideosLibrary.json';
 
 function WatchVideo({ comments, addComment, editComment, deleteComment, currentUser, videoList, deleteVideo, editVideo, setVideoList }) {
+  
   const { videoId } = useParams();
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [resetComments, setResetComments] = useState(false);
