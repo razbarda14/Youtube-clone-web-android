@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import youtubeIcon from "../img/youtube-icon.png";
 import './RegisterBox.css';
 import { useTheme } from '../themeContext/ThemeContext';
+import { registerUser as authRegisterUser } from '../services/authService';
+
 
 function RegisterBox({ registerUser, users }) {
   const { darkMode } = useTheme();
@@ -88,51 +90,37 @@ function RegisterBox({ registerUser, users }) {
     setStep(1);
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Validate that userName and displayName are defined
-    if (!userName || !displayName) {
-      alert('Username and Display Name are required.');
+
+    const isDisplayNameValidFinal = displayName.trim() !== '';
+    const isPhotoValidFinal = photo !== null;
+
+    setIsDisplayNameValid(isDisplayNameValidFinal);
+    setIsPhotoValid(isPhotoValidFinal);
+
+    if (!isDisplayNameValidFinal || !isPhotoValidFinal) {
       return;
     }
-  
+
     const displayNameExists = users.some(user => user.displayName === displayName);
-  
+
     if (displayNameExists) {
       setDisplayNameError('Display name already taken. Please choose another one.');
       setIsDisplayNameValid(false);
       return;
     }
-  
-    const newUser = {
-      username: userName,
-      display_name: displayName,
-      password: password
-    };
-  
-    try {
-      const response = await fetch('http://localhost:8080/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newUser),
-      });
-  
-      if (response.ok) {
-        const user = await response.json();
-        console.log(user);
-        registerUser(user);
-        alert('Registration successful!');
-        navigate('/signIn');
-      } else {
-        console.error('Failed to register:', response.statusText);
-        alert('Failed to register. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again.');
+
+    const user = await authRegisterUser(userName, displayName, password);
+
+    if (user) {
+      registerUser(user);
+      alert('Registration successful!');
+      navigate('/signIn');
+    } else {
+      console.error('Failed to register');
+      alert('Failed to register. Please try again.');
     }
   };
   

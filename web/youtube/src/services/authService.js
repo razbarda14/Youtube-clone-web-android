@@ -1,4 +1,39 @@
 // authService.js
+export const registerUser = async (username, displayName, password) => {
+  if (!username || !displayName || !password) {
+    console.error('Username, display name, or password is missing.');
+    return null;
+  }
+
+  const newUser = {
+    username,
+    display_name: displayName,
+    password
+  };
+
+  try {
+    const response = await fetch('http://localhost:8080/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newUser),
+    });
+
+    if (response.ok) {
+      const user = await response.json();
+      return user; // Return the registered user object
+    } else {
+      console.error('Failed to register:', response.statusText);
+      return null; // Registration failed
+    }
+  } catch (error) {
+    console.error('Error during registration:', error);
+    return null;
+  }
+};
+
+
 export const loginUser = async (username, password) => {
   if (!username || !password) {
     console.error('Username or password is missing.');
