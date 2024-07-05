@@ -7,7 +7,6 @@ import RegisterBox from './registerBox/RegisterBox';
 import SignInBox from './signInBox/SignInBox';
 import MainScreen from './mainScreen/MainScreen';
 import UploadVideo from './uploadVideo/UploadVideo';
-import videoData from './videosLibrary/VideosLibrary.json';
 import UpperBar from './upperBar/UpperBar';
 
 function App() {
