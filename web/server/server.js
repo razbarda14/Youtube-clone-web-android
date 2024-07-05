@@ -29,6 +29,6 @@ mongoose.connect(process.env.CONNECTION_STRING,
 );
 
 const videoRoutes = require('./routes/videoRouter.js');
-server.use('/videos', videoRoutes);
+server.use('/api/videos', videoRoutes);
 
 server.listen(process.env.PORT);

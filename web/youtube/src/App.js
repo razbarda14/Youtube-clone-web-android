@@ -22,7 +22,7 @@ function App() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await fetch('http://localhost:8080/videos');
+        const response = await fetch('http://localhost:8080/api/videos');
         const data = await response.json();
         setVideoList(data);
       } catch (error) {
