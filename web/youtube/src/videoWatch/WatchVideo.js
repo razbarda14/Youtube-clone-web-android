@@ -1,30 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import './WatchVideos.css';
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
-import videoData from '../videosLibrary/VideosLibrary.json';
 
 function WatchVideo({ comments, addComment, editComment, deleteComment, currentUser, videoList, deleteVideo, editVideo, setVideoList }) {
-  
-  const { videoId } = useParams();
+  const { videoId } = useParams(); // Extracts the videoId from the URL
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [resetComments, setResetComments] = useState(false);
-  const [incrementedVideoId, setIncrementedVideoId] = useState(null);
 
   useEffect(() => {
-    const id = videoId ? parseInt(videoId) : videoData[0].id;
-    const video = videoList.find(v => v.id === id);
-    setSelectedVideo(video);
-    setResetComments(true);
+    const fetchAndIncrementVideoById = async (id) => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/videos/${id}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
 
-    if (incrementedVideoId !== id) {
-      setVideoList(videoList.map(v =>
-        v.id === id ? { ...v, viewsCount: (parseInt(v.viewsCount) + 1).toString() } : v
-      ));
-      setIncrementedVideoId(id);
-    }
-  }, [videoId, incrementedVideoId, videoList, setVideoList]);
+        // Increment the view count in the database
+        await fetch(`http://localhost:8080/api/videos/increment-views/${id}`, {
+          method: 'PATCH',
+        });
+
+        // Update the local state with the incremented view count
+        setSelectedVideo({ ...data, viewsCount: (parseInt(data.viewsCount) + 1).toString() });
+      } catch (error) {
+        console.error('Error fetching video:', error);
+      }
+    };
+
+    fetchAndIncrementVideoById(videoId);
+  }, [videoId]);
 
   useEffect(() => {
     if (selectedVideo) {
@@ -40,12 +46,12 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
   const handleLikeToggle = (videoId) => {
     setVideoList(prevVideoList =>
       prevVideoList.map(video => {
-        if (video.id === videoId) {
+        if (video._id === videoId) {
           return {
             ...video,
             isLiked: !video.isLiked,
             likes: video.isLiked ? video.likes - 1 : video.likes + 1,
-            isDisliked: false
+            isDisliked: false,
           };
         } else {
           return video;
@@ -57,12 +63,12 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
   const handleDislikeToggle = (videoId) => {
     setVideoList(prevVideoList =>
       prevVideoList.map(video => {
-        if (video.id === videoId) {
+        if (video._id === videoId) {
           return {
             ...video,
             isDisliked: !video.isDisliked,
             isLiked: false,
-            likes: video.isLiked ? video.likes - 1 : video.likes // Update likes if previously liked
+            likes: video.isLiked ? video.likes - 1 : video.likes, // Update likes if previously liked
           };
         } else {
           return video;
@@ -99,7 +105,7 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
                 resetComments={resetComments}
                 setResetComments={setResetComments}
                 currentUser={currentUser}
-                comments={comments[selectedVideo.id] || []}
+                comments={comments[selectedVideo._id] || []}
                 onDeleteVideo={deleteVideo} // Pass the deleteVideo function
                 onEditVideo={editVideo} // Pass the editVideo function
               />
