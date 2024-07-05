@@ -4,7 +4,6 @@ import './SuggestedVideos';
 
 function SuggestedVideos({videoData, onVideoSelect}) {
 
-
   return (
     <div className='main-content'> 
       <h4>Suggested Videos</h4>
