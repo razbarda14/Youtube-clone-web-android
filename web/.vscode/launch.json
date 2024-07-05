@@ -1,12 +1,30 @@
 {
     "configurations": [
-
         {
             "type": "node-terminal",
             "name": "Run Script: start",
             "request": "launch",
             "command": "npm run start",
             "cwd": "${workspaceFolder}\\server"
-        }
+        },
+        {
+            "type": "node-terminal",
+            "name": "Run Script: start1",
+            "request": "launch",
+            "command": "npm run start",
+            "cwd": "${workspaceFolder}\\youtube"
+        },
+        {
+            "name": "Edge: Launch",
+            "type": "pwa-msedge",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/src",
+            "breakOnLoad": true,
+            "sourceMaps": true,
+            "trace": true,
+            "smartStep": true,
+            "internalConsoleOptions": "openOnSessionStart"
+          }
     ]
 }

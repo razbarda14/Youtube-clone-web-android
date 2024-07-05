@@ -1,31 +1,20 @@
-// authService.js
+const API_URL = 'http://localhost:8080/auth';
+
 export const registerUser = async (username, displayName, password) => {
-  if (!username || !displayName || !password) {
-    console.error('Username, display name, or password is missing.');
-    return null;
-  }
-
-  const newUser = {
-    username,
-    display_name: displayName,
-    password
-  };
-
   try {
-    const response = await fetch('http://localhost:8080/users', {
+    const response = await fetch(`${API_URL}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newUser),
+      body: JSON.stringify({ username, displayName, password }),
     });
 
     if (response.ok) {
       const user = await response.json();
-      return user; // Return the registered user object
+      return user;
     } else {
-      console.error('Failed to register:', response.statusText);
-      return null; // Registration failed
+      throw new Error('Registration failed');
     }
   } catch (error) {
     console.error('Error during registration:', error);
@@ -33,49 +22,41 @@ export const registerUser = async (username, displayName, password) => {
   }
 };
 
-
 export const loginUser = async (username, password) => {
-  if (!username || !password) {
-    console.error('Username or password is missing.');
-    return null;
-  }
-
   try {
-    // Make an API call to get user ID by username
-    const response = await fetch(`http://localhost:8080/users/getUserId?username=${username}`, {
-      method: 'GET',
+    const response = await fetch(`${API_URL}/login`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ username, password }),
     });
 
     if (response.ok) {
-      const { id } = await response.json();
-
-      // Use the user ID to get the user details
-      const userResponse = await fetch(`http://localhost:8080/users/${id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (userResponse.ok) {
-        const user = await userResponse.json();
-        // Check if the passwords match
-        if (user.password === password) {
-          return user; // Return user object if valid
-        } else {
-          return null; // Invalid password
-        }
-      } else {
-        return null; // User not found
-      }
+      const { user, token } = await response.json();
+      localStorage.setItem('token', token); // Store the token
+      return user; // Return the user object
     } else {
-      return null; // User not found
+      throw new Error('Invalid username or password');
     }
   } catch (error) {
     console.error('Error during login:', error);
     return null;
+  }
+};
+
+export const fetchProtectedData = async (route) => {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`http://localhost:8080/${route}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    throw new Error('Failed to fetch protected data');
   }
 };

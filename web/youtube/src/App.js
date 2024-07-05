@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useTheme } from './themeContext/ThemeContext';
 import WatchVideo from './videoWatch/WatchVideo';
 import RegisterBox from './registerBox/RegisterBox';
@@ -9,9 +9,9 @@ import MainScreen from './mainScreen/MainScreen';
 import UploadVideo from './uploadVideo/UploadVideo';
 import videoData from './videosLibrary/VideosLibrary.json';
 import UpperBar from './upperBar/UpperBar';
+import { loginUser as authLoginUser, fetchProtectedData } from './services/authService';
 
 function App() {
-  
   const { darkMode } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [tagFilter, setTagFilter] = useState('all');
@@ -19,9 +19,26 @@ function App() {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [comments, setComments] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     setVideoList(videoData);
+
+    const checkUserAuthentication = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const user = await fetchProtectedData('auth/verify-user');
+          if (user) {
+            setCurrentUser(user);
+          }
+        } catch (error) {
+          console.error('Error verifying user:', error);
+        }
+      }
+    };
+
+    checkUserAuthentication();
   }, []);
 
   const filteredVideos = videoList.filter(video => {
@@ -38,18 +55,40 @@ function App() {
     setUsers([...users, newUser]);
   };
 
-  const loginUser = (userName, password) => {
-    const lowerUserName = userName;
-    const user = users.find(user => user.userName === lowerUserName && user.password === password);
-    if (user) {
-      setCurrentUser(user);
-      return true;
+  const checkUserAuthentication = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const user = await fetchProtectedData('auth/verify-user');
+        if (user) {
+          setCurrentUser(user);
+        }
+      } catch (error) {
+        console.error('Error verifying user:', error);
+      }
     }
-    return false;
+  };
+
+  checkUserAuthentication();
+
+  const loginUser = async (userName, password) => {
+    try {
+      const user = await authLoginUser(userName, password);
+      if (user) {
+        setCurrentUser(user);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      return false;
+    }
   };
 
   const logoutUser = () => {
     setCurrentUser(null);
+    localStorage.removeItem('token');
   };
 
   const addComment = (videoId, comment) => {
@@ -107,7 +146,6 @@ function App() {
 
   return (
     <div className="App">
-
       <UpperBar
         setSearchQuery={setSearchQuery}
         setTagFilter={setTagFilter}

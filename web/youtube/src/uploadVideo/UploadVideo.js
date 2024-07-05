@@ -1,7 +1,8 @@
 import './UploadVideo.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../themeContext/ThemeContext';
+import { fetchProtectedData } from '../services/authService';
 
 function UploadVideo({ addVideo, user }) {
   const { darkMode } = useTheme();
@@ -9,11 +10,25 @@ function UploadVideo({ addVideo, user }) {
   const [description, setDescription] = useState('');
   const [topic, setTopic] = useState('');
   const [videoFile, setVideoFile] = useState(null);
-  const [thumbnailFile, setThumbnailFile] = useState(null); // Add state for thumbnail file
+  const [thumbnailFile, setThumbnailFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    const verifyUser = async () => {
+      try {
+        await fetchProtectedData('auth/verify-user'); // Example route to verify user
+      } catch (err) {
+        setErrorMessage('You must be logged in to upload a video.');
+      }
+    };
+
+    if (user) {
+      verifyUser();
+    }
+  }, [user]);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!title.trim()) {
@@ -26,29 +41,34 @@ function UploadVideo({ addVideo, user }) {
       return;
     }
 
-    const newVideo = {
-      id: Date.now(),
-      title,
-      description,
-      viewsCount: '0',
-      dateUploaded: new Date().toLocaleDateString('en-GB'),
-      thumbnailPath: thumbnailFile ? URL.createObjectURL(thumbnailFile) : null, // Use thumbnail file if provided
-      topic,
-      channel: user.displayName,
-      videoPath: URL.createObjectURL(videoFile),
-      isLiked: false,
-      likes: 0,
-      comments: [],
-    };
+    try {
+      await fetchProtectedData('auth/verify-user'); // Example route to ensure user is authenticated
+      const newVideo = {
+        id: Date.now(),
+        title,
+        description,
+        viewsCount: '0',
+        dateUploaded: new Date().toLocaleDateString('en-GB'),
+        thumbnailPath: thumbnailFile ? URL.createObjectURL(thumbnailFile) : null,
+        topic,
+        channel: user.displayName,
+        videoPath: URL.createObjectURL(videoFile),
+        isLiked: false,
+        likes: 0,
+        comments: [],
+      };
 
-    addVideo(newVideo);
-    setSuccessMessage(true);
-    setTitle('');
-    setDescription('');
-    setTopic('');
-    setVideoFile(null);
-    setThumbnailFile(null); // Reset thumbnail file state
-    setErrorMessage('');
+      addVideo(newVideo);
+      setSuccessMessage(true);
+      setTitle('');
+      setDescription('');
+      setTopic('');
+      setVideoFile(null);
+      setThumbnailFile(null);
+      setErrorMessage('');
+    } catch (err) {
+      setErrorMessage('Failed to upload video. Please try again.');
+    }
   };
 
   const handleUploadAnother = () => {
