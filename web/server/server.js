@@ -11,10 +11,13 @@ const server = express();
 
 server.use(express.json());
 server.use(bodyParser.urlencoded({ extended: true }));
+server.use(cors());
 
 // Serve static files from the public folder
-server.use(cors());
 server.use(express.static(path.join(__dirname, '../youtube/build')));
+
+// Serve the uploads folder
+server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Use configuration file
 customEnv.env(process.env.NODE_ENV, './config');

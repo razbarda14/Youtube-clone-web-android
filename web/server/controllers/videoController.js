@@ -70,14 +70,14 @@ const createVideo = async (req, res) => {
       title,
       description,
       topic,
+      channel,
       videoPath: `/uploads/videos/${videoFile.filename}`,
       thumbnailPath: thumbnailFile ? `/uploads/thumbnails/${thumbnailFile.filename}` : null,
       viewsCount: 0,
-      dateUploaded: new Date().toISOString(),
+      dateUploaded: new Date().toLocaleDateString('en-GB'),
       isLiked: false,
       likes: 0,
-      comments: [],
-      channel // Include channel in the new video object
+      comments: []
     };
 
     const savedVideo = await videoService.createVideo(newVideo);
