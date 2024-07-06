@@ -93,13 +93,13 @@ function App() {
   };
 
   const deleteVideo = (videoId) => {
-    setVideoList(prevVideoList => prevVideoList.filter(video => video.id !== videoId));
+    setVideoList(prevVideoList => prevVideoList.filter(video => video._id !== videoId));
   };
 
   const editVideo = (videoId, newTitle, newDescription) => {
     setVideoList(prevVideoList =>
         prevVideoList.map(video => {
-          if (video.id === videoId) {
+          if (video._id === videoId) {
             return {
               ...video,
               title: newTitle,

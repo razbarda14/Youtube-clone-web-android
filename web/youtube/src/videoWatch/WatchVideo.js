@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
 
 function WatchVideo({ comments, addComment, editComment, deleteComment, currentUser, videoList, deleteVideo, editVideo, setVideoList }) {
-  const { videoId } = useParams(); // Extracts the videoId from the URL
+  const { videoId } = useParams();
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [resetComments, setResetComments] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAndIncrementVideoById = async (id) => {
@@ -45,35 +46,35 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
 
   const handleLikeToggle = (videoId) => {
     setVideoList(prevVideoList =>
-      prevVideoList.map(video => {
-        if (video._id === videoId) {
-          return {
-            ...video,
-            isLiked: !video.isLiked,
-            likes: video.isLiked ? video.likes - 1 : video.likes + 1,
-            isDisliked: false,
-          };
-        } else {
-          return video;
-        }
-      })
+        prevVideoList.map(video => {
+          if (video._id === videoId) {
+            return {
+              ...video,
+              isLiked: !video.isLiked,
+              likes: video.isLiked ? video.likes - 1 : video.likes + 1,
+              isDisliked: false,
+            };
+          } else {
+            return video;
+          }
+        })
     );
   };
 
   const handleDislikeToggle = (videoId) => {
     setVideoList(prevVideoList =>
-      prevVideoList.map(video => {
-        if (video._id === videoId) {
-          return {
-            ...video,
-            isDisliked: !video.isDisliked,
-            isLiked: false,
-            likes: video.isLiked ? video.likes - 1 : video.likes, // Update likes if previously liked
-          };
-        } else {
-          return video;
-        }
-      })
+        prevVideoList.map(video => {
+          if (video._id === videoId) {
+            return {
+              ...video,
+              isDisliked: !video.isDisliked,
+              isLiked: false,
+              likes: video.isLiked ? video.likes - 1 : video.likes, // Update likes if previously liked
+            };
+          } else {
+            return video;
+          }
+        })
     );
   };
 
@@ -89,34 +90,51 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
     editComment(videoId, commentIndex, newComment);
   };
 
+  const handleDeleteVideo = async (videoId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/videos/${videoId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        deleteVideo(videoId);
+        navigate('/');
+      } else {
+        console.error('Failed to delete video:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting video:', error);
+    }
+  };
+
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-8">
-          <div className="current-video-padding">
-            {selectedVideo && (
-              <CurrentVideo
-                video={selectedVideo}
-                onLikeToggle={handleLikeToggle}
-                onDislikeToggle={handleDislikeToggle}
-                onCommentAdd={handleCommentAdd}
-                onCommentDelete={handleCommentDelete}
-                onCommentEdit={handleCommentEdit}
-                resetComments={resetComments}
-                setResetComments={setResetComments}
-                currentUser={currentUser}
-                comments={comments[selectedVideo._id] || []}
-                onDeleteVideo={deleteVideo} // Pass the deleteVideo function
-                onEditVideo={editVideo} // Pass the editVideo function
-              />
-            )}
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-8">
+            <div className="current-video-padding">
+              {selectedVideo && (
+                  <CurrentVideo
+                      video={selectedVideo}
+                      onLikeToggle={handleLikeToggle}
+                      onDislikeToggle={handleDislikeToggle}
+                      onCommentAdd={handleCommentAdd}
+                      onCommentDelete={handleCommentDelete}
+                      onCommentEdit={handleCommentEdit}
+                      resetComments={resetComments}
+                      setResetComments={setResetComments}
+                      currentUser={currentUser}
+                      comments={comments[selectedVideo._id] || []}
+                      onDeleteVideo={handleDeleteVideo} // Pass the handleDeleteVideo function
+                      onEditVideo={editVideo} // Pass the editVideo function
+                  />
+              )}
+            </div>
+          </div>
+          <div className="col-4">
+            <SuggestedVideos onVideoSelect={handleVideoSelect} videoData={videoList} />
           </div>
         </div>
-        <div className="col-4">
-          <SuggestedVideos onVideoSelect={handleVideoSelect} videoData={videoList} />
-        </div>
       </div>
-    </div>
   );
 }
 

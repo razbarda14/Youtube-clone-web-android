@@ -32,4 +32,17 @@ const incrementViews = async (req, res) => {
   }
 };
 
-module.exports = { getAllVideos, getVideoById, incrementViews };
+const deleteVideoById = async (req, res) => {
+  try {
+    const result = await videoService.deleteVideoById(req.params.id);
+    if (result.deletedCount > 0) {
+      res.sendStatus(200);
+    } else {
+      res.status(404).json({ message: 'Video not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById };

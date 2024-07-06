@@ -4,7 +4,9 @@ import ScreenVideo from './ScreenVideo';
 import ButtonsVideo from './userOptions/ButtonsVideo';
 import Comments from './userOptions/Comments';
 
-function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCommentDelete, onCommentEdit, resetComments, setResetComments, currentUser, onDeleteVideo, onEditVideo, comments }) {
+function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCommentDelete, onCommentEdit,
+                        resetComments, setResetComments, currentUser, onDeleteVideo, onEditVideo, comments }) {
+
   const videoRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(video?.title || '');
@@ -27,7 +29,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
   };
 
   const handleSaveClick = () => {
-    onEditVideo(video.id, editedTitle, editedDescription);
+    onEditVideo(video._id, editedTitle, editedDescription);
     setIsEditing(false);
   };
 
@@ -38,7 +40,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
   };
 
   const handleDeleteClick = () => {
-    onDeleteVideo(video.id);
+    onDeleteVideo(video._id);
   };
 
   if (!video) {

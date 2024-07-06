@@ -12,4 +12,8 @@ const incrementViews = async (id) => {
   await VideoModel.updateOne({ _id: id }, { $inc: { viewsCount: 1 } });
 };
 
-module.exports = { getAllVideos, getVideoById, incrementViews };
+const deleteVideoById = async (id) => {
+  return await VideoModel.deleteOne({ _id: id });
+};
+
+module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById };
