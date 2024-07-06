@@ -45,4 +45,18 @@ const deleteVideoById = async (req, res) => {
   }
 };
 
-module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById };
+const updateVideoById = async (req, res) => {
+  try {
+    const updatedData = req.body;
+    const result = await videoService.updateVideoById(req.params.id, updatedData);
+    if (result.nModified > 0) {
+      res.sendStatus(200);
+    } else {
+      res.status(404).json({ message: 'Video not found or no changes made' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById, updateVideoById };

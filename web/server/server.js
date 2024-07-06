@@ -21,12 +21,7 @@ customEnv.env(process.env.NODE_ENV, './config');
 console.log(process.env.CONNECTION_STRING);
 console.log(process.env.PORT);
 
-mongoose.connect(process.env.CONNECTION_STRING,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
-);
+mongoose.connect(process.env.CONNECTION_STRING);
 
 const videoRoutes = require('./routes/videoRouter.js');
 server.use('/api/videos', videoRoutes);

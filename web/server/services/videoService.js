@@ -16,4 +16,8 @@ const deleteVideoById = async (id) => {
   return await VideoModel.deleteOne({ _id: id });
 };
 
-module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById };
+const updateVideoById = async (id, updatedData) => {
+  return await VideoModel.updateOne({ _id: id }, { $set: updatedData });
+};
+
+module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById, updateVideoById };

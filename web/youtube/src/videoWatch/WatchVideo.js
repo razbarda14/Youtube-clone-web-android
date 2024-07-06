@@ -107,6 +107,27 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
     }
   };
 
+  const handleEditVideo = async (videoId, newTitle, newDescription, newTopic) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/videos/${videoId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: newTitle, description: newDescription, topic: newTopic }),
+      });
+
+      if (response.ok) {
+        editVideo(videoId, newTitle, newDescription, newTopic);
+        setSelectedVideo(prevVideo => ({ ...prevVideo, title: newTitle, description: newDescription, topic: newTopic }));
+      } else {
+        console.error('Failed to edit video:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error editing video:', error);
+    }
+  };
+
   return (
       <div className="container-fluid">
         <div className="row">
@@ -125,7 +146,7 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
                       currentUser={currentUser}
                       comments={comments[selectedVideo._id] || []}
                       onDeleteVideo={handleDeleteVideo} // Pass the handleDeleteVideo function
-                      onEditVideo={editVideo} // Pass the editVideo function
+                      onEditVideo={handleEditVideo} // Pass the handleEditVideo function
                   />
               )}
             </div>
