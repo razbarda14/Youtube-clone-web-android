@@ -79,6 +79,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
           <div>
             <p className="text-bold">  {video.viewsCount} views • {video.dateUploaded} </p>
             <p>{video.description}</p>
+            <p>{video.topic}</p>
             {currentUser && (
               <div>
                 <button className="btn btn-secondary me-2" onClick={handleEditClick}>Edit Details</button>

@@ -17,7 +17,7 @@ const VideoSchema = new Schema({
     required: true
   },
   viewsCount: {
-    type: String,
+    type: Number,
     required: true
   },
   dateUploaded: {
