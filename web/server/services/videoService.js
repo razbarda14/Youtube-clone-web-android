@@ -20,4 +20,9 @@ const updateVideoById = async (id, updatedData) => {
   return await VideoModel.updateOne({ _id: id }, { $set: updatedData });
 };
 
-module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById, updateVideoById };
+const createVideo = async (videoData) => {
+  const video = new VideoModel(videoData);
+  return await video.save();
+};
+
+module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById, updateVideoById, createVideo };

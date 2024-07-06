@@ -4,7 +4,7 @@ const getAllVideos = async (_, res) => {
   try {
     const videosList = await videoService.getAllVideos();
     res.json(videosList);
-    console.log(videosList);
+    console.log("Tomer says: video list fetched successfully");
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -59,4 +59,33 @@ const updateVideoById = async (req, res) => {
   }
 };
 
-module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById, updateVideoById };
+const createVideo = async (req, res) => {
+  try {
+    const { title, description, topic, channel } = req.body; // Extract channel from req.body
+    const videoFile = req.files.videoFile[0];
+    const thumbnailFile = req.files.thumbnailFile ? req.files.thumbnailFile[0] : null;
+
+    const newVideo = {
+      id: Date.now(), // Adding id here
+      title,
+      description,
+      topic,
+      videoPath: `/uploads/videos/${videoFile.filename}`,
+      thumbnailPath: thumbnailFile ? `/uploads/thumbnails/${thumbnailFile.filename}` : null,
+      viewsCount: 0,
+      dateUploaded: new Date().toISOString(),
+      isLiked: false,
+      likes: 0,
+      comments: [],
+      channel // Include channel in the new video object
+    };
+
+    const savedVideo = await videoService.createVideo(newVideo);
+    res.status(201).json(savedVideo);
+  } catch (err) {
+    console.error('Error creating video:', err.message); // Log the error
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById, updateVideoById, createVideo };

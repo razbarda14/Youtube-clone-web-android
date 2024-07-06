@@ -9,11 +9,11 @@ function UploadVideo({ addVideo, user }) {
   const [description, setDescription] = useState('');
   const [topic, setTopic] = useState('');
   const [videoFile, setVideoFile] = useState(null);
-  const [thumbnailFile, setThumbnailFile] = useState(null); // Add state for thumbnail file
+  const [thumbnailFile, setThumbnailFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!title.trim()) {
@@ -26,29 +26,37 @@ function UploadVideo({ addVideo, user }) {
       return;
     }
 
-    const newVideo = {
-      id: Date.now(),
-      title,
-      description,
-      viewsCount: '0',
-      dateUploaded: new Date().toLocaleDateString('en-GB'),
-      thumbnailPath: thumbnailFile ? URL.createObjectURL(thumbnailFile) : null, // Use thumbnail file if provided
-      topic,
-      channel: user.displayName,
-      videoPath: URL.createObjectURL(videoFile),
-      isLiked: false,
-      likes: 0,
-      comments: [],
-    };
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('topic', topic);
+    formData.append('videoFile', videoFile);
+    formData.append('thumbnailFile', thumbnailFile);
+    formData.append('channel', user.displayName); // Add channel to form data
 
-    addVideo(newVideo);
-    setSuccessMessage(true);
-    setTitle('');
-    setDescription('');
-    setTopic('');
-    setVideoFile(null);
-    setThumbnailFile(null); // Reset thumbnail file state
-    setErrorMessage('');
+    try {
+      const response = await fetch('http://localhost:8080/api/videos', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        const newVideo = await response.json();
+        addVideo(newVideo);
+        setSuccessMessage(true);
+        setTitle('');
+        setDescription('');
+        setTopic('');
+        setVideoFile(null);
+        setThumbnailFile(null);
+        setErrorMessage('');
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.error || 'Failed to upload video.');
+      }
+    } catch (error) {
+      setErrorMessage(error.message || 'Failed to upload video.');
+    }
   };
 
   const handleUploadAnother = () => {
@@ -56,100 +64,100 @@ function UploadVideo({ addVideo, user }) {
   };
 
   return (
-    <div className="position-absolute top-50 start-50 translate-middle main-content">
-      {!user ? (
-        <div className={`alert alert-warning text-center ${darkMode ? 'alert-dark-mode' : ''}`}>
-          Please sign in to upload a video.
-          <div className="mt-3">
-            <Link to="/signIn">
-              <button className="btn btn-primary">Sign In</button>
-            </Link>
-          </div>
-        </div>
-      ) : (
-        <>
-          {!successMessage && (
-            <div className="mb-3 display-5">
-              Upload Video
-            </div>
-          )}
-
-          {successMessage && (
-            <div className="alert alert-success text-center success-message">
-              Video was added successfully.
+      <div className="position-absolute top-50 start-50 translate-middle main-content">
+        {!user ? (
+            <div className={`alert alert-warning text-center ${darkMode ? 'alert-dark-mode' : ''}`}>
+              Please sign in to upload a video.
               <div className="mt-3">
-                <Link to="/">
-                  <button className="btn btn-danger me-2">Go to Main Screen</button>
+                <Link to="/signIn">
+                  <button className="btn btn-primary">Sign In</button>
                 </Link>
-                <button className="btn btn-secondary" onClick={handleUploadAnother}>Upload Another Video</button>
               </div>
             </div>
-          )}
-
-          {!successMessage && (
-            <form onSubmit={handleSubmit}>
-              {errorMessage && (
-                <div className="alert alert-danger">
-                  {errorMessage}
-                </div>
+        ) : (
+            <>
+              {!successMessage && (
+                  <div className="mb-3 display-5">
+                    Upload Video
+                  </div>
               )}
-              <div className="mb-3">
-                <label className="form-label">Title</label>
-                <input
-                  className="form-control"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                />
-              </div>
 
-              <div className="mb-3">
-                <label className="form-label">Description</label>
-                <input
-                  className="form-control"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
+              {successMessage && (
+                  <div className="alert alert-success text-center success-message">
+                    Video was added successfully.
+                    <div className="mt-3">
+                      <Link to="/">
+                        <button className="btn btn-danger me-2">Go to Main Screen</button>
+                      </Link>
+                      <button className="btn btn-secondary" onClick={handleUploadAnother}>Upload Another Video</button>
+                    </div>
+                  </div>
+              )}
 
-              <div className="mb-3">
-                <label className="form-label">Topic</label>
-                <input
-                  className="form-control"
-                  value={topic}
-                  onChange={(e) => setTopic(e.target.value)}
-                />
-              </div>
+              {!successMessage && (
+                  <form onSubmit={handleSubmit}>
+                    {errorMessage && (
+                        <div className="alert alert-danger">
+                          {errorMessage}
+                        </div>
+                    )}
+                    <div className="mb-3">
+                      <label className="form-label">Title</label>
+                      <input
+                          className="form-control"
+                          value={title}
+                          onChange={(e) => setTitle(e.target.value)}
+                          required
+                      />
+                    </div>
 
-              <div className="mb-3">
-                <label className="form-label">Video File (mp4 only)</label>
-                <input
-                  className="form-control"
-                  type="file"
-                  accept="video/mp4"
-                  onChange={(e) => setVideoFile(e.target.files[0])}
-                  required
-                />
-              </div>
+                    <div className="mb-3">
+                      <label className="form-label">Description</label>
+                      <input
+                          className="form-control"
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                      />
+                    </div>
 
-              <div className="mb-3">
-                <label className="form-label">Thumbnail Image (optional)</label>
-                <input
-                  className="form-control"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setThumbnailFile(e.target.files[0])}
-                />
-              </div>
+                    <div className="mb-3">
+                      <label className="form-label">Topic</label>
+                      <input
+                          className="form-control"
+                          value={topic}
+                          onChange={(e) => setTopic(e.target.value)}
+                      />
+                    </div>
 
-              <div className="text-center" style={{ margin: '10px' }}>
-                <button type="submit" className="btn btn-danger">Upload</button>
-              </div>
-            </form>
-          )}
-        </>
-      )}
-    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Video File (mp4 only)</label>
+                      <input
+                          className="form-control"
+                          type="file"
+                          accept="video/mp4"
+                          onChange={(e) => setVideoFile(e.target.files[0])}
+                          required
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Thumbnail Image (optional)</label>
+                      <input
+                          className="form-control"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => setThumbnailFile(e.target.files[0])}
+                      />
+                    </div>
+
+                    <div className="text-center" style={{ margin: '10px' }}>
+                      <button type="submit" className="btn btn-danger">Upload</button>
+                    </div>
+                  </form>
+              )}
+            </>
+        )}
+      </div>
   );
 }
 

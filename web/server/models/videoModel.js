@@ -50,7 +50,7 @@ const VideoSchema = new Schema({
   },
   channel: {
     type: String,
-    required: true
+    default: null
   }
 });
 
