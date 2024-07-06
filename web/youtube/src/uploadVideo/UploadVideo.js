@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../themeContext/ThemeContext';
 
 function UploadVideo({ addVideo, user }) {
-
   const { darkMode } = useTheme();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -27,18 +26,27 @@ function UploadVideo({ addVideo, user }) {
       return;
     }
 
+    if (!user || !user.displayName) {
+      setErrorMessage('User is not logged in or display name is not available.');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
     formData.append('topic', topic);
     formData.append('videoFile', videoFile);
-    formData.append('thumbnailFile', thumbnailFile);
+    if (thumbnailFile) {
+      formData.append('thumbnailFile', thumbnailFile);
+    }
     formData.append('channel', user.displayName);
+    console.log("user:", user)
+    console.log("user.display:", user.displayName)
 
     try {
       const response = await fetch('http://localhost:8080/api/videos', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
 
       if (response.ok) {
