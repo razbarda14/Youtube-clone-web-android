@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../themeContext/ThemeContext';
 
 function UploadVideo({ addVideo, user }) {
+
   const { darkMode } = useTheme();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -32,7 +33,7 @@ function UploadVideo({ addVideo, user }) {
     formData.append('topic', topic);
     formData.append('videoFile', videoFile);
     formData.append('thumbnailFile', thumbnailFile);
-    formData.append('channel', user.displayName); // Add channel to form data
+    formData.append('channel', user.displayName);
 
     try {
       const response = await fetch('http://localhost:8080/api/videos', {
