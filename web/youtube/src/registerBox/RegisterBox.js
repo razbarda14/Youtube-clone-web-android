@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import youtubeIcon from "../img/youtube-icon.png";
 import './RegisterBox.css';
 import { useTheme } from '../themeContext/ThemeContext';
+import { registerUser as authRegisterUser } from '../services/authService';
+
 
 function RegisterBox({ registerUser, users }) {
   const { darkMode } = useTheme();
@@ -88,7 +90,8 @@ function RegisterBox({ registerUser, users }) {
     setStep(1);
   };
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const isDisplayNameValidFinal = displayName.trim() !== '';
@@ -109,17 +112,19 @@ function RegisterBox({ registerUser, users }) {
       return;
     }
 
-    const newUser = {
-      userName: userName.toLowerCase(),
-      displayName,
-      password,
-      photo: URL.createObjectURL(photo),
-    };
+    const user = await authRegisterUser(userName, displayName, password);
 
-    registerUser(newUser);
-    alert('Registration successful!');
-    navigate('/signIn');
+    if (user) {
+      registerUser(user);
+      alert('Registration successful!');
+      navigate('/signIn');
+    } else {
+      console.error('Failed to register');
+      alert('Failed to register. Please try again.');
+    }
   };
+  
+  
 
   return (
     <div className={`position-absolute top-50 start-50 translate-middle main-content-register ${darkMode ? 'dark-mode' : 'light-mode'}`}>
