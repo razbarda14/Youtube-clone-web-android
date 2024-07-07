@@ -6,7 +6,7 @@ const upload = require('../middleware/multerConfig');
 const videoRouter = express.Router();
 
 videoRouter.route('/')
-    .get(videoController.getAllVideos)
+    .get(videoController.getMostViewedAndRandomVideos)
     .post(upload.fields([
         { name: 'videoFile', maxCount: 1 },
         { name: 'thumbnailFile', maxCount: 1 }

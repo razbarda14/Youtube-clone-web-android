@@ -25,4 +25,19 @@ const createVideo = async (videoData) => {
   return await video.save();
 };
 
-module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById, updateVideoById, createVideo };
+const getMostViewedVideos = async (limit) => {
+  return await VideoModel.find().sort({ viewsCount: -1 }).limit(limit);
+};
+
+const getRandomVideos = async (limit, excludedIds) => {
+  return await VideoModel.aggregate([
+    { $match: { _id: { $nin: excludedIds } } },
+    { $sample: { size: limit } }
+  ]);
+};
+
+module.exports = {
+  getAllVideos, getVideoById, incrementViews,
+  deleteVideoById, updateVideoById, createVideo,
+  getMostViewedVideos, getRandomVideos
+};

@@ -88,4 +88,32 @@ const createVideo = async (req, res) => {
   }
 };
 
-module.exports = { getAllVideos, getVideoById, incrementViews, deleteVideoById, updateVideoById, createVideo };
+// Helper function to shuffle an array
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
+const getMostViewedAndRandomVideos = async (req, res) => {
+  try {
+    const mostViewedVideos = await videoService.getMostViewedVideos(10);
+    const mostViewedVideoIds = mostViewedVideos.map(video => video._id);
+    const randomVideos = await videoService.getRandomVideos(10, mostViewedVideoIds);
+
+    // Combine and shuffle the videos
+    const combinedVideos = shuffleArray([...mostViewedVideos, ...randomVideos]);
+
+    res.json(combinedVideos);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
+module.exports = {
+  getAllVideos, getVideoById, incrementViews,
+  deleteVideoById, updateVideoById, createVideo,
+  getMostViewedAndRandomVideos
+};
