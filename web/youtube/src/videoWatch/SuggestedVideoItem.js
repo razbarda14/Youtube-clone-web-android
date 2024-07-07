@@ -5,7 +5,7 @@ import './SuggestedVideoItem.css';
 function SuggestedVideoItem({ video, onVideoClick }) {
   return (
     <div>
-      <Link to={`/WatchVideo/${video.id}`} className='no-underline'>
+      <Link to={`/WatchVideo/${video._id}`} className='no-underline'>
         <div className="card card-hover-effect" onClick={() => onVideoClick(video)}>
         {video.thumbnailPath ? (
             <img src={video.thumbnailPath} alt="Thumbnail" className="card-img-top" />
