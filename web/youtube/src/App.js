@@ -1,17 +1,17 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from './themeContext/ThemeContext';
 import WatchVideo from './videoWatch/WatchVideo';
 import RegisterBox from './registerBox/RegisterBox';
 import SignInBox from './signInBox/SignInBox';
 import MainScreen from './mainScreen/MainScreen';
 import UploadVideo from './uploadVideo/UploadVideo';
-import videoData from './videosLibrary/VideosLibrary.json';
 import UpperBar from './upperBar/UpperBar';
 import { loginUser as authLoginUser, fetchProtectedData } from './services/authService';
 
 function App() {
+  
   const { darkMode } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [tagFilter, setTagFilter] = useState('all');
@@ -21,8 +21,18 @@ function App() {
   const [comments, setComments] = useState({});
   const navigate = useNavigate();
 
+  const fetchVideos = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/videos');
+      const data = await response.json();
+      setVideoList(data);
+    } catch (error) {
+      console.error('Error fetching videos:', error);
+    }
+  };
+
   useEffect(() => {
-    setVideoList(videoData);
+    fetchVideos();
 
     const checkUserAuthentication = async () => {
       const token = localStorage.getItem('token');
@@ -40,6 +50,18 @@ function App() {
 
     checkUserAuthentication();
   }, []);
+
+  useEffect(() => {
+    fetchVideos();
+  }, []);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      fetchVideos();
+    }
+  }, [location]);
 
   const filteredVideos = videoList.filter(video => {
     const matchesTag = tagFilter === 'all' || video.topic.toLowerCase() === tagFilter.toLowerCase();
@@ -102,7 +124,7 @@ function App() {
     setComments(prevComments => ({
       ...prevComments,
       [videoId]: prevComments[videoId].map((comment, index) =>
-        index === commentIndex ? newComment : comment
+          index === commentIndex ? newComment : comment
       )
     }));
   };
@@ -115,22 +137,22 @@ function App() {
   };
 
   const deleteVideo = (videoId) => {
-    setVideoList(prevVideoList => prevVideoList.filter(video => video.id !== videoId));
+    setVideoList(prevVideoList => prevVideoList.filter(video => video._id !== videoId));
   };
 
   const editVideo = (videoId, newTitle, newDescription) => {
     setVideoList(prevVideoList =>
-      prevVideoList.map(video => {
-        if (video.id === videoId) {
-          return {
-            ...video,
-            title: newTitle,
-            description: newDescription
-          };
-        } else {
-          return video;
-        }
-      })
+        prevVideoList.map(video => {
+          if (video._id === videoId) {
+            return {
+              ...video,
+              title: newTitle,
+              description: newDescription
+            };
+          } else {
+            return video;
+          }
+        })
     );
   };
 
@@ -146,6 +168,7 @@ function App() {
 
   return (
     <div className="App">
+
       <UpperBar
         setSearchQuery={setSearchQuery}
         setTagFilter={setTagFilter}

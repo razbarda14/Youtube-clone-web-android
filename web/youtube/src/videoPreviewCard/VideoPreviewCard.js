@@ -7,7 +7,7 @@ function VideoPreviewCard({ video }) {
 
   return (
     <div className="col-4">
-      <Link to={`/WatchVideo/${video.id}`} className='no-underline'>
+      <Link to={`/WatchVideo/${video._id}`} className='no-underline'>
         <div className={`card video-preview-card card-hover-effect ${darkMode ? 'dark-mode' : 'light-mode'}`}>
           {video.thumbnailPath ? (
             <img src={video.thumbnailPath} alt="Thumbnail" className="card-img-top" />
