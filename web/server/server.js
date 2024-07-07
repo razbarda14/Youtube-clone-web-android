@@ -3,7 +3,6 @@ customEnv.env(process.env.NODE_ENV, './config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const customEnv = require('custom-env');
 const mongoose = require('mongoose');
 const path = require('path');
 const authRoutes = require('./routes/auth'); 
@@ -29,10 +28,6 @@ server.use(express.static(path.join(__dirname, '../youtube/build')));
 // Serve the uploads folder
 server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const customEnv = require('custom-env');
-customEnv.env(process.env.NODE_ENV, './config');
-console.log(process.env.CONNECTION_STRING);
-console.log(process.env.PORT);
 
 mongoose.connect(process.env.CONNECTION_STRING,
   {
