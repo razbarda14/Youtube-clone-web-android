@@ -46,8 +46,8 @@ server.use('/auth', authRoutes); // Add this line to use the auth routes
 // Serve static files from the public folder
 server.use(express.static('public'));
 server.use(cors());
-// check if necececery
-// server.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../youtube/build', 'index.html'));
-// });
+
+server.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../youtube/build', 'index.html'));
+});
 server.listen(process.env.PORT);
