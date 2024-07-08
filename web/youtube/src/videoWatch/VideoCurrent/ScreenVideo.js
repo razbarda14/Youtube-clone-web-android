@@ -14,7 +14,7 @@ function ScreenVideo({ video, videoRef }) {
           {video ? (
             <video
               ref={videoRef}
-              key={video.id}
+              key={video._id}
               className="video-player"
               controls
               poster={video.thumbnail}

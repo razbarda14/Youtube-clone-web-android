@@ -27,7 +27,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
         },
         date: new Date().toLocaleDateString('en-GB')
       };
-      onCommentAdd(video.id, comment);
+      onCommentAdd(video._id, comment);
       setAddCommentText('');
     }
   };
@@ -55,7 +55,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
         },
         text: editingComment.text
       };
-      onCommentEdit(video.id, index, updatedComment);
+      onCommentEdit(video._id, index, updatedComment);
       setEditingComment(null);
     } else {
       alert('Comment cannot be empty.');
@@ -63,7 +63,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
   };
 
   const handleDeleteComment = (index) => {
-    onCommentDelete(video.id, index);
+    onCommentDelete(video._id, index);
   };
 
   return (

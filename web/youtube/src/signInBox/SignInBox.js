@@ -28,6 +28,7 @@ function SignInBox() {
     if (userId) {
       alert('Login successful!');
       navigate('/'); // Redirect to the main page
+      window.location.reload(); // Reload the page after successful login
     } else {
       setIsLoginValid(false);
     }

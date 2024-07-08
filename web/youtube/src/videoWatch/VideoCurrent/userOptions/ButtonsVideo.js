@@ -27,7 +27,7 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle, currentUser }) {
     <div id="buttons-video" className="button-group">
       <button
         className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} ${video.isLiked ? 'active-like' : ''} rounded-button`}
-        onClick={() => currentUser && onLikeToggle(video.id)}
+        onClick={() => currentUser && onLikeToggle(video._id)}
       >
         {video.likes}
         <i className={`bi ${video.isLiked ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'} img-fluid`}></i>
@@ -35,7 +35,7 @@ function ButtonsVideo({ video, onLikeToggle, onDislikeToggle, currentUser }) {
 
       <button
         className={`btn ${darkMode ? 'btn-dark-mode' : 'btn-light-mode'} ${video.isDisliked ? 'active-dislike' : ''} rounded-button`}
-        onClick={() => currentUser && onDislikeToggle(video.id)}
+        onClick={() => currentUser && onDislikeToggle(video._id)}
       >
         <i className={`bi ${video.isDisliked ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down'} img-fluid`}></i>
       </button>
