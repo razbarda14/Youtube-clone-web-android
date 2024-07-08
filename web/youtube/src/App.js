@@ -8,18 +8,26 @@ import SignInBox from './signInBox/SignInBox';
 import MainScreen from './mainScreen/MainScreen';
 import UploadVideo from './uploadVideo/UploadVideo';
 import UpperBar from './upperBar/UpperBar';
-import { loginUser as authLoginUser, fetchProtectedData } from './services/authService';
+import { loginUser as authLoginUser, fetchProtectedData, getCurrentUser } from './services/authService';
 
 function App() {
-  
   const { darkMode } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [tagFilter, setTagFilter] = useState('all');
   const [videoList, setVideoList] = useState([]);
   const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(getCurrentUser());
   const [comments, setComments] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Retrieve user data from localStorage on load
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setCurrentUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const fetchVideos = async () => {
     try {
@@ -31,37 +39,46 @@ function App() {
     }
   };
 
+  const checkUserAuthentication = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const user = await fetchProtectedData('auth/verify-user');
+        if (user) {
+          setCurrentUser(user);
+          console.log('User authenticated:', user); // Log user after authentication check
+        }
+      } catch (error) {
+        console.error('Error verifying user:', error);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchVideos();
-
-    const checkUserAuthentication = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const user = await fetchProtectedData('auth/verify-user');
-          if (user) {
-            setCurrentUser(user);
-          }
-        } catch (error) {
-          console.error('Error verifying user:', error);
-        }
-      }
-    };
-
     checkUserAuthentication();
   }, []);
-
-  useEffect(() => {
-    fetchVideos();
-  }, []);
-
-  const location = useLocation();
 
   useEffect(() => {
     if (location.pathname === '/') {
       fetchVideos();
     }
   }, [location]);
+
+  // add to check the current user
+  useEffect(() => {
+    console.log('Current user changed:', currentUser); // Log user changes
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+      document.body.classList.remove('light-mode');
+    } else {
+      document.body.classList.add('light-mode');
+      document.body.classList.remove('dark-mode');
+    }
+  }, [darkMode]);
 
   const filteredVideos = videoList.filter(video => {
     const matchesTag = tagFilter === 'all' || video.topic.toLowerCase() === tagFilter.toLowerCase();
@@ -77,27 +94,12 @@ function App() {
     setUsers([...users, newUser]);
   };
 
-  const checkUserAuthentication = async () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const user = await fetchProtectedData('auth/verify-user');
-        if (user) {
-          setCurrentUser(user);
-        }
-      } catch (error) {
-        console.error('Error verifying user:', error);
-      }
-    }
-  };
-
-  checkUserAuthentication();
-
   const loginUser = async (userName, password) => {
     try {
       const user = await authLoginUser(userName, password);
       if (user) {
         setCurrentUser(user);
+        console.log('User logged in:', user); // Log user after login
         return true;
       } else {
         return false;
@@ -111,6 +113,7 @@ function App() {
   const logoutUser = () => {
     setCurrentUser(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   const addComment = (videoId, comment) => {
@@ -124,7 +127,7 @@ function App() {
     setComments(prevComments => ({
       ...prevComments,
       [videoId]: prevComments[videoId].map((comment, index) =>
-          index === commentIndex ? newComment : comment
+        index === commentIndex ? newComment : comment
       )
     }));
   };
@@ -142,33 +145,23 @@ function App() {
 
   const editVideo = (videoId, newTitle, newDescription) => {
     setVideoList(prevVideoList =>
-        prevVideoList.map(video => {
-          if (video._id === videoId) {
-            return {
-              ...video,
-              title: newTitle,
-              description: newDescription
-            };
-          } else {
-            return video;
-          }
-        })
+      prevVideoList.map(video => {
+        if (video._id === videoId) {
+          return {
+            ...video,
+            title: newTitle,
+            description: newDescription
+          };
+        } else {
+          return video;
+        }
+      })
     );
   };
-
-  useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add('dark-mode');
-      document.body.classList.remove('light-mode');
-    } else {
-      document.body.classList.add('light-mode');
-      document.body.classList.remove('dark-mode');
-    }
-  }, [darkMode]);
+  console.log('Current user changed:', currentUser); // Log user changes
 
   return (
     <div className="App">
-
       <UpperBar
         setSearchQuery={setSearchQuery}
         setTagFilter={setTagFilter}
