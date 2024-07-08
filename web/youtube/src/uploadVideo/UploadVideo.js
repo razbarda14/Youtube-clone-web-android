@@ -41,10 +41,10 @@ function UploadVideo({ addVideo, user }) {
       return;
     }
 
-    if (!user || !user.displayName) {
-      setErrorMessage('User is not logged in or display name is not available.');
-      return;
-    }
+    // if (!user || !user.displayName) {
+    //   setErrorMessage('User is not logged in or display name is not available.');
+    //   return;
+    // }
 
     const formData = new FormData();
     formData.append('title', title);
@@ -54,7 +54,7 @@ function UploadVideo({ addVideo, user }) {
     if (thumbnailFile) {
       formData.append('thumbnailFile', thumbnailFile);
     }
-    formData.append('channel', user.displayName);
+    formData.append('channel', user.display_name);
 
     try {
       const response = await fetch('http://localhost:8080/api/videos', {
