@@ -8,6 +8,7 @@ import SignInBox from './signInBox/SignInBox';
 import MainScreen from './mainScreen/MainScreen';
 import UploadVideo from './uploadVideo/UploadVideo';
 import UpperBar from './upperBar/UpperBar';
+import UserProfile from "./userProfile/UserProfile";
 import { loginUser as authLoginUser, fetchProtectedData, getCurrentUser } from './services/authService';
 
 function App() {
@@ -174,6 +175,7 @@ function App() {
         <Route path="/signIn" element={<SignInBox loginUser={loginUser} />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} user={currentUser} />} />
         <Route path="/WatchVideo/:videoId" element={<WatchVideo comments={comments} addComment={addComment} editComment={editComment} deleteComment={deleteComment} currentUser={currentUser} videoList={videoList} deleteVideo={deleteVideo} editVideo={editVideo} setVideoList={setVideoList} />} />
+        <Route path='/user' element={<UserProfile />} />
       </Routes>
     </div>
   );

@@ -24,7 +24,11 @@ function VideoPreviewCard({ video }) {
           )}
           <div className="card-body">
             <h5 className="card-title">{video.title}</h5>
-            <p className="card-text">{video.channel}</p>
+            <p>
+              <Link to={'/user'} className='no-underline'>
+                <p className="card-text">{video.channel} </p>
+              </Link>
+            </p>
             <p className="card-text">{video.description}</p>
             <p className="card-text">{video.dateUploaded} • {video.viewsCount} views</p>
           </div>

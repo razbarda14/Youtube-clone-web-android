@@ -1,13 +1,7 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
 const VideoSchema = new Schema({
-  id: {
-    type: Number,
-    required: true,
-    unique: true
-  },
   title: {
     type: String,
     required: true
@@ -40,17 +34,28 @@ const VideoSchema = new Schema({
     type: Number,
     required: true
   },
-  comments: {
-    type: Array,
-    default: []
-  },
-  isLiked: {
-    type: Boolean,
-    default: false
-  },
-  channel: {
-    type: String,
-    default: null
+  comments: [
+    {
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+      },
+      comment: {
+        type: String,
+        required: true
+      }
+    }
+  ],
+  likedBy: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ],
+  uploaderId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 
