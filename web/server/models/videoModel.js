@@ -6,6 +6,10 @@ const VideoSchema = new Schema({
     type: String,
     required: true
   },
+  uploaderId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   description: {
     type: String,
     required: true
@@ -52,11 +56,7 @@ const VideoSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'User'
     }
-  ],
-  uploaderId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  }
+  ]
 });
 
 module.exports = mongoose.model('VideoModel', VideoSchema);
