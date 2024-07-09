@@ -4,14 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ae8fb9f-edd1-47c0-868a-f8ba94f7d54c" name="Changes" comment="run react app through server">
+    <list default="true" id="0ae8fb9f-edd1-47c0-868a-f8ba94f7d54c" name="Changes" comment="Move uploaderId in videoModel.js to the be one of the first fields">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/videoController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/videoController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/videoModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/videoModel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube/src/uploadVideo/UploadVideo.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/uploadVideo/UploadVideo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube/src/videoPreviewCard/VideoPreviewCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/videoPreviewCard/VideoPreviewCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youtube/src/videoWatch/VideoCurrent/CurrentVideo.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/videoWatch/VideoCurrent/CurrentVideo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/controllers/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/userController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/middleware/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/middleware/authMiddleware.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/middleware/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/middleware/userMiddleware.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/userModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/authRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/userRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/services/authService.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/authService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/services/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/user.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +50,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "part__2__tomer__3",
+    "git-widget-placeholder": "part__2__main",
     "go.import.settings.migrated": "true",
     "last_opened_file_path": "C:/Users/guygu/GitHub/Youtube/web",
     "node.js.detected.package.eslint": "true",
@@ -94,7 +97,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1719838350360</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Move uploaderId in videoModel.js to the be one of the first fields">
+      <option name="closed" value="true" />
+      <created>1720538260519</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1720538260519</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -103,7 +114,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="run react app through server" />
-    <option name="LAST_COMMIT_MESSAGE" value="run react app through server" />
+    <MESSAGE value="Move uploaderId in videoModel.js to the be one of the first fields" />
+    <option name="LAST_COMMIT_MESSAGE" value="Move uploaderId in videoModel.js to the be one of the first fields" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>

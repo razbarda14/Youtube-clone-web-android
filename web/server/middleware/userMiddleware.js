@@ -1,4 +1,3 @@
-// middleware/auth.js
 const jwt = require('jsonwebtoken');
 const secretKey = 'your_secret_key'; // Ensure this matches the key used during sign
 

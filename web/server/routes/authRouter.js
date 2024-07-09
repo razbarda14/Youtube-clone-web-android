@@ -1,7 +1,7 @@
 const express = require('express');
 const { registerUser, loginUser } = require('../services/authService');
-const authenticateToken = require('../middleware/auth');
-const User = require('../models/user'); // Ensure this is imported to fetch user details
+const authenticateToken = require('../middleware/authMiddleware');
+const User = require('../models/userModel'); // Ensure this is imported to fetch user details
 const router = express.Router();
 
 // Register route

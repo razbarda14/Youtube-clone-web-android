@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('../models/user');
+const User = require('../models/userModel');
 
 const createUser = async (username, password, display_name) => {
   const user = new User({

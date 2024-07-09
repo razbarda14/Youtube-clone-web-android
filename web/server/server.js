@@ -6,8 +6,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
+const authRoutes = require('./routes/authRouter');
+const userRoutes = require('./routes/userRouter');
 const videoRoutes = require('./routes/videoRouter');
 
 const server = express();

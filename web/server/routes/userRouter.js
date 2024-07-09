@@ -1,6 +1,6 @@
-const userController = require('../controllers/user');
+const userController = require('../controllers/userController');
 const express = require('express');
-const authenticateToken = require('../middleware/auth'); // Correct import
+const authenticateToken = require('../middleware/authMiddleware'); // Correct import
 const router = express.Router();
 
 router.route('/').post(userController.createUser);

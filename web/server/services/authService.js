@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const User = require('../models/userModel');
 const saltRounds = 10;
 const secretKey = process.env.SECRET_KEY; // Use the environment variable
 console.log('Secret Key in authService:', secretKey); // Add this to check if the key is being loaded
