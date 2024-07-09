@@ -22,5 +22,12 @@ const getUserByUsername = async (username) => {
   const user = await UserService.findOne({ username: username });
   return user;
 };
+const getUserDisplayNameById = async (id) => {
+  console.log("getUserDisplayNameById in the service was called");
+  const user = await UserModel.findById(id, 'display_name');
+  console.log("found: ", user);
+  return user ? user.display_name : UNKWN;
+};
 
-module.exports = { createUser, getUserById, getUserByUsername };
+
+module.exports = { createUser, getUserById, getUserByUsername, getUserDisplayNameById };

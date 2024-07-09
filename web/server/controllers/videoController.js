@@ -66,7 +66,7 @@ const createVideo = async (req, res) => {
     const thumbnailFile = req.files.thumbnailFile ? req.files.thumbnailFile[0] : null;
 
     const newVideo = {
-      id: Date.now(), // Adding id here
+      id: Date.now(), // CHECK IF THIS LINE IS NECESSARY
       title,
       description,
       topic,
@@ -113,8 +113,22 @@ const getMostViewedAndRandomVideos = async (req, res) => {
   }
 };
 
+const getVideoWithUploaderNameById = async (req, res) => {
+  try {
+    const video = await videoService.getVideoWithUploaderNameById(req.params.id);
+    if (video) {
+      res.json(video);
+    } else {
+      res.status(404).json({ message: 'Video not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   getAllVideos, getVideoById, incrementViews,
   deleteVideoById, updateVideoById, createVideo,
-  getMostViewedAndRandomVideos
+  getMostViewedAndRandomVideos,
+  getVideoWithUploaderNameById
 };

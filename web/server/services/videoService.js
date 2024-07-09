@@ -36,8 +36,19 @@ const getRandomVideos = async (limit, excludedIds) => {
   ]);
 };
 
+const getVideoWithUploaderNameById = async (id) => {
+  try {
+    const video = await VideoModel.findOne({ _id: id }).populate('uploaderId', 'display_name');
+    return video;
+  } catch (error) {
+    console.error('Error in getVideoWithUploaderNameById:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   getAllVideos, getVideoById, incrementViews,
   deleteVideoById, updateVideoById, createVideo,
-  getMostViewedVideos, getRandomVideos
+  getMostViewedVideos, getRandomVideos,
+  getVideoWithUploaderNameById
 };

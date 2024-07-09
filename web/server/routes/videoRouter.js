@@ -15,6 +15,8 @@ videoRouter.route('/')
 videoRouter.get('/:id', videoController.getVideoById);
 videoRouter.put('/:id', videoController.updateVideoById);
 videoRouter.delete('/:id', videoController.deleteVideoById);
+
+videoRouter.get('/:id/uploader', videoController.getVideoWithUploaderNameById);
 videoRouter.patch('/increment-views/:id', videoController.incrementViews);
 
 module.exports = videoRouter;

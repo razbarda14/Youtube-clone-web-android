@@ -4,17 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ae8fb9f-edd1-47c0-868a-f8ba94f7d54c" name="Changes" comment="Move uploaderId in videoModel.js to the be one of the first fields">
+    <list default="true" id="0ae8fb9f-edd1-47c0-868a-f8ba94f7d54c" name="Changes" comment="With a given video and video.uploaderId, it can show the uploader's display_name">
+      <change afterPath="$PROJECT_DIR$/server/uploads/videos/1720541158394-ableton.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/uploads/videos/1720541466788-ableton.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/uploads/videos/1720541473513-ableton.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/uploads/videos/1720542361808-ableton.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/uploads/videos/1720542370854-ableton.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/uploads/videos/1720545549624-ableton.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/uploads/videos/1720545574591-fc24.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/uploads/videos/1720545633110-champions.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/uploads/videos/1720545812828-lofiMusic.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/uploads/videos/1720563135654-ableton.mp4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/userController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/middleware/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/middleware/authMiddleware.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/middleware/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/middleware/userMiddleware.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/userModel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/authRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/userRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/authService.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/authService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/services/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/controllers/userController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/userController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/controllers/videoController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/videoController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/userModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/userModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/videoModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/videoModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/userRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/userRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/videoRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/videoRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/services/userService.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/userService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/services/videoService.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/services/videoService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube/src/videoPreviewCard/VideoPreviewCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/videoPreviewCard/VideoPreviewCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube/src/videoWatch/SuggestedVideoItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/videoWatch/SuggestedVideoItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube/src/videoWatch/VideoCurrent/CurrentVideo.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/videoWatch/VideoCurrent/CurrentVideo.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +64,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "part__2__main",
+    "git-widget-placeholder": "part__2__tomer__3",
     "go.import.settings.migrated": "true",
     "last_opened_file_path": "C:/Users/guygu/GitHub/Youtube/web",
     "node.js.detected.package.eslint": "true",
@@ -72,6 +86,18 @@
       <recent name="C:\Users\guygu\GitHub\Youtube\web\server\public" />
       <recent name="C:\Users\guygu\GitHub\Youtube\web" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/server/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -105,7 +131,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720538260519</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Update VideoPreviewCard.js and SuggestedVideoItem.js so if there's no thumbnail it will adjust height automatically">
+      <option name="closed" value="true" />
+      <created>1720546068591</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1720546068591</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -115,10 +149,30 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="run react app through server" />
     <MESSAGE value="Move uploaderId in videoModel.js to the be one of the first fields" />
-    <option name="LAST_COMMIT_MESSAGE" value="Move uploaderId in videoModel.js to the be one of the first fields" />
+    <MESSAGE value="Update VideoPreviewCard.js and SuggestedVideoItem.js so if there's no thumbnail it will adjust height automatically" />
+    <MESSAGE value="With a given video and video.uploaderId, it can show the uploader's display_name" />
+    <option name="LAST_COMMIT_MESSAGE" value="With a given video and video.uploaderId, it can show the uploader's display_name" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/youtube/src/videoWatch/SuggestedVideoItem.js</url>
+          <line>41</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/server/routes/videoRouter.js</url>
+          <line>18</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
