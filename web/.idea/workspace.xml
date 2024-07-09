@@ -4,14 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ae8fb9f-edd1-47c0-868a-f8ba94f7d54c" name="Changes" comment="run react app through server" />
+    <list default="true" id="0ae8fb9f-edd1-47c0-868a-f8ba94f7d54c" name="Changes" comment="run react app through server">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/controllers/videoController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/videoController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/videoModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/videoModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube/src/uploadVideo/UploadVideo.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/uploadVideo/UploadVideo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube/src/videoPreviewCard/VideoPreviewCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/videoPreviewCard/VideoPreviewCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youtube/src/videoWatch/VideoCurrent/CurrentVideo.js" beforeDir="false" afterPath="$PROJECT_DIR$/youtube/src/videoWatch/VideoCurrent/CurrentVideo.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="part_2_main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="true" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -24,13 +40,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/guygu/GitHub/Youtube/web&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "part__2__tomer__3",
+    "go.import.settings.migrated": "true",
+    "last_opened_file_path": "C:/Users/guygu/GitHub/Youtube/web",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\guygu\GitHub\Youtube\web" />
@@ -51,6 +78,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1719746044308</updated>
+      <workItem from="1720530764011" duration="2678000" />
     </task>
     <task id="LOCAL‎-00001" summary="run react app through server">
       <created>1719829732167</created>
@@ -69,9 +97,16 @@
     <option name="localTasksCounter" value="3" />
     <servers />
   </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="run react app through server" />
     <option name="LAST_COMMIT_MESSAGE" value="run react app through server" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>false</integration-enabled>
+    <settings-migrated>true</settings-migrated>
   </component>
 </project>

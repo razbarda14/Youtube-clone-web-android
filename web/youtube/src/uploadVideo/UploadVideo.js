@@ -54,7 +54,7 @@ function UploadVideo({ addVideo, user }) {
     if (thumbnailFile) {
       formData.append('thumbnailFile', thumbnailFile);
     }
-    formData.append('channel', user.display_name);
+    formData.append('uploaderId', user._id);
 
     try {
       const response = await fetch('http://localhost:8080/api/videos', {

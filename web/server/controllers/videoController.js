@@ -61,7 +61,7 @@ const updateVideoById = async (req, res) => {
 
 const createVideo = async (req, res) => {
   try {
-    const { title, description, topic, channel } = req.body; // Extract channel from req.body
+    const { title, description, topic, uploaderId } = req.body; // Extract channel from req.body
     const videoFile = req.files.videoFile[0];
     const thumbnailFile = req.files.thumbnailFile ? req.files.thumbnailFile[0] : null;
 
@@ -70,14 +70,15 @@ const createVideo = async (req, res) => {
       title,
       description,
       topic,
-      channel,
+      uploaderId,
       videoPath: `/uploads/videos/${videoFile.filename}`,
       thumbnailPath: thumbnailFile ? `/uploads/thumbnails/${thumbnailFile.filename}` : null,
       viewsCount: 0,
       dateUploaded: new Date().toLocaleDateString('en-GB'),
       isLiked: false,
       likes: 0,
-      comments: []
+      comments: [], // Initialize empty comments array
+      likedBy: []   // Initialize empty likedBy array
     };
 
     const savedVideo = await videoService.createVideo(newVideo);
