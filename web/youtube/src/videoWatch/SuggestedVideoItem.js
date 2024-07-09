@@ -12,6 +12,7 @@ function SuggestedVideoItem({ video, onVideoClick }) {
           ) : (
             <video
               className="card-img-top"
+              height="170px"
               width="400"
               controls={false}
               preload="metadata"
