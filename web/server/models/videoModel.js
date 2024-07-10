@@ -8,7 +8,7 @@ const VideoSchema = new Schema({
   },
   uploaderId: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'UserModel'
   },
   description: {
     type: String,
@@ -42,7 +42,7 @@ const VideoSchema = new Schema({
     {
       userId: {
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'UserModel',
         required: true
       },
       comment: {
@@ -54,7 +54,7 @@ const VideoSchema = new Schema({
   likedBy: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'UserModel'
     }
   ]
 });

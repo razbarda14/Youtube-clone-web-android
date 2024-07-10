@@ -68,7 +68,6 @@ function App() {
 
   // add to check the current user
   useEffect(() => {
-    console.log('Current user changed:', currentUser); // Log user changes
   }, [currentUser]);
 
   useEffect(() => {

@@ -41,4 +41,19 @@ const getUserIdByUsername = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getUserById, getUserIdByUsername };
+const getUserDisplayName = async (req, res) => {
+  console.log("getUserDisplayName was called");
+  try {
+    const displayName = await userService.getUserDisplayNameById(req.params.id);
+    if (displayName) {
+      console.log("getUserDisplayname says: ", displayName);
+      res.json({ display_name: displayName });
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { createUser, getUserById, getUserIdByUsername, getUserDisplayName };

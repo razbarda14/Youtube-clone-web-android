@@ -8,7 +8,8 @@
   }
 
   .video-preview-card video {
-    display: block;
+      height: 170px;
+      display: block;
   }
   
   .card:hover {
