@@ -3,10 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import SuggestedVideos from './SuggestedVideos';
 import CurrentVideo from './VideoCurrent/CurrentVideo';
 
-function WatchVideo({ comments, addComment, editComment, deleteComment, currentUser, videoList, deleteVideo, editVideo, setVideoList }) {
+function WatchVideo({ addComment, editComment, deleteComment, currentUser, videoList, deleteVideo, editVideo, setVideoList }) {
   const { videoId } = useParams();
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [resetComments, setResetComments] = useState(false);
+  const [comments, setComments] = useState([]); // Local state for comments
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +26,7 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
 
         // Update the local state with the incremented view count
         setSelectedVideo({ ...data, viewsCount: (parseInt(data.viewsCount) + 1).toString() });
+        setComments(data.comments); // Set comments from the response
       } catch (error) {
         console.error('Error fetching video:', error);
       }
@@ -46,56 +48,115 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
 
   const handleLikeToggle = (videoId) => {
     setVideoList(prevVideoList =>
-        prevVideoList.map(video => {
-          if (video._id === videoId) {
-            return {
-              ...video,
-              isLiked: !video.isLiked,
-              likes: video.isLiked ? video.likes - 1 : video.likes + 1,
-              isDisliked: false,
-            };
-          } else {
-            return video;
-          }
-        })
+      prevVideoList.map(video => {
+        if (video._id === videoId) {
+          return {
+            ...video,
+            isLiked: !video.isLiked,
+            likes: video.isLiked ? video.likes - 1 : video.likes + 1,
+            isDisliked: false,
+          };
+        } else {
+          return video;
+        }
+      })
     );
   };
 
   const handleDislikeToggle = (videoId) => {
     setVideoList(prevVideoList =>
-        prevVideoList.map(video => {
-          if (video._id === videoId) {
-            return {
-              ...video,
-              isDisliked: !video.isDisliked,
-              isLiked: false,
-              likes: video.isLiked ? video.likes - 1 : video.likes, // Update likes if previously liked
-            };
-          } else {
-            return video;
-          }
-        })
+      prevVideoList.map(video => {
+        if (video._id === videoId) {
+          return {
+            ...video,
+            isDisliked: !video.isDisliked,
+            isLiked: false,
+            likes: video.isLiked ? video.likes - 1 : video.likes, // Update likes if previously liked
+          };
+        } else {
+          return video;
+        }
+      })
     );
   };
 
-  const handleCommentAdd = (videoId, comment) => {
-    addComment(videoId, comment);
+  const handleCommentAdd = async (videoId, comment) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/videos/${videoId}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(comment),
+      });
+
+      if (response.ok) {
+        const updatedVideo = await response.json();
+        setComments(updatedVideo.comments); // Update comments from response
+        setResetComments(true);
+      } else {
+        console.error('Failed to add comment:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
   };
 
-  const handleCommentDelete = (videoId, commentIndex) => {
-    deleteComment(videoId, commentIndex);
+  const handleCommentDelete = async (videoId, commentId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/videos/${videoId}/comments/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: currentUser._id }), // Include user ID in the request body
+      });
+
+      if (response.ok) {
+        const updatedVideo = await response.json();
+        setComments(updatedVideo.comments); // Update comments from response
+        setResetComments(true);
+      } else {
+        console.error('Failed to delete comment:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
   };
 
-  const handleCommentEdit = (videoId, commentIndex, newComment) => {
-    editComment(videoId, commentIndex, newComment);
+  const handleCommentEdit = async (videoId, commentId, newComment) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/videos/${videoId}/comments/${commentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: currentUser._id, comment: newComment }), // Include user ID in the request body
+      });
+
+      if (response.ok) {
+        const updatedVideo = await response.json();
+        setComments(updatedVideo.comments); // Update comments from response
+        setResetComments(true);
+      } else {
+        console.error('Failed to edit comment:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error editing comment:', error);
+    }
   };
 
+ 
   const handleDeleteVideo = async (videoId) => {
     try {
       const response = await fetch(`http://localhost:8080/api/videos/${videoId}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: currentUser._id }), // Include user ID in the request body
       });
-
+  
       if (response.ok) {
         deleteVideo(videoId);
         navigate('/');
@@ -106,7 +167,7 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
       console.error('Error deleting video:', error);
     }
   };
-
+  
   const handleEditVideo = async (videoId, newTitle, newDescription, newTopic) => {
     try {
       const response = await fetch(`http://localhost:8080/api/videos/${videoId}`, {
@@ -114,9 +175,9 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title: newTitle, description: newDescription, topic: newTopic }),
+        body: JSON.stringify({ title: newTitle, description: newDescription, topic: newTopic, userId: currentUser._id }), // Include user ID in the request body
       });
-
+  
       if (response.ok) {
         editVideo(videoId, newTitle, newDescription, newTopic);
         setSelectedVideo(prevVideo => ({ ...prevVideo, title: newTitle, description: newDescription, topic: newTopic }));
@@ -126,37 +187,37 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
     } catch (error) {
       console.error('Error editing video:', error);
     }
-    window.location.reload();
   };
+  
 
   return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-8">
-            <div className="current-video-padding">
-              {selectedVideo && (
-                  <CurrentVideo
-                      video={selectedVideo}
-                      onLikeToggle={handleLikeToggle}
-                      onDislikeToggle={handleDislikeToggle}
-                      onCommentAdd={handleCommentAdd}
-                      onCommentDelete={handleCommentDelete}
-                      onCommentEdit={handleCommentEdit}
-                      resetComments={resetComments}
-                      setResetComments={setResetComments}
-                      currentUser={currentUser}
-                      comments={comments[selectedVideo._id] || []}
-                      onDeleteVideo={handleDeleteVideo} // Pass the handleDeleteVideo function
-                      onEditVideo={handleEditVideo} // Pass the handleEditVideo function
-                  />
-              )}
-            </div>
-          </div>
-          <div className="col-4">
-            <SuggestedVideos onVideoSelect={handleVideoSelect} videoData={videoList} />
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-8">
+          <div className="current-video-padding">
+            {selectedVideo && (
+              <CurrentVideo
+                video={selectedVideo}
+                onLikeToggle={handleLikeToggle}
+                onDislikeToggle={handleDislikeToggle}
+                onCommentAdd={handleCommentAdd}
+                onCommentDelete={handleCommentDelete}
+                onCommentEdit={handleCommentEdit}
+                resetComments={resetComments}
+                setResetComments={setResetComments}
+                currentUser={currentUser}
+                comments={comments} // Pass the comments state here
+                onDeleteVideo={handleDeleteVideo} // Pass the handleDeleteVideo function
+                onEditVideo={handleEditVideo} // Pass the handleEditVideo function
+              />
+            )}
           </div>
         </div>
+        <div className="col-4">
+          <SuggestedVideos onVideoSelect={handleVideoSelect} videoData={videoList} />
+        </div>  
       </div>
+    </div>
   );
 }
 

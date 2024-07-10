@@ -20,12 +20,8 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
   const handleAddComment = () => {
     if (addCommentText.trim() !== '') {
       const comment = {
-        text: addCommentText,
-        user: {
-          displayName: currentUser.displayName,
-          photo: currentUser.photo || 'default-user.png'
-        },
-        date: new Date().toLocaleDateString('en-GB')
+        userId: currentUser._id, // Ensure currentUser._id is correct
+        comment: addCommentText
       };
       onCommentAdd(video._id, comment);
       setAddCommentText('');
@@ -38,32 +34,24 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
   };
 
   const handleEditInputChange = (event) => {
-    setEditingComment({ ...editingComment, text: event.target.value });
+    setEditingComment({ ...editingComment, comment: event.target.value });
   };
 
-  const handleEditComment = (index, comment) => {
-    setEditingComment({ index, ...comment });
+  const handleEditComment = (comment) => {
+    setEditingComment(comment);
   };
 
-  const handleSaveComment = (index) => {
-    if (editingComment.text.trim() !== '') {
-      const updatedComment = {
-        ...editingComment,
-        user: {
-          displayName: editingComment.user.displayName,
-          photo: editingComment.user.photo || 'default-user.png'
-        },
-        text: editingComment.text
-      };
-      onCommentEdit(video._id, index, updatedComment);
+  const handleSaveComment = (commentId) => {
+    if (editingComment.comment.trim() !== '') {
+      onCommentEdit(video._id, commentId, editingComment.comment);
       setEditingComment(null);
     } else {
       alert('Comment cannot be empty.');
     }
   };
 
-  const handleDeleteComment = (index) => {
-    onCommentDelete(video._id, index);
+  const handleDeleteComment = (commentId) => {
+    onCommentDelete(video._id, commentId);
   };
 
   return (
@@ -100,12 +88,12 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
         <h5>Please sign in to like a video or write a comment</h5>
       )}
       <div className="comments-section mt-3">
-        {comments.map((comment, index) => (
-          <div className='container-fluid' key={index}>
+        {comments.map((comment) => (
+          <div className='container-fluid' key={comment._id}>
             <div className='row'>
               <div className='col-1 align-items-center'>
                 <img
-                  src={comment.user?.photo || 'default-user.png'}
+                  src={comment.userId?.image || 'default-user.png'}
                   alt="User"
                   className="rounded-circle"
                   width="35px"
@@ -114,23 +102,23 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
               </div>
               <div className='col-4'>
                 <div className='row'>
-                  @{comment.user?.displayName || 'Unknown'}
+                  @{comment.userId?.display_name || 'Unknown'}
                 </div>
                 <div className='row'>
                   <div className="comment-container">
-                    {editingComment && editingComment.index === index ? (
+                    {editingComment && editingComment._id === comment._id ? (
                       <div className="d-flex">
                         <input
                           type="text"
                           className="form-control"
-                          value={editingComment.text}
+                          value={editingComment.comment}
                           onChange={handleEditInputChange}
                         />
                         <div className="input-group-append">
                           <button
                             className="btn btn-outline-secondary"
-                            onClick={() => handleSaveComment(index)}
-                            disabled={editingComment.text.trim() === ''}
+                            onClick={() => handleSaveComment(comment._id)}
+                            disabled={editingComment.comment.trim() === ''}
                           >
                             Save
                           </button>
@@ -144,13 +132,13 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
                       </div>
                     ) : (
                       <>
-                        <p>{comment.text}</p>
-                        {currentUser && (
+                        <p>{comment.comment}</p>
+                        {currentUser && currentUser._id === comment.userId._id && ( // Only show edit/delete if the comment belongs to current user
                           <div className="input-group-append">
-                            <button className="btn btn-outline-secondary" onClick={() => handleEditComment(index, comment)}>
+                            <button className="btn btn-outline-secondary" onClick={() => handleEditComment(comment)}>
                               <i className="bi bi-pencil"></i>
                             </button>
-                            <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(index)}>
+                            <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(comment._id)}>
                               <i className="bi bi-trash"></i>
                             </button>
                           </div>

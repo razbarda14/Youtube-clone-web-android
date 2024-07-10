@@ -13,28 +13,6 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
   const [editedTitle, setEditedTitle] = useState(video?.title || '');
   const [editedDescription, setEditedDescription] = useState(video?.description || '');
   const [editedTopic, setEditedTopic] = useState(video?.topic || '');
-  const [displayName, setDisplayName] = useState('');
-
-  const fetchDisplayName = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/api/videos/${video._id}/uploader`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      console.log("API Response Data:", data); // Log the entire response data
-      setDisplayName(data.uploaderId.display_name); // Access the populated field
-      console.log("DisplayName after fetch:", data.uploaderId.display_name); // Add logging
-    } catch (error) {
-      console.error('Error fetching display name:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (video._id) {
-      fetchDisplayName();
-    }
-  }, [video._id]);
 
   useEffect(() => {
     if (resetComments) {
@@ -72,8 +50,6 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
     return <div>Loading...</div>;
   }
 
-  const isUploader = currentUser && currentUser._id === video.uploaderId;
-
   return (
       <div className='main-content justify-content-center'>
         <ScreenVideo video={video} videoRef={videoRef} />
@@ -82,7 +58,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
             <div className="video-header">
               <h4>{video.title}</h4>
               <Link to={'/user'} className='no-underline'>
-                <p>{displayName}</p>
+                <p>{video.channel}</p>
               </Link>
             </div>
           </div>
@@ -116,7 +92,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
                 <p className="text-bold">  {video.viewsCount} views • {video.dateUploaded} </p>
                 <p>{video.description}</p>
                 <p>{video.topic}</p>
-                {isUploader && (
+                {currentUser && currentUser._id === video.uploaderId && (
                     <div>
                       <button className="btn btn-secondary me-2" onClick={handleEditClick}>Edit Details</button>
                       <button className="btn btn-danger" onClick={handleDeleteClick}>Delete Video</button>

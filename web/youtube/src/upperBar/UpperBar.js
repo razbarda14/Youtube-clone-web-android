@@ -76,7 +76,7 @@ function UpperBar({ setSearchQuery, setTagFilter, currentUser, logoutUser }) {
                 Sign Out
               </button>
               <img
-                src={currentUser.photo}
+                src={currentUser.image}
                 alt="User Profile"
                 className="rounded-circle me-2"
                 style={{ width: '35px', height: '35px', marginLeft : '7px' }}
