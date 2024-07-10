@@ -6,7 +6,7 @@ const secretKey = process.env.SECRET_KEY; // Use the environment variable
 console.log('Secret Key in authService:', secretKey); // Add this to check if the key is being loaded
 
 
-const registerUser = async (username, displayName, password) => {
+const registerUser = async (username, displayName, password, photoPath) => {
   if (!username || !displayName || !password) {
     throw new Error('Username, display name, or password is missing.');
   }
@@ -16,12 +16,13 @@ const registerUser = async (username, displayName, password) => {
     const newUser = new User({
       username,
       display_name: displayName,
-      password: hashedPassword
+      password: hashedPassword,
+      image: photoPath // Add this line to save the photo path
     });
-    const savedUser = await newUser.save();
+    const savedUser = await newUser.save(); // This is the method that saves the user to MongoDB
     return savedUser;
   } catch (error) {
-    console.error('Error during user registration:', error);
+    console.error('Error during user registration:', error.message);
     throw new Error('Error during registration');
   }
 };

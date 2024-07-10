@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import youtubeIcon from "../img/youtube-icon.png";
 import './RegisterBox.css';
 import { useTheme } from '../themeContext/ThemeContext';
-import { registerUser as authRegisterUser } from '../services/authService';
+import { registerUser as authRegisterUser, checkUserExists } from '../services/authService';
 
 
 function RegisterBox({ registerUser, users }) {
@@ -58,23 +58,24 @@ function RegisterBox({ registerUser, users }) {
     }
   };
 
-  const handleNext = (e) => {
-    e.preventDefault();
+const handleNext = async (e) => {
+  e.preventDefault();
 
-    const isUserNameValidFinal = userName.trim() !== '';
-    const isPasswordValidFinal = password.length >= 8;
-    const doPasswordsMatchFinal = password === verifyPassword;
+  const isUserNameValidFinal = userName.trim() !== '';
+  const isPasswordValidFinal = password.length >= 8;
+  const doPasswordsMatchFinal = password === verifyPassword;
 
-    setIsUserNameValid(isUserNameValidFinal);
-    setIsPasswordValid(isPasswordValidFinal);
-    setDoPasswordsMatch(doPasswordsMatchFinal);
+  setIsUserNameValid(isUserNameValidFinal);
+  setIsPasswordValid(isPasswordValidFinal);
+  setDoPasswordsMatch(doPasswordsMatchFinal);
 
-    if (!isUserNameValidFinal || !isPasswordValidFinal || !doPasswordsMatchFinal) {
-      return;
-    }
+  if (!isUserNameValidFinal || !isPasswordValidFinal || !doPasswordsMatchFinal) {
+    return;
+  }
 
+  try {
     const lowerUserName = userName.toLowerCase();
-    const userExists = users.some(user => user.userName.toLowerCase() === lowerUserName);
+    const userExists = await checkUserExists(lowerUserName); // Check if user exists in the database
 
     if (userExists) {
       setUserNameError('Username already taken. Please choose another one.');
@@ -83,7 +84,12 @@ function RegisterBox({ registerUser, users }) {
     }
 
     setStep(2);
-  };
+  } catch (error) {
+    console.error('Error checking username existence:', error);
+    setUserNameError('Error checking username. Please try again.');
+  }
+};
+
 
   const handleBack = (e) => {
     e.preventDefault();
@@ -93,36 +99,49 @@ function RegisterBox({ registerUser, users }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const isDisplayNameValidFinal = displayName.trim() !== '';
     const isPhotoValidFinal = photo !== null;
-
+  
     setIsDisplayNameValid(isDisplayNameValidFinal);
     setIsPhotoValid(isPhotoValidFinal);
-
+  
     if (!isDisplayNameValidFinal || !isPhotoValidFinal) {
       return;
     }
-
+  
     const displayNameExists = users.some(user => user.displayName === displayName);
-
+  
     if (displayNameExists) {
       setDisplayNameError('Display name already taken. Please choose another one.');
       setIsDisplayNameValid(false);
       return;
     }
-
-    const user = await authRegisterUser(userName, displayName, password);
-
-    if (user) {
-      registerUser(user);
-      alert('Registration successful!');
-      navigate('/signIn');
-    } else {
-      console.error('Failed to register');
+  
+    const formData = new FormData();
+    formData.append('username', userName);
+    formData.append('displayName', displayName);
+    formData.append('password', password);
+    formData.append('photo', photo);
+  
+    try {
+      const user = await authRegisterUser(formData);
+      if (user) {
+        registerUser(user);
+        alert('Registration successful!');
+        navigate('/signIn');
+      } else {
+        console.error('Failed to register: User is null');
+        alert('Failed to register. Please try again.');
+      }
+    } catch (error) {
+      console.error('Failed to register:', error.message);
       alert('Failed to register. Please try again.');
     }
   };
+  
+  
+  
   
   
 

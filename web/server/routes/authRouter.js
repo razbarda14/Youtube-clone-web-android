@@ -2,15 +2,21 @@ const express = require('express');
 const { registerUser, loginUser } = require('../services/authService');
 const authenticateToken = require('../middleware/authMiddleware');
 const User = require('../models/userModel'); // Ensure this is imported to fetch user details
+const upload = require('../middleware/multerConfig'); 
 const router = express.Router();
 
 // Register route
-router.post('/register', async (req, res) => {
+router.post('/register', upload.single('photo'), async (req, res) => {
   const { username, displayName, password } = req.body;
+  const photoPath = req.file ? req.file.path : null;
+
+  console.log('Received registration data:', { username, displayName, password, photoPath });
+
   try {
-    const user = await registerUser(username, displayName, password);
+    const user = await registerUser(username, displayName, password, photoPath);
     res.status(201).json(user);
   } catch (error) {
+    console.error('Error during user registration:', error.message);
     res.status(400).json({ error: error.message });
   }
 });
