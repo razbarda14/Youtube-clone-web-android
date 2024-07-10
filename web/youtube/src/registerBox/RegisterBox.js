@@ -93,36 +93,49 @@ function RegisterBox({ registerUser, users }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const isDisplayNameValidFinal = displayName.trim() !== '';
     const isPhotoValidFinal = photo !== null;
-
+  
     setIsDisplayNameValid(isDisplayNameValidFinal);
     setIsPhotoValid(isPhotoValidFinal);
-
+  
     if (!isDisplayNameValidFinal || !isPhotoValidFinal) {
       return;
     }
-
+  
     const displayNameExists = users.some(user => user.displayName === displayName);
-
+  
     if (displayNameExists) {
       setDisplayNameError('Display name already taken. Please choose another one.');
       setIsDisplayNameValid(false);
       return;
     }
-
-    const user = await authRegisterUser(userName, displayName, password);
-
-    if (user) {
-      registerUser(user);
-      alert('Registration successful!');
-      navigate('/signIn');
-    } else {
-      console.error('Failed to register');
+  
+    const formData = new FormData();
+    formData.append('username', userName);
+    formData.append('displayName', displayName);
+    formData.append('password', password);
+    formData.append('photo', photo);
+  
+    try {
+      const user = await authRegisterUser(formData);
+      if (user) {
+        registerUser(user);
+        alert('Registration successful!');
+        navigate('/signIn');
+      } else {
+        console.error('Failed to register: User is null');
+        alert('Failed to register. Please try again.');
+      }
+    } catch (error) {
+      console.error('Failed to register:', error.message);
       alert('Failed to register. Please try again.');
     }
   };
+  
+  
+  
   
   
 

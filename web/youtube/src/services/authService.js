@@ -1,20 +1,19 @@
 const API_URL = 'http://localhost:8080/auth';
 
-export const registerUser = async (username, displayName, password) => {
+export const registerUser = async (formData) => {
   try {
     const response = await fetch(`${API_URL}/register`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, displayName, password }),
+      body: formData, // No headers required for FormData
     });
 
     if (response.ok) {
       const user = await response.json();
       return user;
     } else {
-      throw new Error('Registration failed');
+      const errorData = await response.json();
+      console.error('Registration failed:', errorData);
+      throw new Error(errorData.error || 'Registration failed');
     }
   } catch (error) {
     console.error('Error during registration:', error);
