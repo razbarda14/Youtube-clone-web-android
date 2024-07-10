@@ -4,6 +4,15 @@ const getAllVideos = async () => {
   return await VideoModel.find({});
 };
 
+const getVideosByUploaderId = async (uploaderId) => {
+  try {
+    return await VideoModel.find({ uploaderId: uploaderId });
+  } catch (error) {
+    console.error('Error fetching videos by uploaderId:', error);
+    throw error;
+  }
+};
+
 const getVideoById = async (id) => {
   return await VideoModel.findOne({ _id: id });
 };
@@ -47,7 +56,8 @@ const getVideoWithUploaderNameById = async (id) => {
 };
 
 module.exports = {
-  getAllVideos, getVideoById, incrementViews,
+  getAllVideos, getVideosByUploaderId,
+  getVideoById, incrementViews,
   deleteVideoById, updateVideoById, createVideo,
   getMostViewedVideos, getRandomVideos,
   getVideoWithUploaderNameById

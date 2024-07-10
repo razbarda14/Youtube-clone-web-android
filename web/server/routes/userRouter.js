@@ -1,4 +1,5 @@
 const userController = require('../controllers/userController');
+const videoController = require('../controllers/videoController.js');
 const express = require('express');
 const authenticateToken = require('../middleware/authMiddleware'); // Correct import
 const upload = require('../middleware/multerConfig');
@@ -18,6 +19,9 @@ router.route('/:id/getDisplayName')
 
 router.route('/:id/getImagePath')
     .get(userController.getUserImagePath);
+
+router.route('/:id/videos')
+    .get(videoController.getVideosByUploader);
 
 router.post('/register', upload.single('photo'), userController.registerUser);
 router.post('/login', userController.loginUser);

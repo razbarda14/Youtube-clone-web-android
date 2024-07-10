@@ -10,9 +10,9 @@ function UserProfile() {
     const [imagePath, setImagePath] = useState('');
 
 
-    const fetchVideos = async () => {
+    const fetchUserVideos = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/videos');
+            const response = await fetch(`http://localhost:8080/users/${userId}/videos`);
             const data = await response.json();
             setUserVideoList(data);
         } catch (error) {
@@ -38,7 +38,7 @@ function UserProfile() {
     };
 
     useEffect(() => {
-        fetchVideos();
+        fetchUserVideos();
         fetchUserDetails();
     }, []);
 

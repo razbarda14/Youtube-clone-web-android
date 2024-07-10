@@ -10,6 +10,18 @@ const getAllVideos = async (_, res) => {
   }
 };
 
+const getVideosByUploader = async (req, res) => {
+  const { id: uploaderId } = req.params;
+
+  try {
+    const videos = await videoService.getVideosByUploaderId(uploaderId);
+    res.status(200).json(videos);
+  } catch (error) {
+    console.error('Error fetching videos by uploaderId:', error);
+    res.status(500).json({ message: 'Error fetching videos' });
+  }
+};
+
 const getVideoById = async (req, res) => {
   try {
     const video = await videoService.getVideoById(req.params.id);
@@ -127,7 +139,8 @@ const getVideoWithUploaderNameById = async (req, res) => {
 };
 
 module.exports = {
-  getAllVideos, getVideoById, incrementViews,
+  getAllVideos, getVideosByUploader,
+  getVideoById, incrementViews,
   deleteVideoById, updateVideoById, createVideo,
   getMostViewedAndRandomVideos,
   getVideoWithUploaderNameById
