@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080/auth';
+const API_URL = 'http://localhost:8080/users';
 
 export const registerUser = async (formData) => {
   try {
@@ -50,7 +50,6 @@ export const loginUser = async (username, password) => {
   }
 };
 
-
 export const fetchProtectedData = async (route) => {
   const token = localStorage.getItem('token');
   try {
@@ -74,11 +73,30 @@ export const fetchProtectedData = async (route) => {
   }
 };
 
-
-
-
-
 export const getCurrentUser = () => {
   const user = localStorage.getItem('user');
   return user ? JSON.parse(user) : null;
+};
+
+export const checkUserExists = async (username) => {
+  try {
+    const response = await fetch(`${API_URL}/getUserId?username=${username}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const { id } = await response.json();
+      return !!id; // Return true if user exists
+    } else if (response.status === 404) {
+      return false; // User does not exist
+    } else {
+      throw new Error('Error checking username existence');
+    }
+  } catch (error) {
+    console.error('Error during checkUserExists:', error);
+    throw error;
+  }
 };
