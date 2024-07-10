@@ -27,10 +27,10 @@ function UserProfile() {
             console.log('Display Name Data:', displayNameData); // Debugging
             setDisplayName(displayNameData.display_name);
 
-            const profilePictureResponse = await fetch(`http://localhost:8080/users/${userId}/getProfilePicturePath`);
+            const profilePictureResponse = await fetch(`http://localhost:8080/users/${userId}/getImagePath`);
             const profilePictureData = await profilePictureResponse.json();
-            console.log('Profile Picture Data:', profilePictureData); // Debugging
             setImagePath(profilePictureData.image);
+            console.log('Profile Picture Data:', profilePictureData.image) // Debugging
 
         } catch (error) {
             console.error('Error fetching videos:', error);
