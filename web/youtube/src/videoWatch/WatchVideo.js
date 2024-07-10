@@ -126,6 +126,7 @@ function WatchVideo({ comments, addComment, editComment, deleteComment, currentU
     } catch (error) {
       console.error('Error editing video:', error);
     }
+    window.location.reload();
   };
 
   return (
