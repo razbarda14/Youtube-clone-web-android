@@ -81,7 +81,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
           <div className='col-7'>
             <div className="video-header">
               <h4>{video.title}</h4>
-              <Link to={'/user'} className='no-underline'>
+              <Link to={`/user/${video.uploaderId}`} className='no-underline'>
                 <p>{displayName}</p>
               </Link>
             </div>

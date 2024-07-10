@@ -16,6 +16,9 @@ router.route('/:id')
 router.route('/:id/getDisplayName')
   .get(userController.getUserDisplayName);
 
+router.route('/:id/getImagePath')
+    .get(userController.getUserImagePath);
+
 router.post('/register', upload.single('photo'), userController.registerUser);
 router.post('/login', userController.loginUser);
 router.get('/verify-user', authenticateToken, userController.getUserById);

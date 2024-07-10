@@ -54,6 +54,19 @@ const getUserDisplayName = async (req, res) => {
   }
 };
 
+const getUserImagePath = async (req, res) => {
+  try {
+    const image = await userService.getUserImagePathById(req.params.id);
+    if (image) {
+      res.json({ image: image });
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const registerUser = async (req, res) => {
   const { username, displayName, password } = req.body;
   const photoPath = req.file ? req.file.path : null;
@@ -77,4 +90,7 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getUserById, getUserIdByUsername, getUserDisplayName, registerUser, loginUser };
+module.exports = {
+  createUser, getUserById, getUserIdByUsername,
+  getUserDisplayName,getUserImagePath,
+  registerUser, loginUser };
