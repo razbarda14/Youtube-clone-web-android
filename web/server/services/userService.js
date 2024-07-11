@@ -34,6 +34,11 @@ const getUserDisplayNameById = async (id) => {
   return user ? user.display_name : null;
 };
 
+const getUserImagePathById = async (id) => {
+  const user = await User.findById(id, 'image');
+  return user ? user.image : null;
+};
+
 const registerUser = async (username, display_name, password, image) => {
   if (!username || !display_name || !password) {
     throw new Error('Username, display name, or password is missing.');
@@ -71,4 +76,7 @@ const loginUser = async (username, password) => {
   }
 };
 
-module.exports = { createUser, getUserById, getUserByUsername, getUserDisplayNameById, registerUser, loginUser };
+module.exports = {
+  createUser, getUserById, getUserByUsername,
+  getUserDisplayNameById, getUserImagePathById,
+  registerUser, loginUser };
