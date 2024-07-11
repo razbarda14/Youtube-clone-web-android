@@ -13,10 +13,19 @@ videoRouter.route('/')
     ]), videoController.createVideo);
 
 videoRouter.get('/:id', videoController.getVideoById);
-videoRouter.put('/:id', videoController.updateVideoById);
-videoRouter.delete('/:id', videoController.deleteVideoById);
-
-videoRouter.get('/:id/uploader', videoController.getVideoWithUploaderNameById);
+videoRouter.delete('/:id', (req, res) => {
+    const userId = req.body.userId;
+    videoController.deleteVideoById({ ...req, body: { ...req.body, userId } }, res);
+  });
+  
+  videoRouter.put('/:id', (req, res) => {
+    const userId = req.body.userId;
+    videoController.updateVideoById({ ...req, body: { ...req.body, userId } }, res);
+  });
+  
 videoRouter.patch('/increment-views/:id', videoController.incrementViews);
+videoRouter.post('/:id/comments', videoController.addCommentToVideo);
+videoRouter.delete('/:id/comments/:commentId', videoController.deleteCommentFromVideo); 
+videoRouter.put('/:id/comments/:commentId', videoController.editCommentInVideo); 
 
 module.exports = videoRouter;
