@@ -49,31 +49,42 @@ const getRandomVideos = async (limit, excludedIds) => {
 
 const addCommentToVideo = async (id, commentData) => {
   return await VideoModel.findByIdAndUpdate(
-    id,
-    { $push: { comments: commentData } },
-    { new: true, useFindAndModify: false }
+      id,
+      { $push: { comments: commentData } },
+      { new: true, useFindAndModify: false }
   ).populate('comments.userId', 'displayName'); // Populate the userId field with displayName
 };
 
 const deleteCommentFromVideo = async (id, commentId) => {
   return await VideoModel.findByIdAndUpdate(
-    id,
-    { $pull: { comments: { _id: commentId } } },
-    { new: true, useFindAndModify: false }
+      id,
+      { $pull: { comments: { _id: commentId } } },
+      { new: true, useFindAndModify: false }
   ).populate('comments.userId', 'displayName');
 };
 
 const editCommentInVideo = async (id, commentId, newComment) => {
   return await VideoModel.findOneAndUpdate(
-    { _id: id, 'comments._id': commentId },
-    { $set: { 'comments.$.comment': newComment } },
-    { new: true, useFindAndModify: false }
+      { _id: id, 'comments._id': commentId },
+      { $set: { 'comments.$.comment': newComment } },
+      { new: true, useFindAndModify: false }
   ).populate('comments.userId', 'displayName');
+};
+
+const getVideoWithUploaderNameById = async (id) => {
+  try {
+    const video = await VideoModel.findOne({ _id: id }).populate('uploaderId', 'display_name');
+    return video;
+  } catch (error) {
+    console.error('Error in getVideoWithUploaderNameById:', error);
+    throw error;
+  }
 };
 
 module.exports = {
   getAllVideos, getVideosByUploaderId,
   getVideoById, incrementViews,
   deleteVideoById, updateVideoById, createVideo,
-  getMostViewedVideos, getRandomVideos, addCommentToVideo, deleteCommentFromVideo, editCommentInVideo
+  getMostViewedVideos, getRandomVideos, addCommentToVideo, deleteCommentFromVideo, editCommentInVideo,
+  getVideoWithUploaderNameById
 };
