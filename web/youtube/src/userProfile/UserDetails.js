@@ -47,6 +47,7 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID }) {
                 alert('Display name updated successfully');
                 setIsEditing(false);
                 setNewDisplayName(updatedUser.display_name);
+                window.location.reload();
             } else {
                 const errorData = await response.json();
                 alert(`Failed to update display name: ${errorData.error}`);
@@ -104,18 +105,21 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID }) {
                                 value={newDisplayName}
                                 onChange={handleDisplayNameChange}
                                 className="form-control"
+                                placeholder="Edit your display name"
+                                aria-label="Edit your display name"
+                                aria-describedby="button-addon2"
                                 style={{ marginBottom: '10px' }}
                             />
-                            <button className="btn-primary" onClick={handleUpdateDisplayName}>Save</button>
-                            <button className="btn-secondary" onClick={() => setIsEditing(false)}>Cancel</button>
+                            <button type="button" className="btn btn-primary mb-2"  onClick={handleUpdateDisplayName}>Save</button>
+                            <button type="button" className="btn btn-secondary mb-2"  onClick={() => setIsEditing(false)}>Cancel</button>
                         </>
                     ) : (
                         <>
                             <h5>{userDisplayName}</h5>
-                            <button className="btn-primary" onClick={handleEditClick}>Edit Details</button>
+                            <button type="button" className="btn btn-primary mb-2"  onClick={handleEditClick}>Edit Details</button>
                         </>
                     )}
-                    <button className="btn-danger" onClick={handleDeleteUser}>Delete User</button>
+                    <button type="button" className="btn btn-danger mb-2"  onClick={handleDeleteUser}>Delete User</button>
                 </div>
             </div>
         </div>
