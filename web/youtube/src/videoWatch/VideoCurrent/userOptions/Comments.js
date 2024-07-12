@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetComments, currentUser, comments }) {
   const [newComment, setNewComment] = useState('');
   const [editingComment, setEditingComment] = useState(null);
   const [addCommentText, setAddCommentText] = useState('');
+  const [displayNames, setDisplayNames] = useState({});
+  const [imagePaths, setImagePaths] = useState({});
 
   useEffect(() => {
     if (resetComments) {
@@ -12,6 +15,59 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
       setAddCommentText('');
     }
   }, [resetComments]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userIds = [...new Set(comments.map(comment => comment.userId._id))];
+        console.log('Unique User IDs:', userIds);
+
+        const displayNamePromises = userIds.map(userId =>
+          axios.get(`/users/${userId}/getDisplayName`)
+            .then(response => ({ userId, displayName: response.data.display_name }))
+            .catch(error => {
+              console.error(`Error fetching display name for userId ${userId}:`, error);
+              return { userId, error };
+            })
+        );
+
+        const imagePathPromises = userIds.map(userId =>
+          axios.get(`/users/${userId}/getImagePath`)
+            .then(response => ({ userId, imagePath: response.data.image }))
+            .catch(error => {
+              console.error(`Error fetching image path for userId ${userId}:`, error);
+              return { userId, error };
+            })
+        );
+
+        const displayNamesArray = await Promise.all(displayNamePromises);
+        const imagePathsArray = await Promise.all(imagePathPromises);
+        console.log('Fetched Display Names:', displayNamesArray);
+        console.log('Fetched Image Paths:', imagePathsArray);
+
+        const displayNamesMap = displayNamesArray.reduce((acc, { userId, displayName }) => {
+          if (displayName) {
+            acc[userId] = displayName;
+          }
+          return acc;
+        }, {});
+        const imagePathsMap = imagePathsArray.reduce((acc, { userId, imagePath }) => {
+          if (imagePath) {
+            acc[userId] = imagePath.startsWith('http') ? imagePath : `/${imagePath}`;
+          }
+          return acc;
+        }, {});
+        console.log('Display Names Map:', displayNamesMap);
+        console.log('Image Paths Map:', imagePathsMap);
+        setDisplayNames(displayNamesMap);
+        setImagePaths(imagePathsMap);
+      } catch (error) {
+        console.error('Error in fetchUserData:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [comments]);
 
   const handleAddInputChange = (event) => {
     setAddCommentText(event.target.value);
@@ -88,69 +144,77 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
         <h5>Please sign in to like a video or write a comment</h5>
       )}
       <div className="comments-section mt-3">
-        {comments.map((comment) => (
-          <div className='container-fluid' key={comment._id}>
-            <div className='row'>
-              <div className='col-1 align-items-center'>
-                <img
-                  src={comment.userId?.image || 'default-user.png'}
-                  alt="User"
-                  className="rounded-circle"
-                  width="35px"
-                  height="35px"
-                />
-              </div>
-              <div className='col-4'>
-                <div className='row'>
-                  @{comment.userId?.display_name || 'Unknown'}
+        {comments.map((comment) => {
+          const displayName = displayNames[comment.userId._id] || 'Unknown';
+          const imagePath = imagePaths[comment.userId._id] || 'default-user.png';
+          console.log('Comment:', comment);
+          console.log('Display Name:', displayName);
+          console.log('Image Path:', imagePath);
+
+          return (
+            <div className='container-fluid' key={comment._id}>
+              <div className='row'>
+                <div className='col-1 align-items-center'>
+                  <img
+                    src={imagePath}
+                    alt="User"
+                    className="rounded-circle"
+                    width="35px"
+                    height="35px"
+                  />
                 </div>
-                <div className='row'>
-                  <div className="comment-container">
-                    {editingComment && editingComment._id === comment._id ? (
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={editingComment.comment}
-                          onChange={handleEditInputChange}
-                        />
-                        <div className="input-group-append">
-                          <button
-                            className="btn btn-outline-secondary"
-                            onClick={() => handleSaveComment(comment._id)}
-                            disabled={editingComment.comment.trim() === ''}
-                          >
-                            Save
-                          </button>
-                          <button
-                            className="btn btn-outline-secondary"
-                            onClick={() => handleCancelComment()}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <p>{comment.comment}</p>
-                        {currentUser && currentUser._id === comment.userId._id && ( // Only show edit/delete if the comment belongs to current user
+                <div className='col-4'>
+                  <div className='row'>
+                    @{displayName}
+                  </div>
+                  <div className='row'>
+                    <div className="comment-container">
+                      {editingComment && editingComment._id === comment._id ? (
+                        <div className="d-flex">
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={editingComment.comment}
+                            onChange={handleEditInputChange}
+                          />
                           <div className="input-group-append">
-                            <button className="btn btn-outline-secondary" onClick={() => handleEditComment(comment)}>
-                              <i className="bi bi-pencil"></i>
+                            <button
+                              className="btn btn-outline-secondary"
+                              onClick={() => handleSaveComment(comment._id)}
+                              disabled={editingComment.comment.trim() === ''}
+                            >
+                              Save
                             </button>
-                            <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(comment._id)}>
-                              <i className="bi bi-trash"></i>
+                            <button
+                              className="btn btn-outline-secondary"
+                              onClick={() => handleCancelComment()}
+                            >
+                              Cancel
                             </button>
                           </div>
-                        )}
-                      </>
-                    )}
+                        </div>
+                      ) : (
+                        <>
+                          <p>{comment.comment}</p>
+                          {currentUser && currentUser._id === comment.userId._id && (
+                            <div className="input-group-append">
+                              <button className="btn btn-outline-secondary" onClick={() => handleEditComment(comment)}>
+                                <i className="bi bi-pencil"></i>
+                              </button>
+                              <button className="btn btn-outline-secondary" onClick={() => handleDeleteComment(comment._id)}>
+                                <i className="bi bi-trash"></i>
+                              </button>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

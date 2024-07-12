@@ -16,7 +16,12 @@ const getUserById = async (req, res) => {
     const { id } = req.params;
     const user = await userService.getUserById(id);
     if (user) {
-      res.status(200).json(user);
+      res.status(200).json({
+        _id: user._id,
+        username: user.username,
+        display_name: user.display_name,
+        image: user.image
+      });
     } else {
       res.status(404).json({ error: 'User not found' });
     }
@@ -25,6 +30,7 @@ const getUserById = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 const getUserIdByUsername = async (req, res) => {
   try {
