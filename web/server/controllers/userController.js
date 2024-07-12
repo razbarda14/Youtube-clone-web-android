@@ -75,7 +75,7 @@ const getUserImagePath = async (req, res) => {
 
 const registerUser = async (req, res) => {
   const { username, displayName, password } = req.body;
-  const photoPath = req.file ? req.file.path : null;
+  const photoPath = req.file ? (req.file.path.startsWith('\\') ? req.file.path : '\\' + req.file.path) : null;
 
   try {
     const user = await userService.registerUser(username, displayName, password, photoPath);

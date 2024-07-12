@@ -53,7 +53,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
         }, {});
         const imagePathsMap = imagePathsArray.reduce((acc, { userId, imagePath }) => {
           if (imagePath) {
-            acc[userId] = imagePath.startsWith('http') ? imagePath : `/${imagePath}`;
+            acc[userId] = imagePath.startsWith('http') ? imagePath : `${imagePath}`;
           }
           return acc;
         }, {});
@@ -145,6 +145,10 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
       )}
       <div className="comments-section mt-3">
         {comments.map((comment) => {
+          if (!comment.userId) {
+          console.error('Comment with missing userId:', comment);
+          return null;
+        }
           const displayName = displayNames[comment.userId._id] || 'Unknown';
           const imagePath = imagePaths[comment.userId._id] || 'default-user.png';
           console.log('Comment:', comment);
