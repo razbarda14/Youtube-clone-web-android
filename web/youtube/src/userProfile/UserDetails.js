@@ -58,7 +58,7 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID }) {
     };
 
     const handleDeleteUser = async () => {
-        if (currentUser !== userID) {
+        if (currentUser._id !== userID) {
             alert("You are not authorized to delete this user.");
             return;
         }
