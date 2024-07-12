@@ -116,10 +116,14 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID }) {
                     ) : (
                         <>
                             <h5>{userDisplayName}</h5>
-                            <button type="button" className="btn btn-primary mb-2"  onClick={handleEditClick}>Edit Details</button>
+                            {currentUser._id === userID && (
+                                <>
+                                    <button type="button" className="btn btn-primary mb-2"  onClick={handleEditClick}>Edit Details</button>
+                                    <button type="button" className="btn btn-danger mb-2"  onClick={handleDeleteUser}>Delete User</button>
+                                </>
+                            )}
                         </>
                     )}
-                    <button type="button" className="btn btn-danger mb-2"  onClick={handleDeleteUser}>Delete User</button>
                 </div>
             </div>
         </div>

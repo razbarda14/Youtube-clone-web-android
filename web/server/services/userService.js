@@ -94,11 +94,11 @@ const updateUserDisplayName = async (id, display_name) => {
     throw new Error('Invalid ObjectId');
   }
 
-  // Check if the new display name is already taken
-  const existingUser = await User.findOne({ display_name: display_name });
-  if (existingUser && existingUser._id.toString() !== id) {
-    throw new Error('Display name already in use');
-  }
+  // // Check if the new display name is already taken
+  // const existingUser = await User.findOne({ display_name: display_name });
+  // if (existingUser && existingUser._id.toString() !== id) {
+  //   throw new Error('Display name already in use');
+  // }
 
   // Update the display name
   const user = await User.findByIdAndUpdate(
