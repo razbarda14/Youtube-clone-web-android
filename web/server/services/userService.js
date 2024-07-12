@@ -89,7 +89,35 @@ const deleteUser = async (id) => {
   await User.findByIdAndDelete(id);
 };
 
+const updateUserDisplayName = async (id, display_name) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error('Invalid ObjectId');
+  }
+
+  // // Check if the new display name is already taken
+  // const existingUser = await User.findOne({ display_name: display_name });
+  // if (existingUser && existingUser._id.toString() !== id) {
+  //   throw new Error('Display name already in use');
+  // }
+
+  // Update the display name
+  const user = await User.findByIdAndUpdate(
+      id,
+      { display_name: display_name },
+      { new: true }
+  );
+
+  return user;
+};
+
 module.exports = {
-  createUser, getUserById, getUserByUsername,
-  getUserDisplayNameById, getUserImagePathById,
-  registerUser, loginUser, deleteUser };
+  createUser,
+  getUserById,
+  getUserByUsername,
+  getUserDisplayNameById,
+  getUserImagePathById,
+  registerUser,
+  loginUser,
+  deleteUser,
+  updateUserDisplayName
+};

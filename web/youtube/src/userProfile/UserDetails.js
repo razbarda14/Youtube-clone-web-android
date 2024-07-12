@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
-function UserDetails({ userDisplayName, userImagePath, currentUser, userID, logout }) {
-    // Add a backslash at the beginning if it's missing
+function UserDetails({ userDisplayName, userImagePath, currentUser, userID }) {
     const correctedUserImagePath = userImagePath.startsWith('\\') ? userImagePath : '\\' + userImagePath;
     const [imageSrc, setImageSrc] = useState(correctedUserImagePath);
+    const [isEditing, setIsEditing] = useState(false);
+    const [newDisplayName, setNewDisplayName] = useState(userDisplayName);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,6 +18,45 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID, logo
             setImageSrc('/uploads/photos/default-user.png');
         };
     }, [correctedUserImagePath]);
+
+    const handleEditClick = () => {
+        if (currentUser._id !== userID) {
+            alert("You are not authorized to edit this user's details.");
+            return;
+        }
+        setIsEditing(true);
+    };
+
+    const handleDisplayNameChange = (e) => {
+        setNewDisplayName(e.target.value);
+    };
+
+    const handleUpdateDisplayName = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/users/${userID}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Assuming you store your token in localStorage
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ display_name: newDisplayName })
+            });
+
+            if (response.ok) {
+                const updatedUser = await response.json();
+                alert('Display name updated successfully');
+                setIsEditing(false);
+                setNewDisplayName(updatedUser.display_name);
+                window.location.reload();
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to update display name: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.error('Error updating display name:', error);
+            alert('An error occurred while updating the display name.');
+        }
+    };
 
     const handleDeleteUser = async () => {
         if (currentUser._id !== userID) {
@@ -38,7 +78,7 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID, logo
 
             if (response.ok) {
                 alert('User deleted successfully');
-                logout();
+                // Redirect to the home page
                 navigate('/');
             } else {
                 alert('Failed to delete user');
@@ -58,9 +98,32 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID, logo
                         className="rounded-circle"
                         style={{ width: '80px', height: '80px', marginLeft: '10px', marginBottom: '10px' }}
                     />
-                    <h5>{userDisplayName}</h5>
-                    <button className="btn-primary">Edit Details</button>
-                    <button className="btn-danger" onClick={handleDeleteUser}>Delete User</button>
+                    {isEditing ? (
+                        <>
+                            <input
+                                type="text"
+                                value={newDisplayName}
+                                onChange={handleDisplayNameChange}
+                                className="form-control"
+                                placeholder="Edit your display name"
+                                aria-label="Edit your display name"
+                                aria-describedby="button-addon2"
+                                style={{ marginBottom: '10px' }}
+                            />
+                            <button type="button" className="btn btn-primary mb-2"  onClick={handleUpdateDisplayName}>Save</button>
+                            <button type="button" className="btn btn-secondary mb-2"  onClick={() => setIsEditing(false)}>Cancel</button>
+                        </>
+                    ) : (
+                        <>
+                            <h5>{userDisplayName}</h5>
+                            {currentUser._id === userID && (
+                                <>
+                                    <button type="button" className="btn btn-primary mb-2"  onClick={handleEditClick}>Edit Details</button>
+                                    <button type="button" className="btn btn-danger mb-2"  onClick={handleDeleteUser}>Delete User</button>
+                                </>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
         </div>

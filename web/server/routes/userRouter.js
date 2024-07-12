@@ -15,6 +15,9 @@ router.route('/:id')
   .get(authenticateToken, userController.getUserById);
 
 router.route('/:id')
+    .put(authenticateToken, userController.updateUser);
+
+router.route('/:id')
   .delete(authenticateToken, userController.deleteUser);
 
 router.route('/:id/getDisplayName')
