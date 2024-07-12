@@ -191,9 +191,23 @@ const editCommentInVideo = async (req, res) => {
   }
 };
 
+const getVideoWithUploaderNameById = async (req, res) => {
+  try {
+    const video = await videoService.getVideoWithUploaderNameById(req.params.id);
+    if (video) {
+      res.json(video);
+    } else {
+      res.status(404).json({ message: 'Video not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   getAllVideos, getVideosByUploader,
   getVideoById, incrementViews,
   deleteVideoById, updateVideoById, createVideo,
-  getMostViewedAndRandomVideos, addCommentToVideo, deleteCommentFromVideo, editCommentInVideo
+  getMostViewedAndRandomVideos, addCommentToVideo, deleteCommentFromVideo, editCommentInVideo,
+  getVideoWithUploaderNameById
 };

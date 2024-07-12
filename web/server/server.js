@@ -13,8 +13,6 @@ const videoRoutes = require('./routes/videoRouter');
 const server = express();
 
 console.log('Connection String:', process.env.CONNECTION_STRING);
-console.log('Port:', process.env.PORT);
-console.log('Secret Key in server.js:', process.env.SECRET_KEY);
 
 mongoose.connect(process.env.CONNECTION_STRING, {
   useNewUrlParser: true,

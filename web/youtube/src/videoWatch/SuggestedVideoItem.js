@@ -50,7 +50,7 @@ function SuggestedVideoItem({ video, onVideoClick }) {
           <div className='card-body'>
             <h5 className="card-title">{video.title}</h5>
             <p>
-              <Link to={'/user'} className='no-underline'>
+              <Link to={`/user/${video.uploaderId}`} className='no-underline'>
                 <span className="card-text">{displayName || 'Loading...'}</span> {/* Changed p to span */}
               </Link>
             </p>

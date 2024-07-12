@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
+const Video = require('../models/videoModel');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRET_KEY;
@@ -76,7 +77,19 @@ const loginUser = async (username, password) => {
   }
 };
 
+const deleteUser = async (id) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error('Invalid ObjectId');
+  }
+
+  // Delete all videos associated with the user
+  await Video.deleteMany({ uploaderId: id });
+
+  // Delete the user
+  await User.findByIdAndDelete(id);
+};
+
 module.exports = {
   createUser, getUserById, getUserByUsername,
   getUserDisplayNameById, getUserImagePathById,
-  registerUser, loginUser };
+  registerUser, loginUser, deleteUser };

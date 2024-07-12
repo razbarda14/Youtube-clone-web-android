@@ -187,6 +187,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
     } catch (error) {
       console.error('Error editing video:', error);
     }
+    window.location.reload();
   };
   
 

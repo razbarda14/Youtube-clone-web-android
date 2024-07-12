@@ -139,6 +139,7 @@ function UploadVideo({ addVideo, user }) {
                   className="form-control"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
+                  required
                 />
               </div>
 
@@ -148,6 +149,7 @@ function UploadVideo({ addVideo, user }) {
                   className="form-control"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
+                  required
                 />
               </div>
 
@@ -163,12 +165,13 @@ function UploadVideo({ addVideo, user }) {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Thumbnail Image (optional)</label>
+                <label className="form-label">Thumbnail Image</label>
                 <input
                   className="form-control"
                   type="file"
                   accept="image/*"
                   onChange={(e) => setThumbnailFile(e.target.files[0])}
+                  required
                 />
               </div>
 
