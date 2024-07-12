@@ -169,7 +169,7 @@ function App() {
         logoutUser={logoutUser}
       />
       <Routes>
-        <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter} />} />
+        <Route path='/' element={<MainScreen videos={filteredVideos} setTagFilter={setTagFilter} currentUser={currentUser} />} />
         <Route path="/register" element={<RegisterBox registerUser={registerUser} users={users} />} />
         <Route path="/signIn" element={<SignInBox loginUser={loginUser} />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} user={currentUser} />} />

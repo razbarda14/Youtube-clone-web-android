@@ -1,8 +1,9 @@
 // LeftMenu.js
 import './LeftMenu.css';
 import { useTheme } from '../themeContext/ThemeContext';
+import {Link} from "react-router-dom";
 
-function LeftMenu() {
+function LeftMenu({currentUser}) {
   
   const { darkMode } = useTheme();
 
@@ -15,18 +16,22 @@ function LeftMenu() {
               Home
               <i className="bi bi-house"></i>
             </li>
+            <Link to={`/WatchVideo/${currentUser._id}`} className='no-underline'>
             <li className="list-group-item d-flex justify-content-between align-items-center">
               My Profile
               <i className="bi bi-person"></i>
             </li>
+            </Link>
             <li className="list-group-item d-flex justify-content-between align-items-center">
               Subscriptions
               <i className="bi bi-card-list"></i>
             </li>
+            <Link to={`/WatchVideo/${currentUser._id}`} className='no-underline'>
             <li className="list-group-item d-flex justify-content-between align-items-center">
               Your channel
               <i className="bi bi-person-square"></i>
             </li>
+            </Link>
             <li className="list-group-item d-flex justify-content-between align-items-center">
               History
               <i className="bi bi-clock-history"></i>
