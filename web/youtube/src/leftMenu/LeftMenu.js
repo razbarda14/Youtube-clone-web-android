@@ -16,7 +16,7 @@ function LeftMenu({currentUser}) {
               Home
               <i className="bi bi-house"></i>
             </li>
-            <Link to={`/WatchVideo/${currentUser._id}`} className='no-underline'>
+            <Link to={`/user/${currentUser._id}`} className='no-underline'>
             <li className="list-group-item d-flex justify-content-between align-items-center">
               My Profile
               <i className="bi bi-person"></i>
@@ -26,7 +26,7 @@ function LeftMenu({currentUser}) {
               Subscriptions
               <i className="bi bi-card-list"></i>
             </li>
-            <Link to={`/WatchVideo/${currentUser._id}`} className='no-underline'>
+            <Link to={`/user/${currentUser._id}`} className='no-underline'>
             <li className="list-group-item d-flex justify-content-between align-items-center">
               Your channel
               <i className="bi bi-person-square"></i>
