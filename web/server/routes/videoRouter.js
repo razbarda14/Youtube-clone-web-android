@@ -2,7 +2,7 @@
 const express = require('express');
 const videoController = require('../controllers/videoController.js');
 const upload = require('../middleware/multerConfig');
-
+const authenticateToken = require('../middleware/authMiddleware'); // Correct import
 const videoRouter = express.Router();
 
 videoRouter.route('/')
