@@ -173,7 +173,10 @@ function App() {
         <Route path="/register" element={<RegisterBox registerUser={registerUser} users={users} />} />
         <Route path="/signIn" element={<SignInBox loginUser={loginUser} />} />
         <Route path='/uploadVideo' element={<UploadVideo addVideo={addVideo} user={currentUser} />} />
-        <Route path="/WatchVideo/:videoId" element={<WatchVideo comments={comments} addComment={addComment} editComment={editComment} deleteComment={deleteComment} currentUser={currentUser} videoList={videoList} deleteVideo={deleteVideo} editVideo={editVideo} setVideoList={setVideoList} />} />
+        <Route path="/WatchVideo/:videoId" element={<WatchVideo
+            comments={comments} addComment={addComment} editComment={editComment}
+            deleteComment={deleteComment} currentUser={currentUser} videoList={videoList}
+            deleteVideo={deleteVideo} editVideo={editVideo} setVideoList={setVideoList} />} />
         <Route path='/user/:userId' element={<UserProfile currentUser={currentUser} logout={logoutUser}/>} />
       </Routes>
     </div>

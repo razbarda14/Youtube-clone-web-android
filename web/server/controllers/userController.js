@@ -104,7 +104,34 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { display_name } = req.body;
+
+    // Check if the user ID in the token matches the user ID in the request
+    if (req.user.id !== id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    // Call the service to update the display name
+    const updatedUser = await userService.updateUserDisplayName(id, display_name);
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
-  createUser, getUserById, getUserIdByUsername,
-  getUserDisplayName,getUserImagePath,
-  registerUser, loginUser, deleteUser };
+  createUser,
+  getUserById,
+  getUserIdByUsername,
+  getUserDisplayName,
+  getUserImagePath,
+  registerUser,
+  loginUser,
+  deleteUser,
+  updateUser
+};
