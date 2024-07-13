@@ -13,12 +13,12 @@ videoRouter.get('/:id', videoController.getVideoById);
 videoRouter.delete('/:id', authenticateToken, (req, res) => {
     const userId = req.body.userId;
     videoController.deleteVideoById({ ...req, body: { ...req.body, userId } }, res);
-  });
+});
 
-  videoRouter.put('/:id', authenticateToken, (req, res) => {
+videoRouter.put('/:id', authenticateToken, (req, res) => {
     const userId = req.body.userId;
     videoController.updateVideoById({ ...req, body: { ...req.body, userId } }, res);
-  });
+});
 
 // Video information
 videoRouter.get('/:id/uploader', videoController.getVideoWithUploaderNameById);

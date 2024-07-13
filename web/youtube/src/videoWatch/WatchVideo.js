@@ -149,7 +149,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
     }
   };
 
- 
+
   const handleDeleteVideo = async (videoId) => {
     try {
       const response = await fetch(`http://localhost:8080/api/videos/${videoId}`, {
@@ -160,7 +160,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
         },
         body: JSON.stringify({ userId: currentUser._id }), // Include user ID in the request body
       });
-  
+
       if (response.ok) {
         deleteVideo(videoId);
         navigate('/');
@@ -171,7 +171,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
       console.error('Error deleting video:', error);
     }
   };
-  
+
   const handleEditVideo = async (videoId, newTitle, newDescription, newTopic) => {
     try {
       const response = await fetch(`http://localhost:8080/api/videos/${videoId}`, {
@@ -182,7 +182,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
         },
         body: JSON.stringify({ title: newTitle, description: newDescription, topic: newTopic, userId: currentUser._id }), // Include user ID in the request body
       });
-  
+
       if (response.ok) {
         editVideo(videoId, newTitle, newDescription, newTopic);
         setSelectedVideo(prevVideo => ({ ...prevVideo, title: newTitle, description: newDescription, topic: newTopic }));
@@ -194,7 +194,6 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
     }
     window.location.reload();
   };
-  
 
   return (
     <div className="container-fluid">
