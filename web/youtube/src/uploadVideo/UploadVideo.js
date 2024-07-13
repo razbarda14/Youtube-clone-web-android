@@ -41,11 +41,6 @@ function UploadVideo({ addVideo, user }) {
       return;
     }
 
-    // if (!user || !user.displayName) {
-    //   setErrorMessage('User is not logged in or display name is not available.');
-    //   return;
-    // }
-
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
@@ -57,7 +52,7 @@ function UploadVideo({ addVideo, user }) {
     formData.append('uploaderId', user._id);
 
     try {
-      const response = await fetch('http://localhost:8080/api/videos', {
+      const response = await fetch(`http://localhost:8080/api/users/${user._id}/videos`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,

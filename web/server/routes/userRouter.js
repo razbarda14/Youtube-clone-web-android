@@ -33,4 +33,11 @@ router.post('/register', upload.single('photo'), userController.registerUser);
 // router.post('/login', userController.loginUser);
 router.get('/verify-user', authenticateToken, userController.getUserById);
 
+// Needs to move to userRouter under /users/:id/videos
+router.route('/:id/videos')
+    .post(authenticateToken, upload.fields([
+        { name: 'videoFile', maxCount: 1 },
+        { name: 'thumbnailFile', maxCount: 1 }
+    ]), videoController.createVideo);
+
 module.exports = router;

@@ -7,10 +7,6 @@ const videoRouter = express.Router();
 
 videoRouter.route('/')
     .get(videoController.getMostViewedAndRandomVideos)
-    .post(authenticateToken, upload.fields([
-        { name: 'videoFile', maxCount: 1 },
-        { name: 'thumbnailFile', maxCount: 1 }
-    ]), videoController.createVideo);
 
 videoRouter.get('/:id', videoController.getVideoById);
 
