@@ -59,6 +59,9 @@ function UploadVideo({ addVideo, user }) {
     try {
       const response = await fetch('http://localhost:8080/api/videos', {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
         body: formData,
       });
 

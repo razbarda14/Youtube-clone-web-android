@@ -7,19 +7,19 @@ const videoRouter = express.Router();
 
 videoRouter.route('/')
     .get(videoController.getMostViewedAndRandomVideos)
-    .post(upload.fields([
+    .post(authenticateToken, upload.fields([
         { name: 'videoFile', maxCount: 1 },
         { name: 'thumbnailFile', maxCount: 1 }
     ]), videoController.createVideo);
 
 videoRouter.get('/:id', videoController.getVideoById);
 
-videoRouter.delete('/:id', (req, res) => {
+videoRouter.delete('/:id', authenticateToken, (req, res) => {
     const userId = req.body.userId;
     videoController.deleteVideoById({ ...req, body: { ...req.body, userId } }, res);
   });
 
-  videoRouter.put('/:id', (req, res) => {
+  videoRouter.put('/:id', authenticateToken, (req, res) => {
     const userId = req.body.userId;
     videoController.updateVideoById({ ...req, body: { ...req.body, userId } }, res);
   });
@@ -29,8 +29,8 @@ videoRouter.get('/:id/uploader', videoController.getVideoWithUploaderNameById);
 videoRouter.patch('/increment-views/:id', videoController.incrementViews);
 
 // Handle comments
-videoRouter.post('/:id/comments', videoController.addCommentToVideo);
-videoRouter.delete('/:id/comments/:commentId', videoController.deleteCommentFromVideo); 
-videoRouter.put('/:id/comments/:commentId', videoController.editCommentInVideo); 
+videoRouter.post('/:id/comments', authenticateToken, videoController.addCommentToVideo);
+videoRouter.delete('/:id/comments/:commentId', authenticateToken, videoController.deleteCommentFromVideo);
+videoRouter.put('/:id/comments/:commentId', authenticateToken, videoController.editCommentInVideo);
 
 module.exports = videoRouter;

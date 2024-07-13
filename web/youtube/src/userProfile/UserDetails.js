@@ -36,7 +36,7 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID, logo
             const response = await fetch(`http://localhost:8080/users/${userID}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Assuming you store your token in localStorage
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ display_name: newDisplayName })
@@ -71,7 +71,7 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID, logo
             const response = await fetch(`http://localhost:8080/users/${userID}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Assuming you store your token in localStorage
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'application/json'
                 }
             });

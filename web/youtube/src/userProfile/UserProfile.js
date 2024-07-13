@@ -43,28 +43,6 @@ function UserProfile({currentUser, logout}) {
         fetchUserDetails();
     }, []);
 
-    // const handleEditDetails = async (userId, newDisplayName) => {
-    //     try {
-    //         const response = await fetch(`http://localhost:8080/api/videos/${videoId}`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ title: newTitle, description: newDescription, topic: newTopic, userId: currentUser._id }), // Include user ID in the request body
-    //         });
-    //
-    //         if (response.ok) {
-    //             editVideo(videoId, newTitle, newDescription, newTopic);
-    //             setSelectedVideo(prevVideo => ({ ...prevVideo, title: newTitle, description: newDescription, topic: newTopic }));
-    //         } else {
-    //             console.error('Failed to edit video:', response.statusText);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error editing video:', error);
-    //     }
-    //     window.location.reload();
-    // };
-
     return (
         <div className="main-content">
             <div className="container-fluid">

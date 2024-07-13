@@ -85,6 +85,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
       const response = await fetch(`http://localhost:8080/api/videos/${videoId}/comments`, {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(comment),
@@ -107,6 +108,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
       const response = await fetch(`http://localhost:8080/api/videos/${videoId}/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ userId: currentUser._id }), // Include user ID in the request body
@@ -129,6 +131,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
       const response = await fetch(`http://localhost:8080/api/videos/${videoId}/comments/${commentId}`, {
         method: 'PUT',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ userId: currentUser._id, comment: newComment }), // Include user ID in the request body
@@ -152,6 +155,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
       const response = await fetch(`http://localhost:8080/api/videos/${videoId}`, {
         method: 'DELETE',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ userId: currentUser._id }), // Include user ID in the request body
@@ -173,6 +177,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
       const response = await fetch(`http://localhost:8080/api/videos/${videoId}`, {
         method: 'PUT',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ title: newTitle, description: newDescription, topic: newTopic, userId: currentUser._id }), // Include user ID in the request body
