@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function UserDetails({ userDisplayName, userImagePath, currentUser, userID }) {
+function UserDetails({ userDisplayName, userImagePath, currentUser, userID, logout }) {
     const correctedUserImagePath = userImagePath.startsWith('\\') ? userImagePath : '\\' + userImagePath;
-    const [imageSrc, setImageSrc] = useState(correctedUserImagePath);
+    const [imageSrc, setImageSrc] = useState(userImagePath);
     const [isEditing, setIsEditing] = useState(false);
     const [newDisplayName, setNewDisplayName] = useState(userDisplayName);
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID }) {
     }, [correctedUserImagePath]);
 
     const handleEditClick = () => {
-        if (currentUser._id !== userID) {
+        if ((currentUser?._id ?? null) !== userID) {
             alert("You are not authorized to edit this user's details.");
             return;
         }
@@ -59,7 +59,7 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID }) {
     };
 
     const handleDeleteUser = async () => {
-        if (currentUser._id !== userID) {
+        if ((currentUser?._id ?? null) !== userID) {
             alert("You are not authorized to delete this user.");
             return;
         }
@@ -78,6 +78,8 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID }) {
 
             if (response.ok) {
                 alert('User deleted successfully');
+                // Log out user
+                logout();
                 // Redirect to the home page
                 navigate('/');
             } else {
@@ -116,7 +118,7 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID }) {
                     ) : (
                         <>
                             <h5>{userDisplayName}</h5>
-                            {currentUser._id === userID && (
+                            {(currentUser?._id ?? null) === userID && (
                                 <>
                                     <button type="button" className="btn btn-primary mb-2"  onClick={handleEditClick}>Edit Details</button>
                                     <button type="button" className="btn btn-danger mb-2"  onClick={handleDeleteUser}>Delete User</button>
