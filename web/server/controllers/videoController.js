@@ -4,7 +4,6 @@ const getAllVideos = async (_, res) => {
   try {
     const videosList = await videoService.getAllVideos();
     res.json(videosList);
-    console.log("Tomer says: video list fetched successfully");
   } catch (error) {
     res.status(500).send(error.message);
   }
