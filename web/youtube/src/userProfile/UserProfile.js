@@ -13,7 +13,7 @@ function UserProfile({currentUser, logout}) {
 
     const fetchUserVideos = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/users/${userId}/videos`);
+            const response = await fetch(`http://localhost:8080/api/users/${userId}/videos`);
             const data = await response.json();
             setUserVideoList(data);
         } catch (error) {
@@ -23,12 +23,12 @@ function UserProfile({currentUser, logout}) {
 
     const fetchUserDetails = async () => {
         try {
-            const displayNameResponse = await fetch(`http://localhost:8080/users/${userId}/getDisplayName`);
+            const displayNameResponse = await fetch(`http://localhost:8080/api/users/${userId}/getDisplayName`);
             const displayNameData = await displayNameResponse.json();
             console.log('Display Name Data:', displayNameData); // Debugging
             setDisplayName(displayNameData.display_name);
 
-            const profilePictureResponse = await fetch(`http://localhost:8080/users/${userId}/getImagePath`);
+            const profilePictureResponse = await fetch(`http://localhost:8080/api/users/${userId}/getImagePath`);
             const profilePictureData = await profilePictureResponse.json();
             setImagePath(profilePictureData.image);
             console.log('Profile Picture Data:', profilePictureData.image) // Debugging

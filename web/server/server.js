@@ -9,6 +9,8 @@ const path = require('path');
 const authRoutes = require('./routes/authRouter');
 const userRoutes = require('./routes/userRouter');
 const videoRoutes = require('./routes/videoRouter');
+const tokenRoutes = require('./routes/tokenRouter');
+
 
 const server = express();
 
@@ -33,8 +35,10 @@ server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Use routes
 server.use('/auth', authRoutes);
-server.use('/users', userRoutes);
+server.use('/api/users', userRoutes);
 server.use('/api/videos', videoRoutes);
+server.use('/api/tokens', tokenRoutes);
+
 
 // Serve static files from the public folder
 server.use(express.static('public'));

@@ -30,7 +30,7 @@ router.route('/:id/videos')
     .get(videoController.getVideosByUploader);
 
 router.post('/register', upload.single('photo'), userController.registerUser);
-router.post('/login', userController.loginUser);
+// router.post('/login', userController.loginUser);
 router.get('/verify-user', authenticateToken, userController.getUserById);
 
 module.exports = router;

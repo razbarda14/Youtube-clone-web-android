@@ -33,7 +33,7 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID, logo
 
     const handleUpdateDisplayName = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/users/${userID}`, {
+            const response = await fetch(`http://localhost:8080/api/users/${userID}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -68,7 +68,7 @@ function UserDetails({ userDisplayName, userImagePath, currentUser, userID, logo
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`http://localhost:8080/users/${userID}`, {
+            const response = await fetch(`http://localhost:8080/api/users/${userID}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,

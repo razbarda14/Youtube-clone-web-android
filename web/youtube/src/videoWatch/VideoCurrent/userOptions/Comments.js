@@ -23,7 +23,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
         console.log('Unique User IDs:', userIds);
 
         const displayNamePromises = userIds.map(userId =>
-            axios.get(`/users/${userId}/getDisplayName`)
+            axios.get(`/api/users/${userId}/getDisplayName`)
                 .then(response => {
                   console.log(`Fetched display name for userId ${userId}:`, response.data.display_name);
                   return { userId, displayName: response.data.display_name };
@@ -35,7 +35,7 @@ function Comments({ video, onCommentAdd, onCommentDelete, onCommentEdit, resetCo
         );
 
         const imagePathPromises = userIds.map(userId =>
-            axios.get(`/users/${userId}/getImagePath`)
+            axios.get(`/api/users/${userId}/getImagePath`)
                 .then(response => {
                   console.log(`Fetched image path for userId ${userId}:`, response.data.image);
                   return { userId, imagePath: response.data.image };
