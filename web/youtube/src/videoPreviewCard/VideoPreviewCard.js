@@ -51,7 +51,7 @@ function VideoPreviewCard({ video }) {
               <h5 className="card-title">{video.title}</h5>
               <p>
                 <Link to={`/user/${video.uploaderId}`} className='no-underline'>
-                  <span className="card-text">{displayName || 'Loading...'}</span> {/* Changed p to span */}
+                  <span className="card-text">{displayName || 'Loading...'}</span>
                 </Link>
               </p>
               <p className="card-text">{video.description}</p>

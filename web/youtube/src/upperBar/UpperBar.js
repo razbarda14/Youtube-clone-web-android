@@ -75,12 +75,14 @@ function UpperBar({ setSearchQuery, setTagFilter, currentUser, logoutUser }) {
               <button type="button" className="btn btn-outline-primary align-middle" onClick={handleSignOut}>
                 Sign Out
               </button>
+              <Link to={`/user/${currentUser._id}`} className='no-underline'>
               <img
                 src={currentUser.image}
                 alt="User Profile"
                 className="rounded-circle me-2"
                 style={{ width: '35px', height: '35px', marginLeft : '7px' }}
               />
+              </Link>
             </>
           ) : (
             <Link to='/signIn'>
