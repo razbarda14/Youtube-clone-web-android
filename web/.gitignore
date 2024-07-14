@@ -2,6 +2,7 @@
 
 # dependencies
 /server/node_modules
+/server/connfig/.env.local
 /youtube/node_modules
 
 

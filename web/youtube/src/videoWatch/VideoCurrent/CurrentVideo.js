@@ -53,7 +53,7 @@ function CurrentVideo({ video, onLikeToggle, onDislikeToggle, onCommentAdd, onCo
   };
 
   const handleSaveClick = () => {
-    onEditVideo(video._id, editedTitle, editedDescription, editedTopic);
+    onEditVideo(video._id, editedTitle, editedDescription, editedTopic, video.uploaderId);
     setIsEditing(false);
   };
 

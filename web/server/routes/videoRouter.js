@@ -8,17 +8,9 @@ const videoRouter = express.Router();
 videoRouter.route('/')
     .get(videoController.getMostViewedAndRandomVideos)
 
-videoRouter.get('/:id', videoController.getVideoById);
 
-videoRouter.delete('/:id', authenticateToken, (req, res) => {
-    const userId = req.body.userId;
-    videoController.deleteVideoById({ ...req, body: { ...req.body, userId } }, res);
-});
-
-videoRouter.put('/:id', authenticateToken, (req, res) => {
-    const userId = req.body.userId;
-    videoController.updateVideoById({ ...req, body: { ...req.body, userId } }, res);
-});
+// Functionality I want to add 14/07/2024
+videoRouter.get('/:id/getUploaderId', videoController.getUploaderId);
 
 // Video information
 videoRouter.get('/:id/uploader', videoController.getVideoWithUploaderNameById);

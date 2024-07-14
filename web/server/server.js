@@ -11,7 +11,6 @@ const userRoutes = require('./routes/userRouter');
 const videoRoutes = require('./routes/videoRouter');
 const tokenRoutes = require('./routes/tokenRouter');
 
-
 const server = express();
 
 console.log('Connection String:', process.env.CONNECTION_STRING);
