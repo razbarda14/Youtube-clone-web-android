@@ -12,6 +12,7 @@ function WatchVideo({ addComment, editComment, deleteComment, currentUser, video
   const navigate = useNavigate();
 
   useEffect(() => {
+
     const fetchUploaderId = async (id) => {
       try {
         const response = await fetch(`http://localhost:8080/api/videos/${id}/getUploaderId`);
