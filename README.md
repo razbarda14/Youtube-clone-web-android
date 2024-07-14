@@ -48,16 +48,19 @@ In order to show the users, videos and comments we created, you need to follow t
 **1. Make sure you have MongoDB installed**
 
 **2. Import relevant collections**
-These instructions are for MongoDB compass, but you can also use shell if you wish.
+The import instructions are for MongoDB Compass, but you can also use shell if you wish.
 Go to Youtube/web/csv_files. There you can find 2 csv files for our collections.
 Under "test" database in MongoDB (you can use whatever MongoDB port you want), create two collections:
 1. usermodel
 2. videomodel
 
-for each one of them:
+For each one of them:
 - Click "ADD DATA +"
 - Choose "Import JSON or CSV file"
 - Choose the right CSV file, provided in the CSV folder
+
+Most importantly, for videomodel you have to make sure uploaderId is set to be **ObjectId** as in the picture:
+![image](https://github.com/user-attachments/assets/dde7419d-66be-4064-9d97-defbcf43c404)
 
 **Drop `id_1` Index:**
 In case an `id_1` index appears in the `videomodels` collection in the `test` database (or the database you use), user will be limited to upload just a single video.
