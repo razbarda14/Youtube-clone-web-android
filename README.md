@@ -61,7 +61,7 @@ for each one of them:
 
 **Drop `id_1` Index:**
 In case an `id_1` index appears in the `videomodels` collection in the `test` database (or the database you use), user will be limited to upload just a single video.
-The solution is dropping it using the following command in your MongoDB shell or MongoDB Compass:
+The solution is dropping it using the following command in your MongoDB Compass under Indexes or via MongoDB shell:
 ```bash
 use test
 db.videomodels.dropIndex("id_1")
@@ -77,7 +77,7 @@ PORT = 8080
 SECRET_KEY=your_secret_key
 ```
 
-Make sure port is 8080 in SECRET_KEY is as defined above. You can choose your own MongoDB port.
+Make sure port is "8080" and SECRET_KEY is "your_secret_key" as defined above. However, you can choose your own MongoDB port.
 
 **Install dependencies:**
 ```bash
