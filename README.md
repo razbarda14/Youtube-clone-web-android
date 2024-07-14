@@ -34,31 +34,42 @@ To get started with the project, follow these steps:
 
 **Clone the repository:**
  get to your desired folder and clone the repository with the following command:
-##### git clone https://github.com/guybaruch1/Youtube.git
+```bash
+ git clone https://github.com/guybaruch1/Youtube.git
+```
+
 
 **Create configuration file:**
 under server/config, create a file called ".env.local" which consist the following lines:
 
-#### CONNECTION_STRING = "mongodb://localhost:YOUR_PORT_OF_CHOICE"
-#### PORT = 8080
-#### SECRET_KEY=your_secret_key
+```
+CONNECTION_STRING = "mongodb://localhost:YOUR_PORT_OF_CHOICE"
+PORT = 8080
+SECRET_KEY=your_secret_key
+```
 
 Make sure port is 8080 in SECRET_KEY is as defined above. You can choose your own MongoDB port.
 
 **Drop `id_1` Index:**
 In case an `id_1` index appears in the `videomodels` collection in the `test` database (or the database you use), user will be limited to upload just a single video.
 The solution is dropping it using the following command in your MongoDB shell or MongoDB Compass:
-#### use test
-#### db.videomodels.dropIndex("id_1")
+```bash
+use test
+db.videomodels.dropIndex("id_1")
+```
 
 **Install dependencies:**
-#### cd Youtube/web/youtube
-#### npm run build
+```bash
+cd Youtube/web/youtube
+npm run build
+```
 
 **Run the project with running the server:**
  start the development server using
-#### cd Youtube/web/server
-#### npm install custom-env express body-parser cors mongoose path
-#### npm start
+```bash
+cd Youtube/web/server
+npm install custom-env express body-parser cors mongoose path
+npm start
+```
 
 The application should now be running on [http://localhost:8080](http://localhost:8080).
