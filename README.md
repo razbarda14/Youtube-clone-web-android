@@ -73,3 +73,16 @@ npm start
 ```
 
 The application should now be running on [http://localhost:8080](http://localhost:8080).
+
+You should see in your homescreen 20 videos (10 of them are the most viewed videos and 10 of them are random) in random order:
+![image](https://github.com/user-attachments/assets/c5f3c66d-e91b-403a-bbc8-922098820723)
+
+When you sign in, you can access to your user profile clicking on your image on the right:
+![image](https://github.com/user-attachments/assets/90c4b59e-1b49-4d43-b4e9-f8de5f833971)
+
+This is how you proflie looks:
+![image](https://github.com/user-attachments/assets/f1e03c0e-8f25-44ce-8298-be8778de6a79)
+
+
+
+
