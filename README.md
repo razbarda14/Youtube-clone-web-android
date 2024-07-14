@@ -49,13 +49,13 @@ In order to show the users, videos and comments we created, you need to follow t
 
 **2. Import relevant collections**
 These instructions are for MongoDB compass, but you can also use shell if you wish.
-Go to Youtube/web/csv_files. There you can find 2 csv files for our collecctions
+Go to Youtube/web/csv_files. There you can find 2 csv files for our collections.
 Under "test" database in MongoDB (you can use whatever MongoDB port you want), create two collections:
 1. usermodel
 2. videomodel
 
 for each one of them:
-- Click "add data"
+- Click "ADD DATA +"
 - Choose "Import JSON or CSV file"
 - Choose the right CSV file, provided in the CSV folder
 
@@ -66,7 +66,7 @@ The solution is dropping it using the following command in your MongoDB shell or
 use test
 db.videomodels.dropIndex("id_1")
 ```
-### Back to your code editor/IDE:
+### Open your code editor/IDE:
 
 **Create a configuration file:**
 under server/config, create a file called ".env.local" which consist the following lines:
