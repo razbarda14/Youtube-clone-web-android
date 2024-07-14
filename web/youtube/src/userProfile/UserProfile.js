@@ -41,7 +41,7 @@ function UserProfile({currentUser, logout}) {
     useEffect(() => {
         fetchUserVideos();
         fetchUserDetails();
-    }, []);
+    }, [userId]); // Add userId to the dependency array
 
     return (
         <div className="main-content">
