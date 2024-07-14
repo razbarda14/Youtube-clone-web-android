@@ -16,6 +16,7 @@ Please note:
 2.	Putting the requirements in a jira project
 3.	Dividing related tasks to each group member (for example, registration and sign-in is one part and upload videos is another). Each group member with a feature branch of its own
 4.	Merging everything and working on the main branch until the submitted version
+   
 Link to Jira: https://tomerbarak2.atlassian.net/jira/software/projects/YOUT/boards/4
 
 ## Features
@@ -89,13 +90,13 @@ The application should now be running on [http://localhost:8080](http://localhos
 
 ## Some screenshots from the application
 
-**Homescreen** you should see in your homescreen 20 videos (10 of them are the most viewed videos and 10 of them are random) in random order:
+**Homescreen:** you should see in your homescreen 20 videos (10 of them are the most viewed videos and 10 of them are random) in random order:
 ![image](https://github.com/user-attachments/assets/c5f3c66d-e91b-403a-bbc8-922098820723)
 
-**Get to your profile** When you sign in, you can access to your user profile clicking on your image on the right:
+**Get to your profile:** when you sign in, you can access to your user profile clicking on your image on the right:
 ![image](https://github.com/user-attachments/assets/90c4b59e-1b49-4d43-b4e9-f8de5f833971)
 
-**User profile** this is how you proflie looks:
+**User profile:** this is how your proflie looks when you uploaded videos:
 ![image](https://github.com/user-attachments/assets/f1e03c0e-8f25-44ce-8298-be8778de6a79)
 
 **Edit your video** when logged-in as the uploader, you can see two buttons to edit/delete your video
