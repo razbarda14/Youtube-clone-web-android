@@ -20,7 +20,7 @@ Please note:
 Link to Jira: https://tomerbarak2.atlassian.net/jira/software/projects/YOUT/boards/4
 
 ## Features
-- Home screen suggests top 10 most viewed videos and 10 more random videos, randomly
+- Home screen suggests top 10 most viewed videos and 10 more random videos
 - Watch videos
 - User registration and sign in
 - Upload videos for registered users
@@ -36,14 +36,21 @@ To get started with the project, follow these steps:
 **Clone the repository:**
  get to your desired folder and clone the repository with the following command:
 ```bash
- git clone https://github.com/guybaruch1/Youtube.git
+git clone https://github.com/guybaruch1/Youtube
+cd Youtube
+git checkout part_2_main
+git pull origin part_2_main
 ```
 
-### MongoDB
+### Set up MongoDB to work with our app
+In order to show the users, videos and comments we created, you need to follow these steps:
 
-**Import relevant collections**
+**1. Make sure you have MongoDB installed**
+
+**2. Import relevant collections**
 These instructions are for MongoDB compass, but you can also use shell if you wish.
-Under "test" database in MongoDB, create two collections:
+Go to Youtube/web/csv_files. There you can find 2 csv files for our collecctions
+Under "test" database in MongoDB (you can use whatever MongoDB port you want), create two collections:
 1. usermodel
 2. videomodel
 
