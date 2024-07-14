@@ -39,7 +39,6 @@ server.use('/api/users', userRoutes);
 server.use('/api/videos', videoRoutes);
 server.use('/api/tokens', tokenRoutes);
 
-
 // Serve static files from the public folder
 server.use(express.static('public'));
 
