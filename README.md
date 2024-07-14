@@ -38,8 +38,29 @@ To get started with the project, follow these steps:
  git clone https://github.com/guybaruch1/Youtube.git
 ```
 
+### MongoDB
 
-**Create configuration file:**
+**Import relevant collections**
+These instructions are for MongoDB compass, but you can also use shell if you wish.
+Under "test" database in MongoDB, create two collections:
+1. usermodel
+2. videomodel
+
+for each one of them:
+- Click "add data"
+- Choose "Import JSON or CSV file"
+- Choose the right CSV file, provided in the CSV folder
+
+**Drop `id_1` Index:**
+In case an `id_1` index appears in the `videomodels` collection in the `test` database (or the database you use), user will be limited to upload just a single video.
+The solution is dropping it using the following command in your MongoDB shell or MongoDB Compass:
+```bash
+use test
+db.videomodels.dropIndex("id_1")
+```
+### Back to your code editor/IDE:
+
+**Create a configuration file:**
 under server/config, create a file called ".env.local" which consist the following lines:
 
 ```
@@ -49,14 +70,6 @@ SECRET_KEY=your_secret_key
 ```
 
 Make sure port is 8080 in SECRET_KEY is as defined above. You can choose your own MongoDB port.
-
-**Drop `id_1` Index:**
-In case an `id_1` index appears in the `videomodels` collection in the `test` database (or the database you use), user will be limited to upload just a single video.
-The solution is dropping it using the following command in your MongoDB shell or MongoDB Compass:
-```bash
-use test
-db.videomodels.dropIndex("id_1")
-```
 
 **Install dependencies:**
 ```bash
@@ -82,7 +95,3 @@ When you sign in, you can access to your user profile clicking on your image on 
 
 This is how you proflie looks:
 ![image](https://github.com/user-attachments/assets/f1e03c0e-8f25-44ce-8298-be8778de6a79)
-
-
-
-
