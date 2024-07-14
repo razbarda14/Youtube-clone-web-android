@@ -47,8 +47,7 @@ In order to show the users, videos and comments we created, you need to follow t
 
 **1. Make sure you have MongoDB installed**
 
-**2. Import relevant collections**
-The import instructions are for MongoDB Compass, but you can also use shell if you wish.
+**2. Import relevant collections:** the import instructions are for MongoDB Compass, but you can also use shell if you wish.
 Go to Youtube/web/csv_files. There you can find 2 csv files for our collections.
 Under "test" database in MongoDB (you can use whatever MongoDB port you want), create two collections:
 1. usermodel
@@ -62,8 +61,7 @@ For each one of them:
 Most importantly, for videomodel you have to make sure uploaderId is set to be **ObjectId** as in the picture:
 ![image](https://github.com/user-attachments/assets/dde7419d-66be-4064-9d97-defbcf43c404)
 
-**Drop `id_1` Index:**
-In case an `id_1` index appears in the `videomodels` collection in the `test` database (or the database you use), user will be limited to upload just a single video.
+**Drop `id_1` Index:** in case an `id_1` index appears in the `videomodels` collection in the `test` database (or the database you use), user will be limited to upload just a single video.
 The solution is dropping it using the following command in your MongoDB Compass under Indexes or via MongoDB shell:
 ```bash
 use test
@@ -71,15 +69,12 @@ db.videomodels.dropIndex("id_1")
 ```
 ### Open your code editor/IDE:
 
-**Create a configuration file:**
-under server/config, create a file called ".env.local" which consist the following lines:
-
+**Create a configuration file:** under server/config, create a file called ".env.local" which consist the following lines:
 ```
 CONNECTION_STRING = "mongodb://localhost:YOUR_PORT_OF_CHOICE"
 PORT = 8080
 SECRET_KEY=your_secret_key
 ```
-
 Make sure port is "8080" and SECRET_KEY is "your_secret_key" as defined above. However, you can choose your own MongoDB port.
 
 **Install dependencies:**
@@ -115,4 +110,3 @@ Please note that the JWT you get when log-in to your account expires within 1 ho
 ![image](https://github.com/user-attachments/assets/d51eca23-0507-4064-8849-e80edc0f2261)
 
 Enjoy the watch!
-
