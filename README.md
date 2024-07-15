@@ -1,4 +1,4 @@
-# 89-3210 Course - Exercise 2 - Youtube Project with Server Side 
+# 89-3210 Course - Exercise 2 - Youtube Project with Server Side - Web
 
 This project is a simplified version of YouTube, allowing users to watch videos as a guest or a registered user, so you can upload videos, write comments and see other user's profiles and their videos.
 
