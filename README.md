@@ -45,7 +45,7 @@ git pull origin part_2_main
 ### Set up MongoDB to work with our app
 In order to show the users, videos and comments we created, you need to follow these steps:
 
-**1. Make sure you have MongoDB installed and you connected to your desired port**
+**1. Make sure you have MongoDB installed and you are connected to your desired port**
 
 **2. Import relevant collections:** the import instructions are for MongoDB Compass, but you can also use shell if you wish.
 Go to Youtube/web/csv_files. There you can find 2 csv files for our collections.
