@@ -1,4 +1,5 @@
 /web/server/node_modules
 /web/server/config/.env.local
 /web/youtube/node_modules
+/web/youtube/build
 /web/.idea/
