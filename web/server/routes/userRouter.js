@@ -40,4 +40,16 @@ router.route('/:id/videos')
         { name: 'thumbnailFile', maxCount: 1 }
     ]), videoController.createVideo);
 
+router.get('/:id/videos/:pid', videoController.getVideoById);
+
+router.delete('/:id/videos/:pid', authenticateToken, (req, res) => {
+    const userId = req.body.userId;
+    videoController.deleteVideoById({ ...req, body: { ...req.body, userId } }, res);
+});
+
+router.put('/:id/videos/:pid', authenticateToken, (req, res) => {
+    const userId = req.body.userId;
+    videoController.updateVideoById({ ...req, body: { ...req.body, userId } }, res);
+});
+
 module.exports = router;
