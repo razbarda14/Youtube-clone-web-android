@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.youtube.R;
 import com.example.youtube.activities.VideoPageActivity;
 import com.example.youtube.model.VideoSession;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -61,6 +62,10 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
         // Assuming the server base URL is http://10.0.2.2:8080
         String fullVideoPath = "http://10.0.2.2:8080" + videoPath;
 
+        // Serialize the comments list to JSON
+        Gson gson = new Gson();
+        String commentsJson = gson.toJson(video.getComments());
+
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, VideoPageActivity.class);
             intent.putExtra("VIDEO_ID", video.getId());
@@ -73,6 +78,8 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
             intent.putExtra("VIDEO_DESCRIPTION", video.getDescription());
             intent.putExtra("VIDEO_TOPIC", video.getTopic());
             intent.putExtra("VIDEO_CHANNEL", video.getUploaderId());
+            intent.putExtra("VIDEO_COMMENTS", commentsJson); // Pass the comments JSON string
+
             context.startActivity(intent);
         });
 
