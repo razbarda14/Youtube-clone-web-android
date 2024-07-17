@@ -1,19 +1,22 @@
 package server.view_model;
+
+import android.app.Application;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.annotation.NonNull;
-import android.app.Application;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import server.model.LoginRequest;
 import server.model.LoginResponse;
 import server.model.RegisterUserRequest;
 import server.model.User;
 import server.repository.UserRepository;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserViewModel extends AndroidViewModel {
     private static final String TAG = UserViewModel.class.getSimpleName();

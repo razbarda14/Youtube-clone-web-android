@@ -34,6 +34,35 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import server.utils.TokenManager;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainPageActivity extends AppCompatActivity {
 
     private static final String TAG = "MainPageActivity";
@@ -56,11 +85,15 @@ public class MainPageActivity extends AppCompatActivity {
     private TextView displayNameTextView;
     private ImageView profileImageView;
 
+    private TokenManager tokenManager;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+
+        tokenManager = new TokenManager(this);
 
         filteredVideoList = new ArrayList<>(videoList);
         videoAdapter = new VideoAdapter(this, filteredVideoList);
@@ -68,6 +101,7 @@ public class MainPageActivity extends AppCompatActivity {
         // Load videos from JSON file
         loadVideosFromJSON();
         loadVideosFromStateManager();
+
         // Initialize views
         searchButton = findViewById(R.id.search_button);
         closeSearchButton = findViewById(R.id.close_search_button);
@@ -85,8 +119,10 @@ public class MainPageActivity extends AppCompatActivity {
         profileImageView = findViewById(R.id.profile_image);
 
         // Check if user is logged in and display user information
-        UserSession userSession = UserSession.getInstance();
-        if (userSession.isLoggedIn()) {
+        if (tokenManager.getToken() != null) {
+            UserSession userSession = UserSession.getInstance();
+            userSession.setLoggedIn(true);
+
             displayNameTextView.setText(userSession.getDisplayName());
             String profilePhotoUrl = userSession.getProfilePhoto();
             if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
@@ -139,6 +175,7 @@ public class MainPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 UserSession.getInstance().clearSession();
+                tokenManager.clearToken();
                 recreate(); // Restart the activity to update the UI
             }
         });
@@ -156,7 +193,6 @@ public class MainPageActivity extends AppCompatActivity {
                 return false;
             }
         });
-
 
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -178,7 +214,6 @@ public class MainPageActivity extends AppCompatActivity {
 
             // Create new video object
             Video newVideo = new Video(id, title, videoUrl, imageUrl, likes, views, uploadDate, description, topic, false, channel, new ArrayList<>());
-
 
             // Add new video to the VideoStateManager and video list
             VideoStateManager.getInstance().addVideo(newVideo);
@@ -291,6 +326,7 @@ public class MainPageActivity extends AppCompatActivity {
             // Handle error
         }
     }
+
     private void loadVideosFromStateManager() {
         VideoStateManager videoStateManager = VideoStateManager.getInstance();
         List<Video> allVideos = videoStateManager.getAllVideos();
@@ -299,4 +335,3 @@ public class MainPageActivity extends AppCompatActivity {
         videoAdapter.updateList(videoList);
     }
 }
-

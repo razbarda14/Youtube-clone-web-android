@@ -5,14 +5,23 @@ public class UserSession {
     private String username;
     private String displayName;
     private String profilePhoto;
+    private boolean isLoggedIn;
 
-    private UserSession() { }
+    private UserSession() {}
 
     public static synchronized UserSession getInstance() {
         if (instance == null) {
             instance = new UserSession();
         }
         return instance;
+    }
+
+    public boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
     }
 
     public String getUsername() {
@@ -43,9 +52,6 @@ public class UserSession {
         username = null;
         displayName = null;
         profilePhoto = null;
-    }
-
-    public boolean isLoggedIn() {
-        return username != null && displayName != null;
+        isLoggedIn = false;
     }
 }

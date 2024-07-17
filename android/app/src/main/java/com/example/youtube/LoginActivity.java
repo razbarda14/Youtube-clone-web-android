@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import server.utils.TokenManager;
+
 import server.model.LoginRequest;
 import server.model.LoginResponse;
 import server.view_model.UserViewModel;
@@ -20,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText username, password;
     Button login, register;
     UserViewModel userViewModel;
+    TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        tokenManager = new TokenManager(this);
 
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
@@ -51,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
                                 userSession.setUsername(loginResponse.getUsername());
                                 userSession.setDisplayName(loginResponse.getDisplay_name());
                                 userSession.setProfilePhoto(loginResponse.getImage());
+
+                                // Save the token
+                                tokenManager.saveToken(loginResponse.getToken());
 
                                 Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, MainPageActivity.class);

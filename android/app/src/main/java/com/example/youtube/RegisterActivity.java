@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import server.utils.TokenManager;
+
 import java.io.IOException;
 
 import server.model.RegisterUserRequest;
@@ -33,6 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
     ImageView profileImageView;
     Uri imageUri;
     UserViewModel userViewModel;
+    TokenManager tokenManager;
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -54,8 +57,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // Initialize the ViewModel inside onCreate
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        tokenManager = new TokenManager(this);
 
         username = findViewById(R.id.register_username);
         password = findViewById(R.id.register_password);
@@ -88,6 +91,10 @@ public class RegisterActivity extends AppCompatActivity {
                                         userSession.setUsername(user.getUsername());
                                         userSession.setDisplayName(user.getDisplay_name());
                                         userSession.setProfilePhoto(user.getImage());
+
+                                        // Save the token if available in User response
+                                        // This is an example, usually the token is in LoginResponse
+                                        // tokenManager.saveToken(user.getToken());
 
                                         Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);

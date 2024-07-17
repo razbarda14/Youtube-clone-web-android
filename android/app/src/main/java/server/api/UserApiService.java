@@ -40,8 +40,8 @@ public interface UserApiService {
     @DELETE("api/users/{id}")
     Call<Void> deleteUser(@Path("id") String id);
 
-    @GET("api/users/{id}/getDisplayName")
-    Call<DisplayNameResponse> getUserDisplayName(@Path("id") String id);
+    @GET("/api/users/{id}/getDisplayName")
+    Call<User> getUserDisplayName(@Path("id") String userId);
 
     @GET("api/users/{id}/getImagePath")
     Call<ImagePathResponse> getUserImagePath(@Path("id") String id);
