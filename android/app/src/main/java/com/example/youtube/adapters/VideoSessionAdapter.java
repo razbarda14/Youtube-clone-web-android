@@ -1,6 +1,7 @@
 package com.example.youtube.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.youtube.R;
+import com.example.youtube.activities.VideoPageActivity;
 import com.example.youtube.model.VideoSession;
 
 import java.util.List;
@@ -54,6 +56,23 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
                     .load(fullThumbnailPath)
                     .into(holder.thumbnail);
         }
+
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, VideoPageActivity.class);
+            intent.putExtra("VIDEO_ID", video.getId());
+            intent.putExtra("VIDEO_TITLE", video.getTitle());
+            intent.putExtra("VIDEO_URL", video.getVideoPath());  // Pass the video URL
+            intent.putExtra("IMAGE_URL", video.getThumbnailPath());
+            intent.putExtra("VIDEO_LIKES", video.getLikes());
+            intent.putExtra("VIDEO_VIEWS", video.getViewsCount());
+            intent.putExtra("VIDEO_UPLOAD_DATE", video.getDateUploaded());
+            intent.putExtra("VIDEO_DESCRIPTION", video.getDescription());
+            intent.putExtra("VIDEO_TOPIC", video.getTopic());
+            intent.putExtra("VIDEO_CHANNEL", video.getUploaderId());
+            context.startActivity(intent);
+        });
+
     }
 
 
