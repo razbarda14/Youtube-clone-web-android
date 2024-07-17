@@ -49,7 +49,7 @@ public interface UserApiService {
     @POST("api/users/register")
     Call<User> registerUser(@Body RegisterUserRequest registerRequest);
 
-    @POST("api/users/login")
+    @POST("api/tokens")
     Call<LoginResponse> loginUser(@Body LoginRequest loginRequest);
 
     @GET("api/users/{id}/videos")
