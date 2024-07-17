@@ -96,6 +96,9 @@ public class VideoPageActivity extends AppCompatActivity {
         String topic = intent.getStringExtra("VIDEO_TOPIC");
         String channel = intent.getStringExtra("VIDEO_CHANNEL");
 
+
+        // Set up the video player
+        setUpVideoPlayer(videoUrl);
         // Set video title
         videoTitle.setText(title);
 
@@ -482,27 +485,5 @@ public class VideoPageActivity extends AppCompatActivity {
         }
 
         return relatedVideos;
-    }
-
-
-    // Add this method to get the newly uploaded video
-    private Video getNewUploadedVideo() {
-        Intent intent = getIntent();
-        if (intent.hasExtra("VIDEO_ID")) {
-            String id = intent.getStringExtra("VIDEO_ID");
-            String title = intent.getStringExtra("VIDEO_TITLE");
-            String videoUrl = intent.getStringExtra("VIDEO_URL");
-            String imageUrl = intent.getStringExtra("IMAGE_URL");
-            int likes = intent.getIntExtra("VIDEO_LIKES", 0);
-            int views = intent.getIntExtra("VIDEO_VIEWS", 0);
-            String uploadDate = intent.getStringExtra("VIDEO_UPLOAD_DATE");
-            String description = intent.getStringExtra("VIDEO_DESCRIPTION");
-            String topic = intent.getStringExtra("VIDEO_TOPIC");
-            String channel = intent.getStringExtra("VIDEO_CHANNEL");
-
-            // Create new video object
-            return new Video(id, title, videoUrl, imageUrl, likes, views, uploadDate, description, topic, false, channel, new ArrayList<>());
-        }
-        return null;
     }
 }

@@ -56,14 +56,17 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
                     .load(fullThumbnailPath)
                     .into(holder.thumbnail);
         }
+        String videoPath = video.getVideoPath();
 
+        // Assuming the server base URL is http://10.0.2.2:8080
+        String fullVideoPath = "http://10.0.2.2:8080" + videoPath;
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, VideoPageActivity.class);
             intent.putExtra("VIDEO_ID", video.getId());
             intent.putExtra("VIDEO_TITLE", video.getTitle());
-            intent.putExtra("VIDEO_URL", video.getVideoPath());  // Pass the video URL
-            intent.putExtra("IMAGE_URL", video.getThumbnailPath());
+            intent.putExtra("VIDEO_URL", fullVideoPath);  // Pass the video URL
+            intent.putExtra("IMAGE_URL", fullThumbnailPath);
             intent.putExtra("VIDEO_LIKES", video.getLikes());
             intent.putExtra("VIDEO_VIEWS", video.getViewsCount());
             intent.putExtra("VIDEO_UPLOAD_DATE", video.getDateUploaded());
