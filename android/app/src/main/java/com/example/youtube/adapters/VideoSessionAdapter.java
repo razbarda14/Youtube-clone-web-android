@@ -1,6 +1,7 @@
 package com.example.youtube.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +38,25 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
         VideoSession video = videos.get(position);
         holder.title.setText(video.getTitle());
 
-
         String thumbnailPath = video.getThumbnailPath();
-        if (thumbnailPath != null && !thumbnailPath.isEmpty()) {
+
+        // Assuming the server base URL is http://10.0.2.2:8080
+        String fullThumbnailPath = "http://10.0.2.2:8080" + thumbnailPath;
+
+        if (thumbnailPath != null && (thumbnailPath.startsWith("android.resource://") || thumbnailPath.startsWith("content://") || thumbnailPath.startsWith("file://") || thumbnailPath.startsWith("http://") || thumbnailPath.startsWith("https://"))) {
+            // If the thumbnailPath is a URI or URL, load using Glide directly
             Glide.with(context)
                     .load(thumbnailPath)
                     .into(holder.thumbnail);
+        } else {
+            // Load using the full URL
+            Glide.with(context)
+                    .load(fullThumbnailPath)
+                    .into(holder.thumbnail);
         }
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -57,7 +69,7 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
     }
 
     public static class VideoViewHolder extends RecyclerView.ViewHolder {
-        TextView title, description, viewsCount;
+        TextView title, description;
         ImageView thumbnail;
 
         public VideoViewHolder(@NonNull View itemView) {
