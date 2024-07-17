@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="center"
-    tools:context=".UploadVideoActivity">
+    tools:context=".activities.UploadVideoActivity">
 
     <TextView
         android:id="@+id/text_view_title"
