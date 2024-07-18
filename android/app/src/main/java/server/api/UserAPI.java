@@ -1,7 +1,13 @@
 package server.api;
 
 import android.util.Log;
+
+import java.io.File;
 import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,7 +26,18 @@ public class UserAPI {
     }
 
     public void registerUser(RegisterUserRequest registerRequest, Callback<User> callback) {
-        Call<User> call = apiService.registerUser(registerRequest);
+        RequestBody username = RequestBody.create(MediaType.parse("text/plain"), registerRequest.getUsername());
+        RequestBody displayName = RequestBody.create(MediaType.parse("text/plain"), registerRequest.getDisplayName());
+        RequestBody password = RequestBody.create(MediaType.parse("text/plain"), registerRequest.getPassword());
+
+        MultipartBody.Part imagePart = null;
+        if (registerRequest.getImage() != null && !registerRequest.getImage().isEmpty()) {
+            File imageFile = new File(registerRequest.getImage());
+            RequestBody imageBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
+            imagePart = MultipartBody.Part.createFormData("photo", imageFile.getName(), imageBody);
+        }
+
+        Call<User> call = apiService.registerUser(username, displayName, password, imagePart);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

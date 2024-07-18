@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import server.utils.TokenManager;
 
+import java.io.File;
 import java.io.IOException;
 
 import server.model.RegisterUserRequest;
@@ -34,6 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button register, uploadPhoto;
     ImageView profileImageView;
     Uri imageUri;
+    String imagePath;
     UserViewModel userViewModel;
     TokenManager tokenManager;
 
@@ -45,6 +47,9 @@ public class RegisterActivity extends AppCompatActivity {
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                         profileImageView.setImageBitmap(bitmap);
+
+                        // Get the image file path
+                        imagePath = FileUtils.getPath(this, imageUri);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -81,8 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     if (isValidPassword(pass)) {
                         if (pass.equals(repass)) {
-                            String profilePhoto = imageUri != null ? imageUri.toString() : "";
-                            RegisterUserRequest request = new RegisterUserRequest(user, display, pass, profilePhoto);
+                            RegisterUserRequest request = new RegisterUserRequest(user, display, pass, imagePath);
                             userViewModel.registerUser(request).observe(RegisterActivity.this, new Observer<User>() {
                                 @Override
                                 public void onChanged(User user) {
