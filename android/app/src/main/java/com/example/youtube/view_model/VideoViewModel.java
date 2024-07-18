@@ -1,4 +1,4 @@
-package com.example.youtube.viesmodels;
+package com.example.youtube.view_model;
 
 import android.app.Application;
 
@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.youtube.model.CreateVideoRequest;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.repository.VideoRepository;
 

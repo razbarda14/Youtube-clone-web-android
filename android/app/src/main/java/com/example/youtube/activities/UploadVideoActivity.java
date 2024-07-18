@@ -20,7 +20,6 @@
 //import com.example.youtube.R;
 //import com.example.youtube.model.User;
 //import com.example.youtube.model.VideoSession;
-//import com.example.youtube.viesmodels.UserViewModel;
 //
 //import java.io.File;
 //import java.io.FileOutputStream;
@@ -197,7 +196,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.youtube.R;
 import com.example.youtube.entities.UserSession;
 import com.example.youtube.model.VideoSession;
-import com.example.youtube.viesmodels.UserViewModel;
+import com.example.youtube.view_model.UserViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
