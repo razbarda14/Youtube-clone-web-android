@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.youtube.Comment;
+import com.example.youtube.entities.Comment;
 
 import java.util.ArrayList;
 import java.util.List;

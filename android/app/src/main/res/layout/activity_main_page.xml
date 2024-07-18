@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainPageActivity">
+    tools:context=".activities.MainPageActivity">
 
     <!-- Upper Bar -->
     <LinearLayout
@@ -112,7 +112,7 @@
     <!-- Down Bar Fragment -->
     <fragment
         android:id="@+id/down_bar_fragment"
-        android:name="com.example.youtube.DownBarFragment"
+        android:name="com.example.youtube.activities.DownBarFragment"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true" />
