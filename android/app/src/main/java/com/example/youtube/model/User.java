@@ -1,7 +1,10 @@
 package com.example.youtube.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
-    private String id;
+    @SerializedName("_id")
+    private String _id;
     private String username;
     private String display_name;
     private String image;
@@ -11,7 +14,7 @@ public class User {
 
     // Parameterized constructor
     public User(String id, String username, String display_name, String image) {
-        this.id = id;
+        this._id = id;
         this.username = username;
         this.display_name = display_name;
         this.image = image;
@@ -19,11 +22,11 @@ public class User {
 
     // Getter and Setter for id
     public String getId() {
-        return id;
+        return _id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this._id = id;
     }
 
     // Getter and Setter for username
@@ -56,7 +59,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
+                "id='" + _id + '\'' +
                 ", username='" + username + '\'' +
                 ", display_name='" + display_name + '\'' +
                 ", image='" + image + '\'' +

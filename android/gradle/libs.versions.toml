@@ -12,6 +12,7 @@ glide = "4.12.0"
 retrofit = "2.9.0"
 lifecycle = "2.3.1"
 room = "2.3.0"
+androidxSecurityCrypto = "1.1.0-alpha03"
 
 [libraries]
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
@@ -30,6 +31,7 @@ viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref
 roomRuntime = { module = "androidx.room:room-runtime", version.ref = "room" }
 roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 roomKtx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidxSecurityCrypto = { group = "androidx.security", name = "security-crypto", version.ref = "androidxSecurityCrypto" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

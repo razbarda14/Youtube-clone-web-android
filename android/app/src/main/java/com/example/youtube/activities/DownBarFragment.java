@@ -17,9 +17,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.example.youtube.R;
-import com.example.youtube.activities.LoginActivity;
-import com.example.youtube.activities.MainPageActivity;
-import com.example.youtube.activities.UploadVideoActivity;
 import com.example.youtube.entities.UserSession;
 
 public class DownBarFragment extends Fragment {

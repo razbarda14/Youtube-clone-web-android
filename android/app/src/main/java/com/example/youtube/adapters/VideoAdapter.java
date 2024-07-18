@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.youtube.R;
+import com.example.youtube.entities.Video;
+import com.example.youtube.activities.VideoPageActivity;
 
 import com.example.youtube.R;
 import com.example.youtube.entities.Video;

@@ -18,17 +18,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.youtube.utils.FileUtils;
 import com.example.youtube.R;
-import com.example.youtube.activities.LoginActivity;
-import com.example.youtube.activities.MainPageActivity;
 import com.example.youtube.entities.UserSession;
-import com.example.youtube.model.RegisterUserRequest;
-import com.example.youtube.model.User;
-import com.example.youtube.viesmodels.UserViewModel;
+import com.example.youtube.utils.TokenManager;
 
 import java.io.IOException;
 
-
+import com.example.youtube.model.RegisterUserRequest;
+import com.example.youtube.model.User;
+import com.example.youtube.view_model.UserViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -38,7 +37,9 @@ public class RegisterActivity extends AppCompatActivity {
     Button register, uploadPhoto;
     ImageView profileImageView;
     Uri imageUri;
+    String imagePath;
     UserViewModel userViewModel;
+    TokenManager tokenManager;
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -48,6 +49,9 @@ public class RegisterActivity extends AppCompatActivity {
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                         profileImageView.setImageBitmap(bitmap);
+
+                        // Get the image file path
+                        imagePath = FileUtils.getPath(this, imageUri);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -60,8 +64,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // Initialize the ViewModel inside onCreate
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        tokenManager = new TokenManager(this);
 
         username = findViewById(R.id.register_username);
         password = findViewById(R.id.register_password);
@@ -84,16 +88,20 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     if (isValidPassword(pass)) {
                         if (pass.equals(repass)) {
-                            String profilePhoto = imageUri != null ? imageUri.toString() : "";
-                            RegisterUserRequest request = new RegisterUserRequest(user, display, pass, profilePhoto);
+                            RegisterUserRequest request = new RegisterUserRequest(user, display, pass, imagePath);
                             userViewModel.registerUser(request).observe(RegisterActivity.this, new Observer<User>() {
                                 @Override
                                 public void onChanged(User user) {
                                     if (user != null) {
                                         UserSession userSession = UserSession.getInstance();
+                                        userSession.setUserId(user.getId());
                                         userSession.setUsername(user.getUsername());
                                         userSession.setDisplayName(user.getDisplay_name());
                                         userSession.setProfilePhoto(user.getImage());
+
+                                        // Save the token if available in User response
+                                        // This is an example, usually the token is in LoginResponse
+                                        // tokenManager.saveToken(user.getToken());
 
                                         Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);

@@ -2,17 +2,35 @@ package com.example.youtube.entities;
 
 public class UserSession {
     private static UserSession instance;
+    private String userId;
     private String username;
     private String displayName;
     private String profilePhoto;
+    private boolean isLoggedIn;
 
-    private UserSession() { }
+    private UserSession() {}
 
     public static synchronized UserSession getInstance() {
         if (instance == null) {
             instance = new UserSession();
         }
         return instance;
+    }
+
+    public boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -40,12 +58,10 @@ public class UserSession {
     }
 
     public void clearSession() {
+        userId = null;
         username = null;
         displayName = null;
         profilePhoto = null;
-    }
-
-    public boolean isLoggedIn() {
-        return username != null && displayName != null;
+        isLoggedIn = false;
     }
 }
