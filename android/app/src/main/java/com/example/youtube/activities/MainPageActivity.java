@@ -26,11 +26,9 @@ import com.example.youtube.entities.UserSession;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.youtube.R;
 import com.example.youtube.adapters.VideoSessionAdapter;
-import com.example.youtube.entities.UserSession;
 import com.example.youtube.model.VideoSession;
-import com.example.youtube.viesmodels.VideoViewModel;
+import com.example.youtube.view_model.VideoViewModel;
 import com.example.youtube.model.User;
 import com.example.youtube.view_model.UserViewModel;
 import com.example.youtube.utils.TokenManager;
