@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VideoPageActivity">
+    tools:context=".activities.VideoPageActivity">
 
     <!-- Video View (Fixed at the top) -->
     <FrameLayout
@@ -276,7 +276,7 @@
     <!-- Down Bar Fragment -->
     <fragment
         android:id="@+id/down_bar_fragment"
-        android:name="com.example.youtube.DownBarFragment"
+        android:name="com.example.youtube.activities.DownBarFragment"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent" />
