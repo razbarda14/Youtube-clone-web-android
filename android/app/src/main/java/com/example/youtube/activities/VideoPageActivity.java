@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youtube.entities.Comment;
+import com.example.youtube.adapters.CommentAdapter;
 import com.example.youtube.R;
 import com.example.youtube.entities.UserSession;
 import com.example.youtube.entities.Video;
-import com.example.youtube.adapters.CommentAdapter;
 import com.example.youtube.adapters.VideoAdapter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,68 +99,30 @@ public class VideoPageActivity extends AppCompatActivity {
         String topic = intent.getStringExtra("VIDEO_TOPIC");
         String channel = intent.getStringExtra("VIDEO_CHANNEL");
 
+        // Deserialize the comments JSON string back to a list of Comment objects
+        String commentsJson = intent.getStringExtra("VIDEO_COMMENTS");
+        Log.d("VideoPageActivity", "Raw Comments JSON: " + commentsJson);
+        Gson gson = new Gson();
+        List<Comment> comments = gson.fromJson(commentsJson, new TypeToken<List<Comment>>() {}.getType());
+
+        // Set up the video player
+        setUpVideoPlayer(videoUrl);
         // Set video title
         videoTitle.setText(title);
 
-        // Set up video player based on video ID
-        String videoUri;
-        switch (videoId) {
-            case "1":
-                videoUri = "android.resource://" + getPackageName() + "/" + R.raw.ableton;
-                break;
-            case "2":
-                videoUri = "android.resource://" + getPackageName() + "/" + R.raw.bitcoin;
-                break;
-            case "3":
-                videoUri = "android.resource://" + getPackageName() + "/" + R.raw.champions;
-                break;
-            case "4":
-                videoUri = "android.resource://" + getPackageName() + "/" + R.raw.fc24;
-                break;
-            case "5":
-                videoUri = "android.resource://" + getPackageName() + "/" + R.raw.lagos;
-                break;
-            case "6":
-                videoUri = "android.resource://" + getPackageName() + "/" + R.raw.livemusic;
-                break;
-            case "7":
-                videoUri = "android.resource://" + getPackageName() + "/" + R.raw.pizza;
-                break;
-            case "8":
-                videoUri = "android.resource://" + getPackageName() + "/" + R.raw.spanish;
-                break;
-            case "9":
-                videoUri = "android.resource://" + getPackageName() + "/" + R.raw.tennis;
-                break;
-            case "10":
-                videoUri = "android.resource://" + getPackageName() + "/" + R.raw.sansebastian;
-                break;
-            default:
-                videoUri = videoUrl; // Use the video URL from the intent
-                break;
-        }
-        setUpVideoPlayer(videoUri);
-
-
         // Retrieve and update video state
         VideoStateManager videoStateManager = VideoStateManager.getInstance();
-        // Initialize the view count with the value from the intent (JSON data)
         videoStateManager.initializeViewCount(videoId, views); // 'views' is the number of views from the JSON
         videoStateManager.initializeLikeCount(videoId, likes); // Initialize default like count
         likes = videoStateManager.getLikeCount(videoId);
-        // Increment view count
         videoStateManager.incrementViewCount(videoId);
         views = videoStateManager.getViewCount(videoId); // Get the updated view count
         viewsTextView.setText("Views: " + views); // Update the viewsTextView with the incremented view count
         likesTextView.setText("Likes: " + likes);
-        // Get current user ID
         String currentUserId = UserSession.getInstance().getUsername();
         isLiked = videoStateManager.isLikedByUser(videoId, currentUserId);
         isDisliked = videoStateManager.isDislikedByUser(videoId, currentUserId);
-
-        // Set video data
         updateButtonColors();
-        // Handle button clicks
         setUpLikeButton(currentUserId);
         setUpDislikeButton(currentUserId);
 
@@ -166,15 +131,6 @@ public class VideoPageActivity extends AppCompatActivity {
         descriptionTextView.setText(description);
         topicTextView.setText("Topic: " + topic);
         channelTextView.setText("Channel: " + channel);
-
-        // Check if user is logged in and enable/disable like and dislike buttons
-//        if (isUserLoggedIn()) {
-//            likeButton.setEnabled(true);
-//            dislikeButton.setEnabled(true);
-//        } else {
-//            likeButton.setEnabled(false);
-//            dislikeButton.setEnabled(false);
-//        }
 
         // Show edit video button if user is logged in
         if (isUserLoggedIn()) {
@@ -203,7 +159,6 @@ public class VideoPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isUserLoggedIn()) {
-                    // Show the edit text fields and save button
                     String tempTitle = VideoStateManager.getInstance().getTitle(videoId);
                     String tempDescription = VideoStateManager.getInstance().getDescription(videoId);
 
@@ -223,13 +178,11 @@ public class VideoPageActivity extends AppCompatActivity {
                     editVideoDescription.setVisibility(View.VISIBLE);
                     saveChangesButton.setVisibility(View.VISIBLE);
 
-                    // Hide other buttons
                     likeButton.setVisibility(View.GONE);
                     dislikeButton.setVisibility(View.GONE);
                     shareButton.setVisibility(View.GONE);
                     downloadButton.setVisibility(View.GONE);
 
-                    // Adjust scrollable content layout
                     findViewById(R.id.scrollable_content).setPadding(0, 0, 0, saveChangesButton.getHeight() + 16);
                 } else {
                     showSignInAlert();
@@ -240,7 +193,6 @@ public class VideoPageActivity extends AppCompatActivity {
         saveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Save the changes temporarily
                 String newTitle = editVideoTitle.getText().toString();
                 String newDescription = editVideoDescription.getText().toString();
 
@@ -250,21 +202,17 @@ public class VideoPageActivity extends AppCompatActivity {
                 videoTitle.setText(newTitle);
                 descriptionTextView.setText(newDescription);
 
-                // Hide the edit text fields and save button
                 editVideoTitle.setVisibility(View.GONE);
                 editVideoDescription.setVisibility(View.GONE);
                 saveChangesButton.setVisibility(View.GONE);
 
-                // Show other buttons
                 likeButton.setVisibility(View.VISIBLE);
                 dislikeButton.setVisibility(View.VISIBLE);
                 shareButton.setVisibility(View.VISIBLE);
                 downloadButton.setVisibility(View.VISIBLE);
 
-                // Reset scrollable content padding
                 findViewById(R.id.scrollable_content).setPadding(0, 0, 0, 0);
 
-                // Load related videos and update the adapter
                 List<Video> relatedVideos = getRelatedVideos(videoId);
                 relatedVideoList.clear();
                 relatedVideoList.addAll(relatedVideos);
@@ -296,17 +244,22 @@ public class VideoPageActivity extends AppCompatActivity {
         });
         commentsRecyclerView.setAdapter(commentAdapter);
 
-        // Retrieve and set comments
-        List<Comment> savedComments = videoStateManager.getComments(videoId);
-        commentList.addAll(savedComments);
-        commentAdapter.notifyDataSetChanged();
+        // Add comments to the comment list and notify the adapter
+        if (comments != null) {
+            for (Comment comment : comments) {
+                // Log each comment for debugging
+                Log.d("VideoPageActivity", "Comment: " + comment.getComment() + ", User: " + comment.getUserId());
+            }
+            commentList.addAll(comments);
+            commentAdapter.notifyDataSetChanged();
+        }
 
         relatedVideosRecyclerView = findViewById(R.id.related_videos_recycler_view);
         relatedVideosRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         relatedVideoList = getRelatedVideos(videoId); // Get related videos including the new one
         relatedVideosAdapter = new VideoAdapter(this, relatedVideoList);
         relatedVideosRecyclerView.setAdapter(relatedVideosAdapter);
-        // Handle button clicks
+
         setUpLikeButton(currentUserId);
         setUpDislikeButton(currentUserId);
 
@@ -316,7 +269,7 @@ public class VideoPageActivity extends AppCompatActivity {
                 if (isUserLoggedIn()) {
                     String newCommentText = commentInput.getText().toString();
                     if (!newCommentText.isEmpty()) {
-                        Comment newComment = new Comment("CurrentUser", newCommentText);
+                        Comment newComment = new Comment(currentUserId, newCommentText); // Updated to use userId
                         commentList.add(newComment);
                         VideoStateManager.getInstance().addComment(videoId, newComment); // Save comment
                         commentAdapter.notifyItemInserted(commentList.size() - 1);
@@ -335,11 +288,12 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
 
-        // Disable comment input and buttons if not logged in
         if (!isUserLoggedIn()) {
             disableCommentInput();
         }
     }
+
+
 
     private void updateButtonColors() {
         if (isLiked) {
@@ -467,7 +421,7 @@ public class VideoPageActivity extends AppCompatActivity {
         builder.setTitle("Edit Comment");
 
         final EditText input = new EditText(this);
-        input.setText(comment.getCommentText());
+        input.setText(comment.getComment());
         builder.setView(input);
 
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -475,7 +429,7 @@ public class VideoPageActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String editedCommentText = input.getText().toString();
                 if (!editedCommentText.isEmpty()) {
-                    comment.setCommentText(editedCommentText);
+                    comment.setComment(editedCommentText);
                     VideoStateManager.getInstance().editComment(videoId, position, editedCommentText); // Edit comment
                     commentAdapter.notifyItemChanged(position);
                 }
@@ -522,27 +476,5 @@ public class VideoPageActivity extends AppCompatActivity {
         }
 
         return relatedVideos;
-    }
-
-
-    // Add this method to get the newly uploaded video
-    private Video getNewUploadedVideo() {
-        Intent intent = getIntent();
-        if (intent.hasExtra("VIDEO_ID")) {
-            String id = intent.getStringExtra("VIDEO_ID");
-            String title = intent.getStringExtra("VIDEO_TITLE");
-            String videoUrl = intent.getStringExtra("VIDEO_URL");
-            String imageUrl = intent.getStringExtra("IMAGE_URL");
-            int likes = intent.getIntExtra("VIDEO_LIKES", 0);
-            int views = intent.getIntExtra("VIDEO_VIEWS", 0);
-            String uploadDate = intent.getStringExtra("VIDEO_UPLOAD_DATE");
-            String description = intent.getStringExtra("VIDEO_DESCRIPTION");
-            String topic = intent.getStringExtra("VIDEO_TOPIC");
-            String channel = intent.getStringExtra("VIDEO_CHANNEL");
-
-            // Create new video object
-            return new Video(id, title, videoUrl, imageUrl, likes, views, uploadDate, description, topic, false, channel, new ArrayList<>());
-        }
-        return null;
     }
 }

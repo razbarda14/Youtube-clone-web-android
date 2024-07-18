@@ -16,18 +16,27 @@ import com.example.youtube.R;
 import com.example.youtube.entities.Video;
 import com.example.youtube.activities.VideoPageActivity;
 
+import com.example.youtube.R;
+import com.example.youtube.entities.Video;
+import com.example.youtube.activities.VideoPageActivity;
+
 import java.util.List;
+import com.example.youtube.model.VideoSession;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
 
     private List<Video> videoList;
     private Context context;
+    private List<VideoSession> videoList1;
 
     public VideoAdapter(Context context, List<Video> videoList) {
         this.context = context;
         this.videoList = videoList;
     }
-
+    public void setVideos(List<VideoSession> videoList) {
+        this.videoList1 = videoList;
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public VideoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

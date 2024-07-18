@@ -1,5 +1,6 @@
 package com.example.youtube.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.youtube.entities.Comment;
 import com.example.youtube.R;
-
+import com.example.youtube.entities.Comment;
 import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
@@ -34,14 +33,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.comment_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_comment, parent, false);
         return new CommentViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CommentViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Comment comment = commentList.get(position);
-        holder.commentText.setText(comment.getCommentText());
+        holder.commentUserName.setText(comment.getUserId());
+        holder.commentText.setText(comment.getComment()); // Ensure this line sets the comment text correctly
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,13 +62,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
-
+        TextView commentUserName;
         TextView commentText;
         Button editButton;
         Button deleteButton;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
+            commentUserName = itemView.findViewById(R.id.comment_user_name);
             commentText = itemView.findViewById(R.id.comment_text);
             editButton = itemView.findViewById(R.id.edit_button);
             deleteButton = itemView.findViewById(R.id.delete_button);

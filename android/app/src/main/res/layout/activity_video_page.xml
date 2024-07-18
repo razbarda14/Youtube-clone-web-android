@@ -132,6 +132,17 @@
                 android:textColor="@color/black"
                 android:layout_gravity="center_horizontal" />
 
+            <!-- Delete Video Button -->
+            <Button
+                android:id="@+id/delete_video_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete Video"
+                android:backgroundTint="@color/button_default_color"
+                android:textColor="@color/white"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal" />
+
             <!-- Like, Dislike, Share, Download Buttons -->
             <LinearLayout
                 android:id="@+id/video_actions"
@@ -271,7 +282,6 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 
     <!-- Down Bar Fragment -->
     <fragment

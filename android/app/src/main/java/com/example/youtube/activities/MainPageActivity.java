@@ -16,38 +16,34 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import com.example.youtube.R;
+import com.example.youtube.entities.UserSession;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youtube.R;
+import com.example.youtube.adapters.VideoSessionAdapter;
 import com.example.youtube.entities.UserSession;
-import com.example.youtube.entities.Video;
-import com.example.youtube.adapters.VideoAdapter;
-import com.example.youtube.utils.Utils;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
+import com.example.youtube.model.VideoSession;
+import com.example.youtube.viesmodels.VideoViewModel;
+import com.example.youtube.model.User;
+import com.example.youtube.view_model.UserViewModel;
+import com.example.youtube.utils.TokenManager;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.youtube.model.User;
-import com.example.youtube.view_model.UserViewModel;
-import com.example.youtube.utils.TokenManager;
-
 public class MainPageActivity extends AppCompatActivity {
 
     private static final String TAG = "MainPageActivity";
-    private static List<Video> videoList = new ArrayList<>();
-
+    private List<VideoSession> videoList = new ArrayList<>();
     private ImageButton searchButton;
     private ImageButton closeSearchButton;
     private LinearLayout upperBar;
@@ -59,12 +55,12 @@ public class MainPageActivity extends AppCompatActivity {
     private ImageButton addButton;
     private ImageButton youButton;
     private RecyclerView recyclerView;
-    private VideoAdapter videoAdapter;
-    private List<Video> filteredVideoList;
+    private VideoSessionAdapter videoAdapter;
+    private List<VideoSession> filteredVideoList;
 
     private TextView displayNameTextView;
     private ImageView profileImageView;
-
+    private VideoViewModel videoViewModel;
     private TokenManager tokenManager;
     private UserViewModel userViewModel;
 
@@ -77,12 +73,9 @@ public class MainPageActivity extends AppCompatActivity {
         tokenManager = new TokenManager(this);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        filteredVideoList = new ArrayList<>(videoList);
-        videoAdapter = new VideoAdapter(this, filteredVideoList);
 
-        // Load videos from JSON file
-        loadVideosFromJSON();
-        loadVideosFromStateManager();
+        filteredVideoList = new ArrayList<>(videoList);
+        videoAdapter = new VideoSessionAdapter(this, filteredVideoList);
 
         // Initialize views
         searchButton = findViewById(R.id.search_button);
@@ -99,6 +92,15 @@ public class MainPageActivity extends AppCompatActivity {
 
         displayNameTextView = findViewById(R.id.display_name);
         profileImageView = findViewById(R.id.profile_image);
+
+        videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class);
+        videoViewModel.getMostViewedAndRandomVideos().observe(this, new Observer<List<VideoSession>>() {
+            @Override
+            public void onChanged(List<VideoSession> videos) {
+                // Update the adapter with the new video list
+                videoAdapter.updateList(videos);
+            }
+        });
 
         // Check if user is logged in and display user information
         String token = tokenManager.getToken();
@@ -212,10 +214,10 @@ public class MainPageActivity extends AppCompatActivity {
             String channel = intent.getStringExtra("VIDEO_CHANNEL");
 
             // Create new video object
-            Video newVideo = new Video(id, title, videoUrl, imageUrl, likes, views, uploadDate, description, topic, false, channel, new ArrayList<>());
+            VideoSession newVideo = new VideoSession(
+                    id, title, channel, description, views, uploadDate, videoUrl, imageUrl, topic, likes, new ArrayList<>(), new ArrayList<>());
 
-            // Add new video to the VideoStateManager and video list
-            VideoStateManager.getInstance().addVideo(newVideo);
+            // Add new video to the list
             videoList.add(newVideo);
             videoAdapter.updateList(videoList);
         }
@@ -226,7 +228,7 @@ public class MainPageActivity extends AppCompatActivity {
         if (query.isEmpty()) {
             filteredVideoList.addAll(videoList);
         } else {
-            for (Video video : videoList) {
+            for (VideoSession video : videoList) {
                 if (video.getTitle().toLowerCase().contains(query.toLowerCase())) {
                     filteredVideoList.add(video);
                 }
@@ -275,62 +277,5 @@ public class MainPageActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
-
-    // Load videos from JSON or VideoStateManager
-    private void loadVideosFromJSON() {
-        // Clear the existing video list to avoid duplicates
-        videoList.clear();
-        String jsonFileContent = Utils.loadJSONFromAsset(this, "videodata.json");
-        if (jsonFileContent != null) {
-            Gson gson = new Gson();
-            Type videoListType = new TypeToken<List<VideoData>>() {}.getType();
-            List<VideoData> videoDataList = gson.fromJson(jsonFileContent, videoListType);
-
-            VideoStateManager videoStateManager = VideoStateManager.getInstance();
-
-            for (VideoData videoData : videoDataList) {
-                String videoId = String.valueOf(videoData.getId());
-                String title = videoStateManager.getTitle(videoId);
-                if (title.isEmpty()) {
-                    title = videoData.getTitle();
-                }
-
-                String description = videoStateManager.getDescription(videoId);
-                if (description.isEmpty()) {
-                    description = videoData.getDescription();
-                }
-
-                Video video = new Video(
-                        videoId,
-                        title,
-                        videoData.getVideoPath(),
-                        videoData.getImageUrl(),
-                        videoData.getLikes(),
-                        videoData.getViewsCount(),
-                        videoData.getDateUploaded(),
-                        description,
-                        videoData.getTopic(),
-                        videoData.isLiked(),
-                        videoData.getChannel(),
-                        videoData.getComments()
-                );
-                videoStateManager.addVideo(video);
-            }
-
-            // Also add videos from VideoStateManager
-            videoList.addAll(videoStateManager.getAllVideos());
-
-            videoAdapter.updateList(videoList);
-        } else {
-            // Handle error
-        }
-    }
-
-    private void loadVideosFromStateManager() {
-        VideoStateManager videoStateManager = VideoStateManager.getInstance();
-        List<Video> allVideos = videoStateManager.getAllVideos();
-        videoList.clear();
-        videoList.addAll(allVideos);
-        videoAdapter.updateList(videoList);
-    }
 }
+

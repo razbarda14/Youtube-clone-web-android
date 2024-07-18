@@ -14,6 +14,7 @@ import retrofit2.Response;
 import com.example.youtube.model.LoginRequest;
 import com.example.youtube.model.LoginResponse;
 import com.example.youtube.model.RegisterUserRequest;
+import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.RetrofitInstance;
 import com.example.youtube.model.User;
 
@@ -109,6 +110,31 @@ public class UserAPI {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Log.e(TAG, "Fetching user details failed: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
+    public void createVideo(String userId, MultipartBody.Part videoFile, MultipartBody.Part thumbnailFile, RequestBody title, RequestBody description, RequestBody topic, Callback<VideoSession> callback) {
+        Call<VideoSession> call = apiService.createVideo(userId, videoFile, thumbnailFile, title, description, topic);
+        call.enqueue(new Callback<VideoSession>() {
+            @Override
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
+                if (response.isSuccessful()) {
+                    callback.onResponse(call, response);
+                } else {
+                    Log.e(TAG, "Video creation failed with response code: " + response.code());
+                    try {
+                        Log.e(TAG, "Response error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    callback.onFailure(call, new Throwable("Video creation failed with response code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VideoSession> call, Throwable t) {
+                Log.e(TAG, "Video creation failed: " + t.getMessage());
                 callback.onFailure(call, t);
             }
         });

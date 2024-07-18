@@ -102,7 +102,7 @@ public class VideoStateManager {
 
     public void editComment(String videoId, int position, String newCommentText) {
         if (comments.containsKey(videoId) && position < comments.get(videoId).size()) {
-            comments.get(videoId).get(position).setCommentText(newCommentText);
+            comments.get(videoId).get(position).setComment(newCommentText);
         }
     }
     public void setTitle(String videoId, String title) {

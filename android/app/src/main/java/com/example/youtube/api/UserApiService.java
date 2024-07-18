@@ -22,6 +22,7 @@ import com.example.youtube.model.LoginResponse;
 import com.example.youtube.model.User;
 import com.example.youtube.model.UserIdResponse;
 import com.example.youtube.model.UserUpdateRequest;
+import com.example.youtube.model.VideoSession;
 
 public interface UserApiService {
     @GET("api/users")
@@ -60,12 +61,20 @@ public interface UserApiService {
     @POST("api/tokens")
     Call<LoginResponse> loginUser(@Body LoginRequest loginRequest);
 
-    @GET("api/users/{id}/videos")
-    Call<List<Video>> getVideosByUploader(@Path("id") String id);
-
-    @POST("api/users/{id}/videos")
-    Call<Video> createVideo(@Path("id") String id, @Body CreateVideoRequest createVideoRequest);
-
     @GET("auth/verify-user")
     Call<User> verifyUser(@Header("Authorization") String token);
+
+    @GET("api/users/{id}/videos")
+    Call<List<VideoSession>> getVideosByUploader(@Path("id") String id);
+
+    @Multipart
+    @POST("api/users/{id}/videos")
+    Call<VideoSession> createVideo(
+            @Path("id") String id,
+            @Part MultipartBody.Part videoFile,
+            @Part MultipartBody.Part thumbnailFile,
+            @Part("title") RequestBody title,
+            @Part("description") RequestBody description,
+            @Part("topic") RequestBody topic
+    );
 }
