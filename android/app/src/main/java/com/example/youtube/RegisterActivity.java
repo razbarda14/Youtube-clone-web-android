@@ -88,6 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 public void onChanged(User user) {
                                     if (user != null) {
                                         UserSession userSession = UserSession.getInstance();
+                                        userSession.setUserId(user.getId());
                                         userSession.setUsername(user.getUsername());
                                         userSession.setDisplayName(user.getDisplay_name());
                                         userSession.setProfilePhoto(user.getImage());
