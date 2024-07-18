@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -135,6 +136,31 @@ public class UserAPI {
             @Override
             public void onFailure(Call<VideoSession> call, Throwable t) {
                 Log.e(TAG, "Video creation failed: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
+    public void getUserDisplayName(String userId,Callback<String> callback) {
+        Call<String> call = apiService.getUserDisplayName(userId);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    callback.onResponse(call, response);
+                } else {
+                    Log.e(TAG, "Fetching displayName failed with response code: " + response.code());
+                    try {
+                        Log.e(TAG, "Response error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    callback.onFailure(call, new Throwable("Fetching displayName failed with response code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e(TAG, "Fetching displayName failed: " + t.getMessage());
                 callback.onFailure(call, t);
             }
         });

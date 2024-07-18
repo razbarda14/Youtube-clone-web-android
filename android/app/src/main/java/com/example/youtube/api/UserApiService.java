@@ -44,7 +44,7 @@ public interface UserApiService {
     Call<Void> deleteUser(@Path("id") String id);
 
     @GET("/api/users/{id}/getDisplayName")
-    Call<User> getUserDisplayName(@Path("id") String userId);
+    Call<String> getUserDisplayName(@Path("id") String userId);
 
     @GET("api/users/{id}/getImagePath")
     Call<ImagePathResponse> getUserImagePath(@Path("id") String id);

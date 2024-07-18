@@ -32,4 +32,7 @@ public class UserRepository {
     public void createVideo(RequestBody userId, MultipartBody.Part videoFile, MultipartBody.Part thumbnailFile, RequestBody title, RequestBody description, RequestBody topic, Callback<VideoSession> callback) {
         userAPI.createVideo(userId, videoFile, thumbnailFile, title, description, topic, callback);
     }
+    public void getUserDisplayName(String userId, Callback<String> callback) {
+        userAPI.getUserDisplayName(userId, callback);
+    }
 }
