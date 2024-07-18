@@ -217,6 +217,7 @@ public class UploadVideoActivity extends AppCompatActivity {
     private EditText editTextTitle;
     private EditText editTextDescription;
     private EditText editTextTopic;
+    private EditText editTextUploaderID;
     private UserViewModel userViewModel;
     private UserSession userSession;
 
@@ -283,9 +284,10 @@ public class UploadVideoActivity extends AppCompatActivity {
         String title = editTextTitle.getText().toString();
         String description = editTextDescription.getText().toString();
         String topic = editTextTopic.getText().toString();
+        String uploaderId = userSession.getUserId();
 
-        // Get the current user's ID
-        String uploaderId = "1"; // Assuming username is used as ID here
+//        // Get the current user's ID
+//        String uploaderId = "1"; // Assuming username is used as ID here
 
         File videoFile = getFileFromUri(videoUri);
         File imageFile = getFileFromUri(imageUri);
@@ -304,8 +306,9 @@ public class UploadVideoActivity extends AppCompatActivity {
         RequestBody titleRequestBody = RequestBody.create(MediaType.parse("text/plain"), title);
         RequestBody descriptionRequestBody = RequestBody.create(MediaType.parse("text/plain"), description);
         RequestBody topicRequestBody = RequestBody.create(MediaType.parse("text/plain"), topic);
+        RequestBody uploaderIDRequestBody = RequestBody.create(MediaType.parse("text/plain"), uploaderId);
 
-        userViewModel.createVideo(uploaderId, videoPart, imagePart, titleRequestBody, descriptionRequestBody, topicRequestBody).observe(this, new Observer<VideoSession>() {
+        userViewModel.createVideo(uploaderIDRequestBody, videoPart, imagePart, titleRequestBody, descriptionRequestBody, topicRequestBody).observe(this, new Observer<VideoSession>() {
             @Override
             public void onChanged(VideoSession video) {
                 if (video != null) {
