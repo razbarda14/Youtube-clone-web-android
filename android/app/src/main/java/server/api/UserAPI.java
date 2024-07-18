@@ -1,4 +1,5 @@
 package server.api;
+
 import android.util.Log;
 import java.io.IOException;
 import retrofit2.Call;
@@ -65,6 +66,32 @@ public class UserAPI {
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Log.e(TAG, "Login failed: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
+
+    public void verifyUser(String token, Callback<User> callback) {
+        Call<User> call = apiService.verifyUser("Bearer " + token);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    callback.onResponse(call, response);
+                } else {
+                    Log.e(TAG, "Fetching user details failed with response code: " + response.code());
+                    try {
+                        Log.e(TAG, "Response error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    callback.onFailure(call, new Throwable("Fetching user details failed with response code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e(TAG, "Fetching user details failed: " + t.getMessage());
                 callback.onFailure(call, t);
             }
         });

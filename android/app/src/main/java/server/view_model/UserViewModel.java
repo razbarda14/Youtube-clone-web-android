@@ -72,4 +72,27 @@ public class UserViewModel extends AndroidViewModel {
         });
         return liveData;
     }
+
+    public LiveData<User> verifyUser(String token) {
+        MutableLiveData<User> liveData = new MutableLiveData<>();
+        mRepository.verifyUser(token, new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(response.body());
+                    Log.d(TAG, "Fetched user details successfully: " + response.body().toString());
+                } else {
+                    liveData.setValue(null);
+                    Log.e(TAG, "Failed to fetch user details with response code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                liveData.setValue(null);
+                Log.e(TAG, "Failed to fetch user details: " + t.getMessage());
+            }
+        });
+        return liveData;
+    }
 }

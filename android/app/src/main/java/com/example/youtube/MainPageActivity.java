@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,6 +20,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,34 +35,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import server.model.User;
+import server.view_model.UserViewModel;
 import server.utils.TokenManager;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainPageActivity extends AppCompatActivity {
 
@@ -86,6 +62,7 @@ public class MainPageActivity extends AppCompatActivity {
     private ImageView profileImageView;
 
     private TokenManager tokenManager;
+    private UserViewModel userViewModel;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -94,6 +71,7 @@ public class MainPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_page);
 
         tokenManager = new TokenManager(this);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         filteredVideoList = new ArrayList<>(videoList);
         videoAdapter = new VideoAdapter(this, filteredVideoList);
@@ -119,21 +97,38 @@ public class MainPageActivity extends AppCompatActivity {
         profileImageView = findViewById(R.id.profile_image);
 
         // Check if user is logged in and display user information
-        if (tokenManager.getToken() != null) {
-            UserSession userSession = UserSession.getInstance();
-            userSession.setLoggedIn(true);
+        String token = tokenManager.getToken();
+        if (token != null) {
+            userViewModel.verifyUser(token).observe(this, new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+                    if (user != null) {
+                        UserSession userSession = UserSession.getInstance();
+                        userSession.setLoggedIn(true);
+                        userSession.setUserId(user.getId());
+                        userSession.setUsername(user.getUsername());
+                        userSession.setDisplayName(user.getDisplay_name());
+                        userSession.setProfilePhoto(user.getImage());
 
-            displayNameTextView.setText(userSession.getDisplayName());
-            String profilePhotoUrl = userSession.getProfilePhoto();
-            if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
-                setImageFromUrl(profileImageView, profilePhotoUrl);
-            } else {
-                profileImageView.setImageResource(R.drawable.default_profile);
-            }
-            displayNameTextView.setVisibility(View.VISIBLE);
-            profileImageView.setVisibility(View.VISIBLE);
-            signInButton.setVisibility(View.GONE);
-            signOutButton.setVisibility(View.VISIBLE);
+                        displayNameTextView.setText(userSession.getDisplayName());
+                        String profilePhotoUrl = userSession.getProfilePhoto();
+                        if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
+                            setImageFromUrl(profileImageView, profilePhotoUrl);
+                        } else {
+                            profileImageView.setImageResource(R.drawable.default_profile);
+                        }
+                        displayNameTextView.setVisibility(View.VISIBLE);
+                        profileImageView.setVisibility(View.VISIBLE);
+                        signInButton.setVisibility(View.GONE);
+                        signOutButton.setVisibility(View.VISIBLE);
+                    } else {
+                        displayNameTextView.setVisibility(View.GONE);
+                        profileImageView.setVisibility(View.GONE);
+                        signInButton.setVisibility(View.VISIBLE);
+                        signOutButton.setVisibility(View.GONE);
+                    }
+                }
+            });
         } else {
             displayNameTextView.setVisibility(View.GONE);
             profileImageView.setVisibility(View.GONE);

@@ -21,4 +21,8 @@ public class UserRepository {
     public void loginUser(LoginRequest loginRequest, Callback<LoginResponse> callback) {
         userAPI.loginUser(loginRequest, callback);
     }
+
+    public void verifyUser(String token, Callback<User> callback) {
+        userAPI.verifyUser(token, callback);
+    }
 }

@@ -2,6 +2,7 @@ package com.example.youtube;
 
 public class UserSession {
     private static UserSession instance;
+    private String userId;
     private String username;
     private String displayName;
     private String profilePhoto;
@@ -22,6 +23,14 @@ public class UserSession {
 
     public void setLoggedIn(boolean loggedIn) {
         isLoggedIn = loggedIn;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -49,6 +58,7 @@ public class UserSession {
     }
 
     public void clearSession() {
+        userId = null;
         username = null;
         displayName = null;
         profilePhoto = null;

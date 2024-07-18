@@ -52,9 +52,9 @@ public class LoginActivity extends AppCompatActivity {
                         public void onChanged(LoginResponse loginResponse) {
                             if (loginResponse != null) {
                                 UserSession userSession = UserSession.getInstance();
-                                userSession.setUsername(loginResponse.getUsername());
-                                userSession.setDisplayName(loginResponse.getDisplay_name());
-                                userSession.setProfilePhoto(loginResponse.getImage());
+                                userSession.setUsername(loginResponse.getUser().getUsername());
+                                userSession.setDisplayName(loginResponse.getUser().getDisplay_name());
+                                userSession.setProfilePhoto(loginResponse.getUser().getImage());
 
                                 // Save the token
                                 tokenManager.saveToken(loginResponse.getToken());
