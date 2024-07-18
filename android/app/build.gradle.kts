@@ -46,6 +46,7 @@ dependencies {
     implementation (libs.roomRuntime)
     //kapt (libs.roomCompiler)
     implementation (libs.roomKtx)
+    implementation (libs.androidxSecurityCrypto)
 
 
 

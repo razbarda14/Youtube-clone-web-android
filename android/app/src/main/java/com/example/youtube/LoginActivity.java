@@ -6,22 +6,32 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 
-import data.DatabaseHelper;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import server.utils.TokenManager;
+
+import server.model.LoginRequest;
+import server.model.LoginResponse;
+import server.view_model.UserViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
-    DatabaseHelper db;
     EditText username, password;
     Button login, register;
+    UserViewModel userViewModel;
+    TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        db = new DatabaseHelper(this);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        tokenManager = new TokenManager(this);
+
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         login = findViewById(R.id.login_button);
@@ -36,32 +46,31 @@ public class LoginActivity extends AppCompatActivity {
                 if (user.equals("") || pass.equals("")) {
                     Toast.makeText(LoginActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
-                    boolean checkUserPass = db.checkUser(user, pass);
-                    if (checkUserPass) {
-                        // Fetch user details from the database
-                        DatabaseHelper.User userDetails = db.getUserDetails(user);
-                        if (userDetails != null) {
-                            // Set user session data
-                            UserSession userSession = UserSession.getInstance();
-                            userSession.setUsername(userDetails.getUsername());
-                            userSession.setDisplayName(userDetails.getDisplayName());
-                            userSession.setProfilePhoto(userDetails.getProfilePhoto());
+                    LoginRequest loginRequest = new LoginRequest(user, pass);
+                    userViewModel.loginUser(loginRequest).observe(LoginActivity.this, new Observer<LoginResponse>() {
+                        @Override
+                        public void onChanged(LoginResponse loginResponse) {
+                            if (loginResponse != null) {
+                                UserSession userSession = UserSession.getInstance();
+                                userSession.setUsername(loginResponse.getUser().getUsername());
+                                userSession.setDisplayName(loginResponse.getUser().getDisplay_name());
+                                userSession.setProfilePhoto(loginResponse.getUser().getImage());
 
-                            Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this, MainPageActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Failed to fetch user details", Toast.LENGTH_SHORT).show();
+                                // Save the token
+                                tokenManager.saveToken(loginResponse.getToken());
+
+                                Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainPageActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
-                    }
+                    });
                 }
             }
         });
-
-
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override

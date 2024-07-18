@@ -81,10 +81,22 @@ const getVideoWithUploaderNameById = async (id) => {
   }
 };
 
+const getUploaderId = async (videoId) => {
+  try {
+    const video = await VideoModel.findById(videoId).select('uploaderId');
+    if (!video) {
+      return null;
+    }
+    return video.uploaderId;
+  } catch (error) {
+    throw new Error('Error fetching uploader ID');
+  }
+};
+
 module.exports = {
   getAllVideos, getVideosByUploaderId,
   getVideoById, incrementViews,
   deleteVideoById, updateVideoById, createVideo,
   getMostViewedVideos, getRandomVideos, addCommentToVideo, deleteCommentFromVideo, editCommentInVideo,
-  getVideoWithUploaderNameById
+  getVideoWithUploaderNameById, getUploaderId
 };

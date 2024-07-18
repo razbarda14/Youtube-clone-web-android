@@ -23,7 +23,7 @@ const getVideosByUploader = async (req, res) => {
 
 const getVideoById = async (req, res) => {
   try {
-    const video = await videoService.getVideoById(req.params.id);
+    const video = await videoService.getVideoById(req.params.pid);
     if (video) {
       res.json(video);
     } else {
@@ -45,7 +45,7 @@ const incrementViews = async (req, res) => {
 
 const deleteVideoById = async (req, res) => {
   try {
-    const video = await videoService.getVideoById(req.params.id);
+    const video = await videoService.getVideoById(req.params.pid);
     if (!video) {
       return res.status(404).json({ message: 'Video not found' });
     }
@@ -54,7 +54,7 @@ const deleteVideoById = async (req, res) => {
       return res.status(403).json({ message: 'You do not have permission to delete this video' });
     }
 
-    const result = await videoService.deleteVideoById(req.params.id);
+    const result = await videoService.deleteVideoById(req.params.pid);
     if (result.deletedCount > 0) {
       res.sendStatus(200);
     } else {
@@ -67,7 +67,7 @@ const deleteVideoById = async (req, res) => {
 
 const updateVideoById = async (req, res) => {
   try {
-    const video = await videoService.getVideoById(req.params.id);
+    const video = await videoService.getVideoById(req.params.pid);
     if (!video) {
       return res.status(404).json({ message: 'Video not found' });
     }
@@ -77,7 +77,7 @@ const updateVideoById = async (req, res) => {
     }
 
     const updatedData = req.body;
-    const result = await videoService.updateVideoById(req.params.id, updatedData);
+    const result = await videoService.updateVideoById(req.params.pid, updatedData);
     if (result.nModified > 0) {
       res.sendStatus(200);
     } else {
@@ -203,10 +203,27 @@ const getVideoWithUploaderNameById = async (req, res) => {
   }
 };
 
+const getUploaderId = async (req, res) => {
+  try {
+    const uploaderId = await videoService.getUploaderId(req.params.id);
+    if (!uploaderId) {
+      return res.status(404).json({ message: 'Video not found' });
+    }
+    res.status(200).json({ uploaderId });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
 module.exports = {
-  getAllVideos, getVideosByUploader,
-  getVideoById, incrementViews,
-  deleteVideoById, updateVideoById, createVideo,
+  getAllVideos,
+  getVideosByUploader,
+  getVideoById,
+  incrementViews,
+  deleteVideoById,
+  updateVideoById,
+  createVideo,
   getMostViewedAndRandomVideos, addCommentToVideo, deleteCommentFromVideo, editCommentInVideo,
-  getVideoWithUploaderNameById
+  getVideoWithUploaderNameById,
+  getUploaderId
 };

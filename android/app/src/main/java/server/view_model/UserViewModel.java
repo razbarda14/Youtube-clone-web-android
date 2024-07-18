@@ -1,17 +1,22 @@
 package server.view_model;
+
+import android.app.Application;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.annotation.NonNull;
-import android.app.Application;
+
+import server.model.LoginRequest;
+import server.model.LoginResponse;
+import server.model.RegisterUserRequest;
+import server.model.User;
+import server.repository.UserRepository;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import server.model.RegisterUserRequest;
-import server.model.User;
-import server.repository.UserRepository;
 
 public class UserViewModel extends AndroidViewModel {
     private static final String TAG = UserViewModel.class.getSimpleName();
@@ -40,6 +45,52 @@ public class UserViewModel extends AndroidViewModel {
             public void onFailure(Call<User> call, Throwable t) {
                 liveData.setValue(null);
                 Log.e(TAG, "Registration failed: " + t.getMessage());
+            }
+        });
+        return liveData;
+    }
+
+    public LiveData<LoginResponse> loginUser(LoginRequest loginRequest) {
+        MutableLiveData<LoginResponse> liveData = new MutableLiveData<>();
+        mRepository.loginUser(loginRequest, new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(response.body());
+                    Log.d(TAG, "Login successful: " + response.body().toString());
+                } else {
+                    liveData.setValue(null);
+                    Log.e(TAG, "Login failed with response code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                liveData.setValue(null);
+                Log.e(TAG, "Login failed: " + t.getMessage());
+            }
+        });
+        return liveData;
+    }
+
+    public LiveData<User> verifyUser(String token) {
+        MutableLiveData<User> liveData = new MutableLiveData<>();
+        mRepository.verifyUser(token, new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(response.body());
+                    Log.d(TAG, "Fetched user details successfully: " + response.body().toString());
+                } else {
+                    liveData.setValue(null);
+                    Log.e(TAG, "Failed to fetch user details with response code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                liveData.setValue(null);
+                Log.e(TAG, "Failed to fetch user details: " + t.getMessage());
             }
         });
         return liveData;
