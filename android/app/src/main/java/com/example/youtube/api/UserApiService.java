@@ -70,7 +70,7 @@ public interface UserApiService {
     @Multipart
     @POST("api/users/{id}/videos")
     Call<VideoSession> createVideo(
-            @Path("id") String id,
+            @Part("uploaderId") RequestBody uploaderId,
             @Part MultipartBody.Part videoFile,
             @Part MultipartBody.Part thumbnailFile,
             @Part("title") RequestBody title,

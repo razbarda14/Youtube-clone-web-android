@@ -114,7 +114,7 @@ public class UserAPI {
             }
         });
     }
-    public void createVideo(String userId, MultipartBody.Part videoFile, MultipartBody.Part thumbnailFile, RequestBody title, RequestBody description, RequestBody topic, Callback<VideoSession> callback) {
+    public void createVideo(RequestBody userId, MultipartBody.Part videoFile, MultipartBody.Part thumbnailFile, RequestBody title, RequestBody description, RequestBody topic, Callback<VideoSession> callback) {
         Call<VideoSession> call = apiService.createVideo(userId, videoFile, thumbnailFile, title, description, topic);
         call.enqueue(new Callback<VideoSession>() {
             @Override
