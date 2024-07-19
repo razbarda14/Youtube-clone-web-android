@@ -15,6 +15,7 @@ import retrofit2.Response;
 import com.example.youtube.model.LoginRequest;
 import com.example.youtube.model.LoginResponse;
 import com.example.youtube.model.RegisterUserRequest;
+import com.example.youtube.model.UserDisplayNameResponse;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.RetrofitInstance;
 import com.example.youtube.model.User;
@@ -140,11 +141,11 @@ public class UserAPI {
             }
         });
     }
-    public void getUserDisplayName(String userId,Callback<String> callback) {
-        Call<String> call = apiService.getUserDisplayName(userId);
-        call.enqueue(new Callback<String>() {
+    public void getUserDisplayName(String userId, Callback<UserDisplayNameResponse> callback) {
+        Call<UserDisplayNameResponse> call = apiService.getUserDisplayName(userId);
+        call.enqueue(new Callback<UserDisplayNameResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<UserDisplayNameResponse> call, Response<UserDisplayNameResponse> response) {
                 if (response.isSuccessful()) {
                     callback.onResponse(call, response);
                 } else {
@@ -159,10 +160,11 @@ public class UserAPI {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<UserDisplayNameResponse> call, Throwable t) {
                 Log.e(TAG, "Fetching displayName failed: " + t.getMessage());
                 callback.onFailure(call, t);
             }
         });
     }
+
 }

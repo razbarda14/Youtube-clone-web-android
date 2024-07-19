@@ -45,9 +45,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         String displayName = comment.getDisplayName() != null ? comment.getDisplayName() : comment.getUserId();
         holder.commentUserName.setText(displayName);
 
-
-        //holder.commentUserName.setText(comment.getUserId());
-        holder.commentText.setText(comment.getComment()); // Ensure this line sets the comment text correctly
+        holder.commentText.setText(comment.getComment());
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +59,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         });
     }
+
 
     @Override
     public int getItemCount() {

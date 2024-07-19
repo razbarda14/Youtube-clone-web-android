@@ -13,6 +13,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +23,7 @@ import com.example.youtube.R;
 import com.example.youtube.entities.UserSession;
 import com.example.youtube.entities.Video;
 import com.example.youtube.adapters.VideoAdapter;
+import com.example.youtube.view_model.UserViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -61,11 +63,14 @@ public class VideoPageActivity extends AppCompatActivity {
     private Button cancelCommentButton;
 
     private String videoId;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_page);
+
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         videoView = findViewById(R.id.video_view);
         videoTitle = findViewById(R.id.video_title);
@@ -247,12 +252,23 @@ public class VideoPageActivity extends AppCompatActivity {
         // Add comments to the comment list and notify the adapter
         if (comments != null) {
             for (Comment comment : comments) {
-                // Log each comment for debugging
                 Log.d("VideoPageActivity", "Comment: " + comment.getComment() + ", User: " + comment.getUserId());
+
+                // Fetch display name for each comment
+                userViewModel.getUserDisplayName(comment.getUserId()).observe(this, displayName -> {
+                    if (displayName != null) {
+                        Log.d("VideoPageActivity", "Fetched Display Name: " + displayName + " for User: " + comment.getUserId());
+                        comment.setDisplayName(displayName);
+                        commentAdapter.notifyDataSetChanged(); // Notify adapter to update the UI
+                    } else {
+                        Log.d("VideoPageActivity", "Display Name is null for User: " + comment.getUserId());
+                    }
+                });
             }
             commentList.addAll(comments);
             commentAdapter.notifyDataSetChanged();
         }
+
 
         relatedVideosRecyclerView = findViewById(R.id.related_videos_recycler_view);
         relatedVideosRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -292,7 +308,6 @@ public class VideoPageActivity extends AppCompatActivity {
             disableCommentInput();
         }
     }
-
 
 
     private void updateButtonColors() {

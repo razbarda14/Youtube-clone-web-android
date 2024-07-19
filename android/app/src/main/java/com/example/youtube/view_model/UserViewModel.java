@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.youtube.model.RegisterUserRequest;
 import com.example.youtube.model.User;
+import com.example.youtube.model.UserDisplayNameResponse;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.repository.UserRepository;
 import com.example.youtube.model.LoginRequest;
@@ -121,21 +122,22 @@ public class UserViewModel extends AndroidViewModel {
     }
     public LiveData<String> getUserDisplayName(String id) {
         MutableLiveData<String> liveData = new MutableLiveData<>();
-        mRepository.getUserDisplayName(id,new Callback<String>() {
+        mRepository.getUserDisplayName(id, new Callback<UserDisplayNameResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    liveData.setValue(response.body());
+            public void onResponse(Call<UserDisplayNameResponse> call, Response<UserDisplayNameResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    liveData.setValue(response.body().getDisplayName());
                 } else {
                     liveData.setValue(null);
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<UserDisplayNameResponse> call, Throwable t) {
                 liveData.setValue(null);
             }
         });
         return liveData;
     }
+
 }

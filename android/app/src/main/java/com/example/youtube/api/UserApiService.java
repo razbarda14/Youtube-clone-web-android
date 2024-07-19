@@ -20,6 +20,7 @@ import com.example.youtube.model.ImagePathResponse;
 import com.example.youtube.model.LoginRequest;
 import com.example.youtube.model.LoginResponse;
 import com.example.youtube.model.User;
+import com.example.youtube.model.UserDisplayNameResponse;
 import com.example.youtube.model.UserIdResponse;
 import com.example.youtube.model.UserUpdateRequest;
 import com.example.youtube.model.VideoSession;
@@ -44,7 +45,8 @@ public interface UserApiService {
     Call<Void> deleteUser(@Path("id") String id);
 
     @GET("/api/users/{id}/getDisplayName")
-    Call<String> getUserDisplayName(@Path("id") String userId);
+    Call<UserDisplayNameResponse> getUserDisplayName(@Path("id") String userId);
+
 
     @GET("api/users/{id}/getImagePath")
     Call<ImagePathResponse> getUserImagePath(@Path("id") String id);

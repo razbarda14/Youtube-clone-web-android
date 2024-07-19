@@ -8,6 +8,7 @@ import com.example.youtube.model.RegisterUserRequest;
 import com.example.youtube.model.User;
 import com.example.youtube.model.LoginRequest;
 import com.example.youtube.model.LoginResponse;
+import com.example.youtube.model.UserDisplayNameResponse;
 import com.example.youtube.model.VideoSession;
 
 public class UserRepository {
@@ -32,7 +33,8 @@ public class UserRepository {
     public void createVideo(RequestBody userId, MultipartBody.Part videoFile, MultipartBody.Part thumbnailFile, RequestBody title, RequestBody description, RequestBody topic, Callback<VideoSession> callback) {
         userAPI.createVideo(userId, videoFile, thumbnailFile, title, description, topic, callback);
     }
-    public void getUserDisplayName(String userId, Callback<String> callback) {
+    public void getUserDisplayName(String userId, Callback<UserDisplayNameResponse> callback) {
         userAPI.getUserDisplayName(userId, callback);
     }
+
 }
