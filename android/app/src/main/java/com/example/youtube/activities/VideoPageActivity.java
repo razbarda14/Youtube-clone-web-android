@@ -1,5 +1,6 @@
 package com.example.youtube.activities;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +15,8 @@ import android.widget.VideoView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +26,8 @@ import com.example.youtube.adapters.VideoAdapter;
 import com.example.youtube.entities.Comment;
 import com.example.youtube.entities.UserSession;
 import com.example.youtube.entities.Video;
+import com.example.youtube.model.VideoSession;
+import com.example.youtube.view_model.VideoViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -60,13 +65,14 @@ public class VideoPageActivity extends AppCompatActivity {
     private EditText commentInput;
     private Button addCommentButton;
     private Button cancelCommentButton;
-
     private String videoId;
-
+    private VideoViewModel videoViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_page);
+
+        videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class);
 
         videoView = findViewById(R.id.video_view);
         videoTitle = findViewById(R.id.video_title);
@@ -328,8 +334,23 @@ public class VideoPageActivity extends AppCompatActivity {
         if (!isUserLoggedIn()) {
             disableCommentInput();
         }
+
+
     }
 
+    private void incrementViewsOnServer(String videoId) {
+        videoViewModel.incrementViews(videoId).observe(this, new Observer<VideoSession>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onChanged(VideoSession videoSession) {
+                if (videoSession != null) {
+                    viewsTextView.setText("Views: " + videoSession.getViewsCount());
+                } else {
+                    Log.e("VideoPageActivity", "Failed to fetch updated video details");
+                }
+            }
+        });
+    }
 
 
     private void updateButtonColors() {
@@ -432,6 +453,7 @@ public class VideoPageActivity extends AppCompatActivity {
         videoView.setOnPreparedListener(mp -> {
             mp.setLooping(true);
             videoView.start();
+            incrementViewsOnServer(videoId); // Increment views on server when video starts playing
         });
 
         videoView.setOnErrorListener((mp, what, extra) -> {

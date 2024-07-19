@@ -27,7 +27,7 @@ public interface VideoApiService {
     Call<String> getUploaderId(@Path("id") String id);
 
     @PATCH("api/videos/increment-views/{id}")
-    Call<Void> incrementViews(@Path("id") String id);
+    Call<VideoSession> incrementViews(@Path("id") String id);
 
     @POST("api/videos/{id}/comments")
     Call<VideoSession> addCommentToVideo(@Path("id") String id, @Body RequestBody commentJson);
