@@ -104,6 +104,15 @@ public class VideoPageActivity extends AppCompatActivity {
         String topic = intent.getStringExtra("VIDEO_TOPIC");
         String channel = intent.getStringExtra("VIDEO_CHANNEL");
 
+        // Fetch and display the uploader's display name
+        userViewModel.getUserDisplayName(channel).observe(this, displayName -> {
+            if (displayName != null) {
+                channelTextView.setText(displayName);
+            } else {
+                channelTextView.setText(channel); // Fallback to uploaderId if display name is not found
+            }
+        });
+
         // Deserialize the comments JSON string back to a list of Comment objects
         String commentsJson = intent.getStringExtra("VIDEO_COMMENTS");
         Log.d("VideoPageActivity", "Raw Comments JSON: " + commentsJson);
