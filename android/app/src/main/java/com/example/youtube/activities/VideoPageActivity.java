@@ -11,17 +11,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.youtube.entities.Comment;
-import com.example.youtube.adapters.CommentAdapter;
 import com.example.youtube.R;
+import com.example.youtube.adapters.CommentAdapter;
+import com.example.youtube.adapters.VideoAdapter;
+import com.example.youtube.entities.Comment;
 import com.example.youtube.entities.UserSession;
 import com.example.youtube.entities.Video;
-import com.example.youtube.adapters.VideoAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -280,6 +281,42 @@ public class VideoPageActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+//        addCommentButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (isUserLoggedIn()) {
+//                    String newCommentText = commentInput.getText().toString();
+//                    if (!newCommentText.isEmpty()) {
+//                        try {
+//                            JSONObject commentJson = new JSONObject();
+//                            commentJson.put("userId", currentUserId);
+//                            commentJson.put("comment", newCommentText);
+//                            String commentString = commentJson.toString();
+//
+//                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), commentString);
+//                            commentViewModel.addCommentToVideo(videoId, requestBody).observe(VideoPageActivity.this, new Observer<VideoSession>() {
+//                                @Override
+//                                public void onChanged(VideoSession videoSession) {
+//                                    if (videoSession != null) {
+//                                        commentList.clear();
+//                                        commentList.addAll(videoSession.getComments());
+//                                        commentAdapter.notifyDataSetChanged();
+//                                        commentInput.setText("");
+//                                    }
+//                                }
+//                            });
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                } else {
+//                    showSignInAlert();
+//                }
+//            }
+//        });
+
 
         cancelCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override

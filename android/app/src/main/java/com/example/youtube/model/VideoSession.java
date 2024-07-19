@@ -1,8 +1,12 @@
 package com.example.youtube.model;
 
+import com.example.youtube.entities.Comment;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class VideoSession {
+    @SerializedName("_id")
     private String id;
     private String title;
     private String uploaderId;
@@ -17,8 +21,8 @@ public class VideoSession {
     private List<String> likedBy;
 
     public VideoSession(String id, String title, String uploaderId, String description, int viewsCount,
-                    String dateUploaded, String videoPath, String thumbnailPath, String topic, int likes,
-                    List<Comment> comments, List<String> likedBy) {
+                        String dateUploaded, String videoPath, String thumbnailPath, String topic, int likes,
+                        List<Comment> comments, List<String> likedBy) {
         this.id = id;
         this.title = title;
         this.uploaderId = uploaderId;
@@ -128,37 +132,5 @@ public class VideoSession {
 
     public void setLikedBy(List<String> likedBy) {
         this.likedBy = likedBy;
-    }
-
-    // Comment class
-    public static class Comment {
-        private String userId;
-        private String comment;
-
-        // Constructors
-        public Comment() {
-        }
-
-        public Comment(String userId, String comment) {
-            this.userId = userId;
-            this.comment = comment;
-        }
-
-        // Getters and Setters
-        public String getUserId() {
-            return userId;
-        }
-
-        public void setUserId(String userId) {
-            this.userId = userId;
-        }
-
-        public String getComment() {
-            return comment;
-        }
-
-        public void setComment(String comment) {
-            this.comment = comment;
-        }
     }
 }
