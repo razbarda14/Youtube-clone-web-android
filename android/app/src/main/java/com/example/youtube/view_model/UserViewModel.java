@@ -156,4 +156,20 @@ public class UserViewModel extends AndroidViewModel {
         });
         return liveData;
     }
+    public LiveData<Boolean> deleteVideoById(String userId, String videoId) {
+        MutableLiveData<Boolean> resultLiveData = new MutableLiveData<>();
+        mRepository.deleteVideoById(userId, videoId, new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                resultLiveData.setValue(response.isSuccessful());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                resultLiveData.setValue(false);
+            }
+        });
+        return resultLiveData;
+    }
+
 }

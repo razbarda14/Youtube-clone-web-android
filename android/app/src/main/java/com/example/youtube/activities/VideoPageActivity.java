@@ -65,6 +65,7 @@ public class VideoPageActivity extends AppCompatActivity {
     private Button shareButton;
     private Button downloadButton;
     private Button editVideoButton;
+    private Button deleteVideoButton;
     private boolean isLiked = false;
     private boolean isDisliked = false;
     private int likes;
@@ -92,6 +93,7 @@ public class VideoPageActivity extends AppCompatActivity {
         shareButton = findViewById(R.id.share_button);
         downloadButton = findViewById(R.id.download_button);
         editVideoButton = findViewById(R.id.edit_video_button);
+        deleteVideoButton = findViewById(R.id.delete_video_button);
         viewsTextView = findViewById(R.id.views_text_view);
         uploadDateTextView = findViewById(R.id.upload_date_text_view);
         descriptionTextView = findViewById(R.id.description_text_view);
@@ -155,13 +157,13 @@ public class VideoPageActivity extends AppCompatActivity {
             commentInput.setVisibility(View.VISIBLE);
             cancelCommentButton.setVisibility(View.VISIBLE);
             addCommentButton.setVisibility(View.VISIBLE);
-            findViewById(R.id.delete_video_button).setVisibility(View.VISIBLE);
+            deleteVideoButton.setVisibility(View.VISIBLE);
         } else {
             editVideoButton.setVisibility(View.GONE);
             commentInput.setVisibility(View.GONE);
             cancelCommentButton.setVisibility(View.GONE);
             addCommentButton.setVisibility(View.GONE);
-            findViewById(R.id.delete_video_button).setVisibility(View.GONE);
+            deleteVideoButton.setVisibility(View.GONE);
         }
         editVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,7 +229,22 @@ public class VideoPageActivity extends AppCompatActivity {
                 relatedVideosAdapter.notifyDataSetChanged();
             }
         });
-
+        deleteVideoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(VideoPageActivity.this)
+                        .setTitle("Delete Video")
+                        .setMessage("Are you sure you want to delete this video?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteVideo();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
         commentsRecyclerView = findViewById(R.id.comments_recycler_view);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentList = new ArrayList<>();
@@ -563,6 +580,20 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         }
         return relatedVideos;
+    }
+    private void deleteVideo() {
+        String userId = UserSession.getInstance().getUserId();
+        userViewModel.deleteVideoById(userId, videoId).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean success) {
+                if (success) {
+                    Toast.makeText(VideoPageActivity.this, "Video deleted successfully", Toast.LENGTH_SHORT).show();
+                    finish(); // Close the activity or navigate as needed
+                } else {
+                    Toast.makeText(VideoPageActivity.this, "Failed to delete video", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 }

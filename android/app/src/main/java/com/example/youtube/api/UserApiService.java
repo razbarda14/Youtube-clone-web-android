@@ -77,6 +77,9 @@ public interface UserApiService {
             @Part("description") RequestBody description,
             @Part("topic") RequestBody topic
     );
+    @DELETE("api/users/{id}/videos/{pid}")
+    Call<Void> deleteVideoById(@Path("id") String userId, @Path("pid") String videoId);
+
     @GET("api/users/{id}/videos/{pid}")
     Call<VideoSession> getVideoById(@Path("id") String userId, @Path("pid") String videoId);
 }

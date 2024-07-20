@@ -191,4 +191,23 @@ public class UserAPI {
             }
         });
     }
+    public void deleteVideoById(String userId, String videoId, Callback<Void> callback) {
+        Call<Void> call = apiService.deleteVideoById(userId, videoId);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    callback.onResponse(call, response);
+                } else {
+                    callback.onFailure(call, new Throwable("Failed to delete video: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                callback.onFailure(call, t);
+            }
+        });
+    }
+
 }
