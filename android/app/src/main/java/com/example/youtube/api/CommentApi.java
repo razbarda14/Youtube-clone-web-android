@@ -66,4 +66,30 @@ public class CommentApi {
             }
         });
     }
+    public void deleteCommentFromVideo(String videoId, String commentId, Callback<VideoSession> callback) {
+        Call<VideoSession> call = apiService.deleteCommentFromVideo(videoId, commentId);
+        call.enqueue(new Callback<VideoSession>() {
+            @Override
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "Comment deleted successfully: " + response.body());
+                    callback.onResponse(call, response);
+                } else {
+                    Log.e(TAG, "Deleting comment failed with response code: " + response.code());
+                    try {
+                        Log.e(TAG, "Response error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    callback.onFailure(call, new Throwable("Deleting comment failed with response code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VideoSession> call, Throwable t) {
+                Log.e(TAG, "Deleting comment failed: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
 }

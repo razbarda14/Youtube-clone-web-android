@@ -86,7 +86,7 @@ public class VideoPageActivity extends AppCompatActivity {
         commentviewModel = new ViewModelProvider(this).get(CommentViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-       // fetchVideoDetails(); // Fetch video details when activity is created
+
 
         videoView = findViewById(R.id.video_view);
         videoTitle = findViewById(R.id.video_title);
@@ -344,6 +344,7 @@ public class VideoPageActivity extends AppCompatActivity {
                                         commentList.add(newComment);
                                         commentAdapter.notifyItemInserted(commentList.size() - 1); // Notify the adapter
                                         commentInput.setText(""); // Clear the input field
+                                       // fetchVideoDetails(); // Fetch video details when activity is created
                                     } else {
                                         Toast.makeText(VideoPageActivity.this, "Failed to add comment", Toast.LENGTH_SHORT).show();
                                     }
@@ -566,10 +567,28 @@ public class VideoPageActivity extends AppCompatActivity {
     }
 
     private void deleteComment(int position) {
-        VideoStateManager.getInstance().removeComment(videoId, position); // Remove comment
-        commentList.remove(position);
-        commentAdapter.notifyItemRemoved(position);
+        Comment comment = commentList.get(position);
+        String videoId = getIntent().getStringExtra("VIDEO_ID");
+        String commentId = comment.getCommentId(); // Ensure commentId is correctly set
+
+        if (commentId == null || commentId.isEmpty()) {
+            Log.e("VideoPageActivity", "Comment ID is null or empty");
+            return;
+        }
+
+        commentviewModel.deleteComment(videoId, commentId).observe(this, videoSession -> {
+            if (videoSession != null) {
+                // Comment deleted successfully, update the comment list and notify the adapter
+                commentList.remove(position);
+                commentAdapter.notifyItemRemoved(position);
+                Log.d("VideoPageActivity", "Comment deleted successfully");
+            } else {
+                Log.e("VideoPageActivity", "Failed to delete comment");
+            }
+        });
     }
+
+
 
     private void showSignInAlert() {
         new AlertDialog.Builder(this)

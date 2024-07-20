@@ -30,7 +30,7 @@ public class Comment {
     }
 
     // Getters and Setters
-    public Object  getUserId() {
+    public Object getUserId() {
         return userId;
     }
 

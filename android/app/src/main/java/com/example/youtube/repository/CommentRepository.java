@@ -17,5 +17,8 @@ public class CommentRepository {
         commentApi.addCommentToVideo(videoId, commentJson, callback);
     }
 
+    public void deleteComment(String videoId, String commentId, Callback<VideoSession> callback) {
+        commentApi.deleteCommentFromVideo(videoId, commentId, callback);
+    }
 
 }
