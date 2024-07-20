@@ -23,6 +23,7 @@ import com.example.youtube.R;
 import com.example.youtube.entities.UserSession;
 import com.example.youtube.entities.Video;
 import com.example.youtube.adapters.VideoAdapter;
+import com.example.youtube.view_model.CommentViewModel;
 import com.example.youtube.view_model.UserViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -64,6 +65,8 @@ public class VideoPageActivity extends AppCompatActivity {
 
     private String videoId;
     private UserViewModel userViewModel;
+    private CommentViewModel commentViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,7 @@ public class VideoPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_video_page);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        commentViewModel = new ViewModelProvider(this).get(CommentViewModel.class);
 
         videoView = findViewById(R.id.video_view);
         videoTitle = findViewById(R.id.video_title);
@@ -470,9 +474,20 @@ public class VideoPageActivity extends AppCompatActivity {
     }
 
     private void deleteComment(int position) {
-        VideoStateManager.getInstance().removeComment(videoId, position); // Remove comment
-        commentList.remove(position);
-        commentAdapter.notifyItemRemoved(position);
+        Comment comment = commentList.get(position);
+        String videoId = getIntent().getStringExtra("VIDEO_ID");
+        String commentId = comment.getCommentId(); // Assuming commentId is stored in userId field, replace with actual comment ID field if different
+
+        commentViewModel.deleteComment(videoId, commentId).observe(this, videoSession -> {
+            if (videoSession != null) {
+                // Comment deleted successfully, update the comment list and notify the adapter
+                commentList.remove(position);
+                commentAdapter.notifyItemRemoved(position);
+                Log.d("VideoPageActivity", "Comment deleted successfully");
+            } else {
+                Log.e("VideoPageActivity", "Failed to delete comment");
+            }
+        });
     }
 
     private void showSignInAlert() {

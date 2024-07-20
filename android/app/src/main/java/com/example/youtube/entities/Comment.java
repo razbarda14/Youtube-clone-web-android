@@ -23,7 +23,12 @@
 //}
 package com.example.youtube.entities;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Comment {
+    @SerializedName("_id")
+    private String commentId;
+    @SerializedName("userId")
     private String userId;
     private String comment;
     private String displayName;
@@ -36,6 +41,14 @@ public class Comment {
     public Comment(String userId, String comment) {
         this.userId = userId;
         this.comment = comment;
+        this.displayName = null; // Initialize with null
+    }
+
+    // Constructor
+    public Comment(String userId, String comment, String commentId) {
+        this.userId = userId;
+        this.comment = comment;
+        this.commentId = commentId;
         this.displayName = null; // Initialize with null
     }
 
@@ -62,5 +75,13 @@ public class Comment {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 }
