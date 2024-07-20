@@ -78,4 +78,24 @@ public class CommentViewModel extends AndroidViewModel {
         });
         return videoSessionLiveData;
     }
+    public LiveData<VideoSession> editComment(String videoId, String commentId, Comment newComment) {
+        MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
+        repository.editComment(videoId, commentId, newComment, new retrofit2.Callback<VideoSession>() {
+            @Override
+            public void onResponse(retrofit2.Call<VideoSession> call, retrofit2.Response<VideoSession> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(response.body());
+                } else {
+                    liveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<VideoSession> call, Throwable t) {
+                liveData.setValue(null);
+            }
+        });
+        return liveData;
+    }
+
 }

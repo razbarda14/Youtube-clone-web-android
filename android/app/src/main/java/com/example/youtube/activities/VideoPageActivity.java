@@ -533,9 +533,6 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
     private void editComment(int position) {
         Comment comment = commentList.get(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -550,9 +547,23 @@ public class VideoPageActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String editedCommentText = input.getText().toString();
                 if (!editedCommentText.isEmpty()) {
+                    String videoId = getIntent().getStringExtra("VIDEO_ID");
+                    String commentId = comment.getCommentId();
+
                     comment.setComment(editedCommentText);
-                    VideoStateManager.getInstance().editComment(videoId, position, editedCommentText); // Edit comment
-                    commentAdapter.notifyItemChanged(position);
+
+                    commentviewModel.editComment(videoId, commentId, comment).observe(VideoPageActivity.this, videoSession -> {
+                        if (videoSession != null) {
+                            // Update the local comment list
+                            commentList.set(position, comment);
+                            commentAdapter.notifyItemChanged(position);
+                            Log.d("VideoPageActivity", "Comment edited successfully");
+                        } else {
+                            Log.e("VideoPageActivity", "Failed to edit comment");
+                        }
+                    });
+                } else {
+                    Toast.makeText(VideoPageActivity.this, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -565,6 +576,7 @@ public class VideoPageActivity extends AppCompatActivity {
 
         builder.show();
     }
+
 
     private void deleteComment(int position) {
         Comment comment = commentList.get(position);

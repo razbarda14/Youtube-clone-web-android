@@ -92,4 +92,31 @@ public class CommentApi {
             }
         });
     }
+    public void editCommentInVideo(String videoId, String commentId, Comment newComment, Callback<VideoSession> callback) {
+        Call<VideoSession> call = apiService.editCommentInVideo(videoId, commentId, newComment);
+        call.enqueue(new Callback<VideoSession>() {
+            @Override
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "Comment edited successfully: " + response.body());
+                    callback.onResponse(call, response);
+                } else {
+                    Log.e(TAG, "Editing comment failed with response code: " + response.code());
+                    try {
+                        Log.e(TAG, "Response error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    callback.onFailure(call, new Throwable("Editing comment failed with response code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VideoSession> call, Throwable t) {
+                Log.e(TAG, "Editing comment failed: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
+
 }
