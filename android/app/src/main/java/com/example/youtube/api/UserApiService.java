@@ -79,4 +79,7 @@ public interface UserApiService {
             @Part("description") RequestBody description,
             @Part("topic") RequestBody topic
     );
+
+    @PUT("api/users/{userId}/videos/{videoId}")
+    Call<Void> updateVideo(@Path("videoId") String videoId, @Body VideoSession video);
 }

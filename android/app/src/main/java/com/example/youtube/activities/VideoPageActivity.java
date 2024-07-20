@@ -23,6 +23,7 @@ import com.example.youtube.R;
 import com.example.youtube.entities.UserSession;
 import com.example.youtube.entities.Video;
 import com.example.youtube.adapters.VideoAdapter;
+import com.example.youtube.model.VideoSession;
 import com.example.youtube.view_model.CommentViewModel;
 import com.example.youtube.view_model.UserViewModel;
 import com.google.gson.Gson;
@@ -214,8 +215,13 @@ public class VideoPageActivity extends AppCompatActivity {
                 String newTitle = editVideoTitle.getText().toString();
                 String newDescription = editVideoDescription.getText().toString();
 
-                VideoStateManager.getInstance().setTitle(videoId, newTitle);
-                VideoStateManager.getInstance().setDescription(videoId, newDescription);
+                VideoSession updatedVideo = new VideoSession();
+                updatedVideo.setId(videoId);
+                updatedVideo.setTitle(newTitle);
+                updatedVideo.setDescription(newDescription);
+
+                // Call ViewModel to update video
+                userViewModel.updateVideoDetails(updatedVideo);
 
                 videoTitle.setText(newTitle);
                 descriptionTextView.setText(newDescription);
@@ -230,13 +236,9 @@ public class VideoPageActivity extends AppCompatActivity {
                 downloadButton.setVisibility(View.VISIBLE);
 
                 findViewById(R.id.scrollable_content).setPadding(0, 0, 0, 0);
-
-                List<Video> relatedVideos = getRelatedVideos(videoId);
-                relatedVideoList.clear();
-                relatedVideoList.addAll(relatedVideos);
-                relatedVideosAdapter.notifyDataSetChanged();
             }
         });
+
 
         commentsRecyclerView = findViewById(R.id.comments_recycler_view);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -37,6 +37,21 @@ public class VideoSession {
         this.likedBy = likedBy;
     }
 
+    public VideoSession(){
+        this.id = null;
+        this.title = null;
+        this.uploaderId = null;
+        this.description = null;
+        this.viewsCount = 0;
+        this.dateUploaded = null;
+        this.videoPath = null;
+        this.thumbnailPath = null;
+        this.topic = null;
+        this.likes = 0;
+        this.comments = null;
+        this.likedBy = null;
+    }
+
     // Getters and Setters
     public String getId() {
         return id;
