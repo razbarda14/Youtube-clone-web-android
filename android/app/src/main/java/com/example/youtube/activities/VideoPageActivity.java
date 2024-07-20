@@ -81,8 +81,6 @@ public class VideoPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_page);
 
-        Log.d("VideoPageActivity", "onCreate called");
-
         videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class);
         commentviewModel = new ViewModelProvider(this).get(CommentViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -106,26 +104,6 @@ public class VideoPageActivity extends AppCompatActivity {
         editVideoDescription = findViewById(R.id.edit_video_description);
         saveChangesButton = findViewById(R.id.save_changes_button);
         likesTextView = findViewById(R.id.likes_text_view);
-        // Check if any of the views are null
-        if (videoTitle == null) {
-            Log.e("VideoPageActivity", "videoTitle is null");
-        }
-        if (viewsTextView == null) {
-            Log.e("VideoPageActivity", "viewsTextView is null");
-        }
-
-        if (likesTextView == null) {
-            Log.e("VideoPageActivity", "likesTextView is null");
-        }
-        if (descriptionTextView == null) {
-            Log.e("VideoPageActivity", "descriptionTextView is null");
-        }
-        if (topicTextView == null) {
-            Log.e("VideoPageActivity", "topicTextView is null");
-        }
-        if (channelTextView == null) {
-            Log.e("VideoPageActivity", "channelTextView is null");
-        }
 
         // Get video details from intent
         Intent intent = getIntent();
@@ -174,26 +152,17 @@ public class VideoPageActivity extends AppCompatActivity {
         // Show edit video button if user is logged in
         if (isUserLoggedIn()) {
             editVideoButton.setVisibility(View.VISIBLE);
+            commentInput.setVisibility(View.VISIBLE);
+            cancelCommentButton.setVisibility(View.VISIBLE);
+            addCommentButton.setVisibility(View.VISIBLE);
+            findViewById(R.id.delete_video_button).setVisibility(View.VISIBLE);
         } else {
             editVideoButton.setVisibility(View.GONE);
-        }
-
-        if (isUserLoggedIn()) {
-            commentInput.setVisibility(View.VISIBLE);
-        } else {
             commentInput.setVisibility(View.GONE);
-        }
-        if (isUserLoggedIn()) {
-            cancelCommentButton.setVisibility(View.VISIBLE);
-        } else {
             cancelCommentButton.setVisibility(View.GONE);
-        }
-        if (isUserLoggedIn()) {
-            addCommentButton.setVisibility(View.VISIBLE);
-        } else {
             addCommentButton.setVisibility(View.GONE);
+            findViewById(R.id.delete_video_button).setVisibility(View.GONE);
         }
-
         editVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
