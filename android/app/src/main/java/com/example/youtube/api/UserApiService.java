@@ -1,5 +1,13 @@
 package com.example.youtube.api;
 
+import com.example.youtube.model.ImagePathResponse;
+import com.example.youtube.model.LoginRequest;
+import com.example.youtube.model.LoginResponse;
+import com.example.youtube.model.User;
+import com.example.youtube.model.UserIdResponse;
+import com.example.youtube.model.UserUpdateRequest;
+import com.example.youtube.model.VideoSession;
+
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -15,14 +23,6 @@ import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import com.example.youtube.model.CreateVideoRequest;
-import com.example.youtube.model.ImagePathResponse;
-import com.example.youtube.model.LoginRequest;
-import com.example.youtube.model.LoginResponse;
-import com.example.youtube.model.User;
-import com.example.youtube.model.UserIdResponse;
-import com.example.youtube.model.UserUpdateRequest;
-import com.example.youtube.model.VideoSession;
 
 public interface UserApiService {
     @GET("api/users")
@@ -77,4 +77,6 @@ public interface UserApiService {
             @Part("description") RequestBody description,
             @Part("topic") RequestBody topic
     );
+    @GET("api/users/{id}/videos/{pid}")
+    Call<VideoSession> getVideoById(@Path("id") String userId, @Path("pid") String videoId);
 }

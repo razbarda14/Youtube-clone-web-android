@@ -42,7 +42,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         Comment comment = commentList.get(position);
 
         // Check if displayName is available, otherwise use userId
-        String displayName = comment.getDisplayName() != null ? comment.getDisplayName() : comment.getUserId();
+        String displayName = comment.getDisplayName() != null ? comment.getDisplayName() : (String) comment.getUserId();
         holder.commentUserName.setText(displayName);
 
 

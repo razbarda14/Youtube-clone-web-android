@@ -8,14 +8,12 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.youtube.model.LoginRequest;
+import com.example.youtube.model.LoginResponse;
 import com.example.youtube.model.RegisterUserRequest;
 import com.example.youtube.model.User;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.repository.UserRepository;
-import com.example.youtube.model.LoginRequest;
-import com.example.youtube.model.LoginResponse;
-
-import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -133,6 +131,26 @@ public class UserViewModel extends AndroidViewModel {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+                liveData.setValue(null);
+            }
+        });
+        return liveData;
+    }
+
+    public LiveData<VideoSession> getVideoById(String userId, String videoId) {
+        MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
+        mRepository.getVideoById(userId, videoId, new Callback<VideoSession>() {
+            @Override
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(response.body());
+                } else {
+                    liveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VideoSession> call, Throwable t) {
                 liveData.setValue(null);
             }
         });

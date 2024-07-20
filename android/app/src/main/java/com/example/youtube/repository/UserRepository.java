@@ -1,14 +1,15 @@
 package com.example.youtube.repository;
 
+import com.example.youtube.api.UserAPI;
+import com.example.youtube.model.LoginRequest;
+import com.example.youtube.model.LoginResponse;
+import com.example.youtube.model.RegisterUserRequest;
+import com.example.youtube.model.User;
+import com.example.youtube.model.VideoSession;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Callback;
-import com.example.youtube.api.UserAPI;
-import com.example.youtube.model.RegisterUserRequest;
-import com.example.youtube.model.User;
-import com.example.youtube.model.LoginRequest;
-import com.example.youtube.model.LoginResponse;
-import com.example.youtube.model.VideoSession;
 
 public class UserRepository {
     private UserAPI userAPI;
@@ -34,5 +35,8 @@ public class UserRepository {
     }
     public void getUserDisplayName(String userId, Callback<String> callback) {
         userAPI.getUserDisplayName(userId, callback);
+    }
+    public void getVideoById(String userId, String videoId, Callback<VideoSession> callback) {
+        userAPI.getVideoById(userId, videoId, callback);
     }
 }

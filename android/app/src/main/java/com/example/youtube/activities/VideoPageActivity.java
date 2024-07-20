@@ -27,12 +27,20 @@ import com.example.youtube.entities.Comment;
 import com.example.youtube.entities.UserSession;
 import com.example.youtube.entities.Video;
 import com.example.youtube.model.VideoSession;
+import com.example.youtube.view_model.CommentViewModel;
+import com.example.youtube.view_model.UserViewModel;
 import com.example.youtube.view_model.VideoViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class VideoPageActivity extends AppCompatActivity {
     private EditText editVideoTitle;
@@ -67,12 +75,18 @@ public class VideoPageActivity extends AppCompatActivity {
     private Button cancelCommentButton;
     private String videoId;
     private VideoViewModel videoViewModel;
+    private CommentViewModel commentviewModel;
+    private UserViewModel userViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_page);
 
         videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class);
+        commentviewModel = new ViewModelProvider(this).get(CommentViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
+       // fetchVideoDetails(); // Fetch video details when activity is created
 
         videoView = findViewById(R.id.video_view);
         videoTitle = findViewById(R.id.video_title);
@@ -270,25 +284,6 @@ public class VideoPageActivity extends AppCompatActivity {
         setUpLikeButton(currentUserId);
         setUpDislikeButton(currentUserId);
 
-        addCommentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isUserLoggedIn()) {
-                    String newCommentText = commentInput.getText().toString();
-                    if (!newCommentText.isEmpty()) {
-                        Comment newComment = new Comment(currentUserId, newCommentText); // Updated to use userId
-                        commentList.add(newComment);
-                        VideoStateManager.getInstance().addComment(videoId, newComment); // Save comment
-                        commentAdapter.notifyItemInserted(commentList.size() - 1);
-                        commentInput.setText("");
-                    }
-                } else {
-                    showSignInAlert();
-                }
-            }
-        });
-
-
 //        addCommentButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -297,17 +292,19 @@ public class VideoPageActivity extends AppCompatActivity {
 //                    if (!newCommentText.isEmpty()) {
 //                        try {
 //                            JSONObject commentJson = new JSONObject();
-//                            commentJson.put("userId", currentUserId);
+//                            commentJson.put("userId", UserSession.getInstance().getUserId()); // Ensure this returns a string
 //                            commentJson.put("comment", newCommentText);
 //                            String commentString = commentJson.toString();
 //
+//                            Log.d("VideoPageActivity", "Comment JSON: " + commentString); // Log the JSON
+//
 //                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), commentString);
-//                            commentViewModel.addCommentToVideo(videoId, requestBody).observe(VideoPageActivity.this, new Observer<VideoSession>() {
+//                            commentviewModel.addCommentToVideo(videoId, requestBody).observe(VideoPageActivity.this, new Observer<VideoSession>() {
 //                                @Override
 //                                public void onChanged(VideoSession videoSession) {
 //                                    if (videoSession != null) {
 //                                        commentList.clear();
-//                                        commentList.addAll(videoSession.getComments());
+//                                      //  commentList.addAll(videoSession.getComments());
 //                                        commentAdapter.notifyDataSetChanged();
 //                                        commentInput.setText("");
 //                                    }
@@ -322,6 +319,48 @@ public class VideoPageActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+//
+        addCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isUserLoggedIn()) {
+                    String newCommentText = commentInput.getText().toString();
+                    if (!newCommentText.isEmpty()) {
+                        try {
+                            JSONObject commentJson = new JSONObject();
+                            commentJson.put("userId", UserSession.getInstance().getUserId());
+                            commentJson.put("comment", newCommentText);
+                            String commentString = commentJson.toString();
+
+                            Log.d("VideoPageActivity", "Comment JSON: " + commentString);
+
+                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), commentString);
+                            commentviewModel.addCommentToVideo(videoId, requestBody).observe(VideoPageActivity.this, new Observer<VideoSession>() {
+                                @Override
+                                public void onChanged(VideoSession videoSession) {
+                                    if (videoSession != null) {
+                                        // Create a new Comment object and add it to the local list
+                                        Comment newComment = new Comment(UserSession.getInstance().getUserId(), newCommentText);
+                                        commentList.add(newComment);
+                                        commentAdapter.notifyItemInserted(commentList.size() - 1); // Notify the adapter
+                                        commentInput.setText(""); // Clear the input field
+                                    } else {
+                                        Toast.makeText(VideoPageActivity.this, "Failed to add comment", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    showSignInAlert();
+                }
+            }
+        });
+
+
+
 
 
         cancelCommentButton.setOnClickListener(new View.OnClickListener() {
@@ -336,6 +375,28 @@ public class VideoPageActivity extends AppCompatActivity {
         }
 
 
+    }
+    private void fetchVideoDetails() {
+        String currentUserId = UserSession.getInstance().getUserId();
+        userViewModel.getVideoById(currentUserId, videoId).observe(this, new Observer<VideoSession>() {
+            @Override
+            public void onChanged(VideoSession videoSession) {
+                if (videoSession != null) {
+                    // Update the UI with the fetched video details
+                    videoTitle.setText(videoSession.getTitle());
+                    viewsTextView.setText("Views: " + videoSession.getViewsCount());
+                    likesTextView.setText("Likes: " + videoSession.getLikes());
+                    descriptionTextView.setText(videoSession.getDescription());
+                    topicTextView.setText("Topic: " + videoSession.getTopic());
+                    channelTextView.setText("Channel: " + videoSession.getUploaderId());
+                    commentList.clear();
+                    commentList.addAll(videoSession.getComments());
+                    commentAdapter.notifyDataSetChanged();
+                } else {
+                    Log.e("VideoPageActivity", "Failed to fetch updated video details");
+                }
+            }
+        });
     }
 
     private void incrementViewsOnServer(String videoId) {

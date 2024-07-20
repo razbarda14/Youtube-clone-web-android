@@ -7,8 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.youtube.entities.Comment;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.repository.CommentRepository;
+
+import java.util.Map;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -22,14 +25,28 @@ public class CommentViewModel extends AndroidViewModel {
         super(application);
         repository = new CommentRepository();
     }
-
     public LiveData<VideoSession> addCommentToVideo(String videoId, RequestBody commentJson) {
         MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
         repository.addCommentToVideo(videoId, commentJson, new Callback<VideoSession>() {
             @Override
             public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
                 if (response.isSuccessful()) {
-                    liveData.setValue(response.body());
+                    // Ensure the userId is a string
+                    VideoSession videoSession = response.body();
+                    if (videoSession != null) {
+                        for (Comment comment : videoSession.getComments()) {
+                            Object userId = comment.getUserId();
+                            if (userId instanceof Map) {
+                                Map userIdMap = (Map) userId;
+                                if (userIdMap.containsKey("$oid")) {
+                                    comment.setUserId(userIdMap.get("$oid").toString());
+                                }
+                            } else if (userId instanceof String) {
+                                comment.setUserId((String) userId);
+                            }
+                        }
+                    }
+                    liveData.setValue(videoSession);
                 } else {
                     liveData.setValue(null);
                 }

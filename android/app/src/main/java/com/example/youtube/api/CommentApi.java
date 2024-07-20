@@ -2,10 +2,12 @@ package com.example.youtube.api;
 
 import android.util.Log;
 
+import com.example.youtube.entities.Comment;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.RetrofitInstance;
 
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -22,11 +24,29 @@ public class CommentApi {
 
     public void addCommentToVideo(String videoId, RequestBody commentJson, Callback<VideoSession> callback) {
         Call<VideoSession> call = apiService.addCommentToVideo(videoId, commentJson);
+        Log.d(TAG, "commentJson is : " + commentJson);
         call.enqueue(new Callback<VideoSession>() {
             @Override
             public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "Comment added successfully");
+                    Log.d(TAG, "Comment added successfully: " + response.body().toString()); // Log the response body
+
+                    // Parse the response to ensure userId is a string
+                    VideoSession videoSession = response.body();
+                    if (videoSession != null) {
+                        for (Comment comment : videoSession.getComments()) {
+                            Object userId = comment.getUserId();
+                            if (userId instanceof Map) {
+                                Map userIdMap = (Map) userId;
+                                if (userIdMap.containsKey("$oid")) {
+                                    comment.setUserId(userIdMap.get("$oid").toString());
+                                }
+                            } else if (userId instanceof String) {
+                                comment.setUserId((String) userId);
+                            }
+                        }
+                    }
+
                     callback.onResponse(call, response);
                 } else {
                     Log.e(TAG, "Adding comment failed with response code: " + response.code());
@@ -46,6 +66,4 @@ public class CommentApi {
             }
         });
     }
-
-
 }

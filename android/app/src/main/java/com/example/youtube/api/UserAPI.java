@@ -2,9 +2,15 @@ package com.example.youtube.api;
 
 import android.util.Log;
 
+import com.example.youtube.model.LoginRequest;
+import com.example.youtube.model.LoginResponse;
+import com.example.youtube.model.RegisterUserRequest;
+import com.example.youtube.model.User;
+import com.example.youtube.model.VideoSession;
+import com.example.youtube.utils.RetrofitInstance;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -12,12 +18,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.example.youtube.model.LoginRequest;
-import com.example.youtube.model.LoginResponse;
-import com.example.youtube.model.RegisterUserRequest;
-import com.example.youtube.model.VideoSession;
-import com.example.youtube.utils.RetrofitInstance;
-import com.example.youtube.model.User;
 
 public class UserAPI {
     private static final String TAG = UserAPI.class.getSimpleName();
@@ -161,6 +161,32 @@ public class UserAPI {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.e(TAG, "Fetching displayName failed: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
+    public void getVideoById(String userId, String videoId, Callback<VideoSession> callback) {
+        Call<VideoSession> call = apiService.getVideoById(userId, videoId);
+        call.enqueue(new Callback<VideoSession>() {
+            @Override
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "Fetched video successfully");
+                    callback.onResponse(call, response);
+                } else {
+                    Log.e(TAG, "Fetching video failed with response code: " + response.code());
+                    try {
+                        Log.e(TAG, "Response error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    callback.onFailure(call, new Throwable("Fetching video failed with response code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VideoSession> call, Throwable t) {
+                Log.e(TAG, "Fetching video failed: " + t.getMessage());
                 callback.onFailure(call, t);
             }
         });
