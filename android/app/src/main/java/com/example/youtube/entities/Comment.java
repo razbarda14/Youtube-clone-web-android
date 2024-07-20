@@ -2,6 +2,8 @@ package com.example.youtube.entities;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Map;
+
 public class Comment {
     @SerializedName("_id")
     private String commentId;
@@ -30,8 +32,14 @@ public class Comment {
     }
 
     // Getters and Setters
-    public Object getUserId() {
-        return userId;
+    public String getUserId() {
+        if (userId instanceof String) {
+            return (String) userId;
+        } else if (userId instanceof Map) {
+            Map<String, String> userIdMap = (Map<String, String>) userId;
+            return userIdMap.get("$oid");
+        }
+        return null;
     }
 
     public void setUserId(String userId) {

@@ -65,7 +65,6 @@ public class VideoPageActivity extends AppCompatActivity {
     private Button shareButton;
     private Button downloadButton;
     private Button editVideoButton;
-
     private boolean isLiked = false;
     private boolean isDisliked = false;
     private int likes;
@@ -82,11 +81,11 @@ public class VideoPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_page);
 
+        Log.d("VideoPageActivity", "onCreate called");
+
         videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class);
         commentviewModel = new ViewModelProvider(this).get(CommentViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-
-
 
         videoView = findViewById(R.id.video_view);
         videoTitle = findViewById(R.id.video_title);
@@ -107,6 +106,26 @@ public class VideoPageActivity extends AppCompatActivity {
         editVideoDescription = findViewById(R.id.edit_video_description);
         saveChangesButton = findViewById(R.id.save_changes_button);
         likesTextView = findViewById(R.id.likes_text_view);
+        // Check if any of the views are null
+        if (videoTitle == null) {
+            Log.e("VideoPageActivity", "videoTitle is null");
+        }
+        if (viewsTextView == null) {
+            Log.e("VideoPageActivity", "viewsTextView is null");
+        }
+
+        if (likesTextView == null) {
+            Log.e("VideoPageActivity", "likesTextView is null");
+        }
+        if (descriptionTextView == null) {
+            Log.e("VideoPageActivity", "descriptionTextView is null");
+        }
+        if (topicTextView == null) {
+            Log.e("VideoPageActivity", "topicTextView is null");
+        }
+        if (channelTextView == null) {
+            Log.e("VideoPageActivity", "channelTextView is null");
+        }
 
         // Get video details from intent
         Intent intent = getIntent();
@@ -119,7 +138,6 @@ public class VideoPageActivity extends AppCompatActivity {
         String description = intent.getStringExtra("VIDEO_DESCRIPTION");
         String topic = intent.getStringExtra("VIDEO_TOPIC");
         String channel = intent.getStringExtra("VIDEO_CHANNEL");
-
         // Deserialize the comments JSON string back to a list of Comment objects
         String commentsJson = intent.getStringExtra("VIDEO_COMMENTS");
         Log.d("VideoPageActivity", "Raw Comments JSON: " + commentsJson);
@@ -284,42 +302,6 @@ public class VideoPageActivity extends AppCompatActivity {
         setUpLikeButton(currentUserId);
         setUpDislikeButton(currentUserId);
 
-//        addCommentButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (isUserLoggedIn()) {
-//                    String newCommentText = commentInput.getText().toString();
-//                    if (!newCommentText.isEmpty()) {
-//                        try {
-//                            JSONObject commentJson = new JSONObject();
-//                            commentJson.put("userId", UserSession.getInstance().getUserId()); // Ensure this returns a string
-//                            commentJson.put("comment", newCommentText);
-//                            String commentString = commentJson.toString();
-//
-//                            Log.d("VideoPageActivity", "Comment JSON: " + commentString); // Log the JSON
-//
-//                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), commentString);
-//                            commentviewModel.addCommentToVideo(videoId, requestBody).observe(VideoPageActivity.this, new Observer<VideoSession>() {
-//                                @Override
-//                                public void onChanged(VideoSession videoSession) {
-//                                    if (videoSession != null) {
-//                                        commentList.clear();
-//                                      //  commentList.addAll(videoSession.getComments());
-//                                        commentAdapter.notifyDataSetChanged();
-//                                        commentInput.setText("");
-//                                    }
-//                                }
-//                            });
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                } else {
-//                    showSignInAlert();
-//                }
-//            }
-//        });
-//
         addCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -339,12 +321,8 @@ public class VideoPageActivity extends AppCompatActivity {
                                 @Override
                                 public void onChanged(VideoSession videoSession) {
                                     if (videoSession != null) {
-                                        // Create a new Comment object and add it to the local list
-                                        Comment newComment = new Comment(UserSession.getInstance().getUserId(), newCommentText);
-                                        commentList.add(newComment);
-                                        commentAdapter.notifyItemInserted(commentList.size() - 1); // Notify the adapter
                                         commentInput.setText(""); // Clear the input field
-                                       // fetchVideoDetails(); // Fetch video details when activity is created
+                                        fetchVideoDetails(); // Fetch updated video details
                                     } else {
                                         Toast.makeText(VideoPageActivity.this, "Failed to add comment", Toast.LENGTH_SHORT).show();
                                     }
@@ -360,10 +338,6 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
         cancelCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -375,8 +349,10 @@ public class VideoPageActivity extends AppCompatActivity {
             disableCommentInput();
         }
 
-
+        // Initial fetch of video details
+        fetchVideoDetails();
     }
+
     private void fetchVideoDetails() {
         String currentUserId = UserSession.getInstance().getUserId();
         userViewModel.getVideoById(currentUserId, videoId).observe(this, new Observer<VideoSession>() {
@@ -413,7 +389,6 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void updateButtonColors() {
         if (isLiked) {
@@ -501,7 +476,6 @@ public class VideoPageActivity extends AppCompatActivity {
         cancelCommentButton.setEnabled(false);
     }
 
-
     private void setUpVideoPlayer(String videoUrl) {
         Uri videoUri = Uri.parse(videoUrl);
         videoView.setVideoURI(videoUri);
@@ -533,6 +507,7 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
     }
+
     private void editComment(int position) {
         Comment comment = commentList.get(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -554,9 +529,7 @@ public class VideoPageActivity extends AppCompatActivity {
 
                     commentviewModel.editComment(videoId, commentId, comment).observe(VideoPageActivity.this, videoSession -> {
                         if (videoSession != null) {
-                            // Update the local comment list
-                            commentList.set(position, comment);
-                            commentAdapter.notifyItemChanged(position);
+                            fetchVideoDetails(); // Fetch updated video details
                             Log.d("VideoPageActivity", "Comment edited successfully");
                         } else {
                             Log.e("VideoPageActivity", "Failed to edit comment");
@@ -577,7 +550,6 @@ public class VideoPageActivity extends AppCompatActivity {
         builder.show();
     }
 
-
     private void deleteComment(int position) {
         Comment comment = commentList.get(position);
         String videoId = getIntent().getStringExtra("VIDEO_ID");
@@ -590,17 +562,13 @@ public class VideoPageActivity extends AppCompatActivity {
 
         commentviewModel.deleteComment(videoId, commentId).observe(this, videoSession -> {
             if (videoSession != null) {
-                // Comment deleted successfully, update the comment list and notify the adapter
-                commentList.remove(position);
-                commentAdapter.notifyItemRemoved(position);
+                fetchVideoDetails(); // Fetch updated video details
                 Log.d("VideoPageActivity", "Comment deleted successfully");
             } else {
                 Log.e("VideoPageActivity", "Failed to delete comment");
             }
         });
     }
-
-
 
     private void showSignInAlert() {
         new AlertDialog.Builder(this)
@@ -625,7 +593,7 @@ public class VideoPageActivity extends AppCompatActivity {
                 relatedVideos.add(video);
             }
         }
-
         return relatedVideos;
     }
+
 }
