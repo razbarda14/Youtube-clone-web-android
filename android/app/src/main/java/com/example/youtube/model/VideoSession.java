@@ -1,8 +1,12 @@
 package com.example.youtube.model;
 
+import com.example.youtube.entities.Comment;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class VideoSession {
+    @SerializedName("_id")
     private String id;
     private String title;
     private String uploaderId;
@@ -31,6 +35,21 @@ public class VideoSession {
         this.likes = likes;
         this.comments = comments;
         this.likedBy = likedBy;
+    }
+
+    public VideoSession(){
+        this.id = null;
+        this.title = null;
+        this.uploaderId = null;
+        this.description = null;
+        this.viewsCount = 0;
+        this.dateUploaded = null;
+        this.videoPath = null;
+        this.thumbnailPath = null;
+        this.topic = null;
+        this.likes = 0;
+        this.comments = null;
+        this.likedBy = null;
     }
 
     // Getters and Setters
@@ -116,49 +135,5 @@ public class VideoSession {
 
     public List<Comment> getComments() {
         return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public List<String> getLikedBy() {
-        return likedBy;
-    }
-
-    public void setLikedBy(List<String> likedBy) {
-        this.likedBy = likedBy;
-    }
-
-    // Comment class
-    public static class Comment {
-        private String userId;
-        private String comment;
-
-        // Constructors
-        public Comment() {
-        }
-
-        public Comment(String userId, String comment) {
-            this.userId = userId;
-            this.comment = comment;
-        }
-
-        // Getters and Setters
-        public String getUserId() {
-            return userId;
-        }
-
-        public void setUserId(String userId) {
-            this.userId = userId;
-        }
-
-        public String getComment() {
-            return comment;
-        }
-
-        public void setComment(String comment) {
-            this.comment = comment;
-        }
     }
 }

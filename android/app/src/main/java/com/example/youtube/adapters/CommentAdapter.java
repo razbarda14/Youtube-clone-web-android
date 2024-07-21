@@ -40,8 +40,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Comment comment = commentList.get(position);
-        holder.commentUserName.setText(comment.getUserId());
-        holder.commentText.setText(comment.getComment()); // Ensure this line sets the comment text correctly
+
+        // Check if displayName is available, otherwise use userId
+        String displayName = comment.getDisplayName() != null ? comment.getDisplayName() : comment.getUserId();
+        holder.commentUserName.setText(displayName);
+
+        holder.commentText.setText(comment.getComment());
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +59,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         });
     }
+
 
     @Override
     public int getItemCount() {

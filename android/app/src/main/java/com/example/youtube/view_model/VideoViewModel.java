@@ -64,4 +64,12 @@ public class VideoViewModel extends AndroidViewModel {
         });
         return liveData;
     }
+
+    public void updateVideoDetails(VideoSession video) {
+        videoRepository.updateVideoDetails(video);
+    }
+
+    public void deleteVideoById(String videoId) {
+        videoRepository.deleteVideoById(videoId);
+    }
 }

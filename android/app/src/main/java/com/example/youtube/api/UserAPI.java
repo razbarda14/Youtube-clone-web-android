@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -14,6 +15,7 @@ import retrofit2.Response;
 import com.example.youtube.model.LoginRequest;
 import com.example.youtube.model.LoginResponse;
 import com.example.youtube.model.RegisterUserRequest;
+import com.example.youtube.model.UserDisplayNameResponse;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.RetrofitInstance;
 import com.example.youtube.model.User;
@@ -139,4 +141,30 @@ public class UserAPI {
             }
         });
     }
+    public void getUserDisplayName(String userId, Callback<UserDisplayNameResponse> callback) {
+        Call<UserDisplayNameResponse> call = apiService.getUserDisplayName(userId);
+        call.enqueue(new Callback<UserDisplayNameResponse>() {
+            @Override
+            public void onResponse(Call<UserDisplayNameResponse> call, Response<UserDisplayNameResponse> response) {
+                if (response.isSuccessful()) {
+                    callback.onResponse(call, response);
+                } else {
+                    Log.e(TAG, "Fetching displayName failed with response code: " + response.code());
+                    try {
+                        Log.e(TAG, "Response error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    callback.onFailure(call, new Throwable("Fetching displayName failed with response code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDisplayNameResponse> call, Throwable t) {
+                Log.e(TAG, "Fetching displayName failed: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
+
 }
