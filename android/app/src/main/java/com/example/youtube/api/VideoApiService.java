@@ -2,8 +2,10 @@ package com.example.youtube.api;
 
 import com.example.youtube.entities.Comment;
 import com.example.youtube.model.VideoSession;
+
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -25,10 +27,11 @@ public interface VideoApiService {
     Call<String> getUploaderId(@Path("id") String id);
 
     @PATCH("api/videos/increment-views/{id}")
-    Call<Void> incrementViews(@Path("id") String id);
+    Call<VideoSession> incrementViews(@Path("id") String id);
 
     @POST("api/videos/{id}/comments")
-    Call<VideoSession> addCommentToVideo(@Path("id") String id, @Body Comment comment);
+    Call<VideoSession> addCommentToVideo(@Path("id") String id, @Body RequestBody commentJson);
+
 
     @DELETE("api/videos/{id}/comments/{commentId}")
     Call<VideoSession> deleteCommentFromVideo(@Path("id") String id, @Path("commentId") String commentId);

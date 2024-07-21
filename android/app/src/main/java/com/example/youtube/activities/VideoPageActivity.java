@@ -1,5 +1,6 @@
 package com.example.youtube.activities;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,13 +14,14 @@ import android.widget.Toast;
 import android.widget.VideoView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.youtube.entities.Comment;
-import com.example.youtube.adapters.CommentAdapter;
 import com.example.youtube.R;
+import com.example.youtube.adapters.CommentAdapter;
+import com.example.youtube.adapters.VideoSessionAdapter;
+import com.example.youtube.entities.Comment;
 import com.example.youtube.entities.UserSession;
 import com.example.youtube.entities.Video;
 import com.example.youtube.adapters.VideoAdapter;
@@ -30,8 +32,14 @@ import com.example.youtube.view_model.VideoViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class VideoPageActivity extends AppCompatActivity {
     private EditText editVideoTitle;
@@ -47,16 +55,16 @@ public class VideoPageActivity extends AppCompatActivity {
     private RecyclerView commentsRecyclerView;
     private RecyclerView relatedVideosRecyclerView;
     private CommentAdapter commentAdapter;
-    private VideoAdapter relatedVideosAdapter;
+    private VideoSessionAdapter relatedVideosAdapter;
     private List<Comment> commentList;
-    private List<Video> relatedVideoList;
+    private List<VideoSession> relatedVideoList = new ArrayList<>(); // Initialize here
 
     private Button likeButton;
     private Button dislikeButton;
     private Button shareButton;
     private Button downloadButton;
     private Button editVideoButton;
-
+    private Button deleteVideoButton;
     private boolean isLiked = false;
     private boolean isDisliked = false;
     private int likes;
@@ -67,19 +75,18 @@ public class VideoPageActivity extends AppCompatActivity {
     private Button deleteVideoButton;
 
     private String videoId;
-    private UserViewModel userViewModel;
     private VideoViewModel videoViewModel;
-    private CommentViewModel commentViewModel;
-
+    private CommentViewModel commentviewModel;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_page);
-
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        commentViewModel = new ViewModelProvider(this).get(CommentViewModel.class);
+      
         videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class);
+        commentviewModel = new ViewModelProvider(this).get(CommentViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         videoView = findViewById(R.id.video_view);
         videoTitle = findViewById(R.id.video_title);
@@ -88,6 +95,7 @@ public class VideoPageActivity extends AppCompatActivity {
         shareButton = findViewById(R.id.share_button);
         downloadButton = findViewById(R.id.download_button);
         editVideoButton = findViewById(R.id.edit_video_button);
+        deleteVideoButton = findViewById(R.id.delete_video_button);
         viewsTextView = findViewById(R.id.views_text_view);
         uploadDateTextView = findViewById(R.id.upload_date_text_view);
         descriptionTextView = findViewById(R.id.description_text_view);
@@ -113,7 +121,7 @@ public class VideoPageActivity extends AppCompatActivity {
         String description = intent.getStringExtra("VIDEO_DESCRIPTION");
         String topic = intent.getStringExtra("VIDEO_TOPIC");
         String channel = intent.getStringExtra("VIDEO_CHANNEL");
-
+      
         // Fetch and display the uploader's display name
         userViewModel.getUserDisplayName(channel).observe(this, displayName -> {
             if (displayName != null) {
@@ -122,7 +130,7 @@ public class VideoPageActivity extends AppCompatActivity {
                 channelTextView.setText(channel); // Fallback to uploaderId if display name is not found
             }
         });
-
+      
         // Deserialize the comments JSON string back to a list of Comment objects
         String commentsJson = intent.getStringExtra("VIDEO_COMMENTS");
         Log.d("VideoPageActivity", "Raw Comments JSON: " + commentsJson);
@@ -159,28 +167,17 @@ public class VideoPageActivity extends AppCompatActivity {
         // Show edit video button if user is logged in
         if (isUserLoggedIn()) {
             editVideoButton.setVisibility(View.VISIBLE);
-        } else {
-            editVideoButton.setVisibility(View.GONE);
-        }
-
-        if (isUserLoggedIn()) {
             commentInput.setVisibility(View.VISIBLE);
-        } else {
-            commentInput.setVisibility(View.GONE);
-        }
-        if (isUserLoggedIn()) {
             cancelCommentButton.setVisibility(View.VISIBLE);
-        } else {
-            cancelCommentButton.setVisibility(View.GONE);
-        }
-        if (isUserLoggedIn()) {
             addCommentButton.setVisibility(View.VISIBLE);
             deleteVideoButton.setVisibility(View.VISIBLE);
         } else {
+            editVideoButton.setVisibility(View.GONE);
+            commentInput.setVisibility(View.GONE);
+            cancelCommentButton.setVisibility(View.GONE);
             addCommentButton.setVisibility(View.GONE);
             deleteVideoButton.setVisibility(View.GONE);
         }
-
         editVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -266,7 +263,6 @@ public class VideoPageActivity extends AppCompatActivity {
                                 // Redirect to MainPageActivity
                                 Intent intent = new Intent(VideoPageActivity.this, MainPageActivity.class);
                                 startActivity(intent);
-                                finish(); // Optional: Call finish() if you don't want to keep this activity in the back stack
                             }
                         })
                         .setNegativeButton("No", null)
@@ -274,8 +270,6 @@ public class VideoPageActivity extends AppCompatActivity {
                         .show();
             }
         });
-
-
 
         commentsRecyclerView = findViewById(R.id.comments_recycler_view);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -321,11 +315,11 @@ public class VideoPageActivity extends AppCompatActivity {
             commentAdapter.notifyDataSetChanged();
         }
 
+        relatedVideoList = new ArrayList<>(); // Initialize relatedVideoList
+        relatedVideosAdapter = new VideoSessionAdapter(this, relatedVideoList); // Initialize relatedVideosAdapter
 
         relatedVideosRecyclerView = findViewById(R.id.related_videos_recycler_view);
         relatedVideosRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        relatedVideoList = getRelatedVideos(videoId); // Get related videos including the new one
-        relatedVideosAdapter = new VideoAdapter(this, relatedVideoList);
         relatedVideosRecyclerView.setAdapter(relatedVideosAdapter);
 
         setUpLikeButton(currentUserId);
@@ -337,11 +331,29 @@ public class VideoPageActivity extends AppCompatActivity {
                 if (isUserLoggedIn()) {
                     String newCommentText = commentInput.getText().toString();
                     if (!newCommentText.isEmpty()) {
-                        Comment newComment = new Comment(currentUserId, newCommentText); // Updated to use userId
-                        commentList.add(newComment);
-                        VideoStateManager.getInstance().addComment(videoId, newComment); // Save comment
-                        commentAdapter.notifyItemInserted(commentList.size() - 1);
-                        commentInput.setText("");
+                        try {
+                            JSONObject commentJson = new JSONObject();
+                            commentJson.put("userId", UserSession.getInstance().getUserId());
+                            commentJson.put("comment", newCommentText);
+                            String commentString = commentJson.toString();
+
+                            Log.d("VideoPageActivity", "Comment JSON: " + commentString);
+
+                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), commentString);
+                            commentviewModel.addCommentToVideo(videoId, requestBody).observe(VideoPageActivity.this, new Observer<VideoSession>() {
+                                @Override
+                                public void onChanged(VideoSession videoSession) {
+                                    if (videoSession != null) {
+                                        commentInput.setText(""); // Clear the input field
+                                        fetchVideoDetails(); // Fetch updated video details
+                                    } else {
+                                        Toast.makeText(VideoPageActivity.this, "Failed to add comment", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else {
                     showSignInAlert();
@@ -359,9 +371,50 @@ public class VideoPageActivity extends AppCompatActivity {
         if (!isUserLoggedIn()) {
             disableCommentInput();
         }
+
+        // Initial fetch of video details
+        fetchVideoDetails();
+        // Fetch related videos
+        fetchRelatedVideos();
     }
 
+    private void fetchVideoDetails() {
+        String currentUserId = UserSession.getInstance().getUserId();
+        userViewModel.getVideoById(currentUserId, videoId).observe(this, new Observer<VideoSession>() {
+            @Override
+            public void onChanged(VideoSession videoSession) {
+                if (videoSession != null) {
+                    // Update the UI with the fetched video details
+                    videoTitle.setText(videoSession.getTitle());
+                    viewsTextView.setText("Views: " + videoSession.getViewsCount());
+                    likesTextView.setText("Likes: " + videoSession.getLikes());
+                    descriptionTextView.setText(videoSession.getDescription());
+                    topicTextView.setText("Topic: " + videoSession.getTopic());
+                    channelTextView.setText("Channel: " + videoSession.getUploaderId());
+                    commentList.clear();
+                    commentList.addAll(videoSession.getComments());
+                    commentAdapter.notifyDataSetChanged();
+                } else {
+                    Log.e("VideoPageActivity", "Failed to fetch updated video details");
+                }
+            }
+        });
+    }
 
+    private void incrementViewsOnServer(String videoId) {
+        videoViewModel.incrementViews(videoId).observe(this, new Observer<VideoSession>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onChanged(VideoSession videoSession) {
+                if (videoSession != null) {
+                    viewsTextView.setText("Views: " + videoSession.getViewsCount());
+                } else {
+                    Log.e("VideoPageActivity", "Failed to fetch updated video details");
+                }
+            }
+        });
+    }
+  
     private void updateButtonColors() {
         if (isLiked) {
             likeButton.setBackgroundColor(getResources().getColor(R.color.button_darker_color));
@@ -448,7 +501,6 @@ public class VideoPageActivity extends AppCompatActivity {
         cancelCommentButton.setEnabled(false);
     }
 
-
     private void setUpVideoPlayer(String videoUrl) {
         Uri videoUri = Uri.parse(videoUrl);
         videoView.setVideoURI(videoUri);
@@ -462,6 +514,7 @@ public class VideoPageActivity extends AppCompatActivity {
         videoView.setOnPreparedListener(mp -> {
             mp.setLooping(true);
             videoView.start();
+            incrementViewsOnServer(videoId); // Increment views on server when video starts playing
         });
 
         videoView.setOnErrorListener((mp, what, extra) -> {
@@ -480,8 +533,6 @@ public class VideoPageActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void editComment(int position) {
         Comment comment = commentList.get(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -496,9 +547,21 @@ public class VideoPageActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String editedCommentText = input.getText().toString();
                 if (!editedCommentText.isEmpty()) {
+                    String videoId = getIntent().getStringExtra("VIDEO_ID");
+                    String commentId = comment.getCommentId();
+
                     comment.setComment(editedCommentText);
-                    VideoStateManager.getInstance().editComment(videoId, position, editedCommentText); // Edit comment
-                    commentAdapter.notifyItemChanged(position);
+
+                    commentviewModel.editComment(videoId, commentId, comment).observe(VideoPageActivity.this, videoSession -> {
+                        if (videoSession != null) {
+                            fetchVideoDetails(); // Fetch updated video details
+                            Log.d("VideoPageActivity", "Comment edited successfully");
+                        } else {
+                            Log.e("VideoPageActivity", "Failed to edit comment");
+                        }
+                    });
+                } else {
+                    Toast.makeText(VideoPageActivity.this, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -512,21 +575,24 @@ public class VideoPageActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void deleteComment(int position) {
-        Comment comment = commentList.get(position);
-        String videoId = getIntent().getStringExtra("VIDEO_ID");
-        String commentId = comment.getCommentId(); // Assuming commentId is stored in userId field, replace with actual comment ID field if different
+    public LiveData<VideoSession> getVideoById(String userId, String videoId) {
+        MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
+        mRepository.getVideoById(userId, videoId, new Callback<VideoSession>() {
+            @Override
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(response.body());
+                } else {
+                    liveData.setValue(null);
+                }
+            }
 
-        commentViewModel.deleteComment(videoId, commentId).observe(this, videoSession -> {
-            if (videoSession != null) {
-                // Comment deleted successfully, update the comment list and notify the adapter
-                commentList.remove(position);
-                commentAdapter.notifyItemRemoved(position);
-                Log.d("VideoPageActivity", "Comment deleted successfully");
-            } else {
-                Log.e("VideoPageActivity", "Failed to delete comment");
+            @Override
+            public void onFailure(Call<VideoSession> call, Throwable t) {
+                liveData.setValue(null);
             }
         });
+        return liveData;
     }
 
     private void showSignInAlert() {
@@ -543,16 +609,34 @@ public class VideoPageActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
-
-    private List<Video> getRelatedVideos(String videoId) {
-        List<Video> relatedVideos = new ArrayList<>();
-        VideoStateManager videoStateManager = VideoStateManager.getInstance();
-        for (Video video : videoStateManager.getAllVideos()) {
-            if (!video.getId().equals(videoId)) {
-                relatedVideos.add(video);
+    private void deleteVideo() {
+        String userId = UserSession.getInstance().getUserId();
+        userViewModel.deleteVideoById(userId, videoId).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean success) {
+                if (success) {
+                    Toast.makeText(VideoPageActivity.this, "Video deleted successfully", Toast.LENGTH_SHORT).show();
+                    finish(); // Close the activity or navigate as needed
+                } else {
+                    Toast.makeText(VideoPageActivity.this, "Failed to delete video", Toast.LENGTH_SHORT).show();
+                }
             }
-        }
-
-        return relatedVideos;
+        });
     }
+    private void fetchRelatedVideos() {
+        videoViewModel.getMostViewedAndRandomVideos().observe(this, new Observer<List<VideoSession>>() {
+            @Override
+            public void onChanged(List<VideoSession> videos) {
+                // Update the adapter with the new video list
+                relatedVideoList.clear();
+                for (VideoSession video : videos) {
+                    if (!video.getId().equals(videoId)) {
+                        relatedVideoList.add(video);
+                    }
+                }
+                relatedVideosAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 }

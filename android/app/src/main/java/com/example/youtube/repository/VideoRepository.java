@@ -1,12 +1,11 @@
 package com.example.youtube.repository;
 
-import com.example.youtube.model.CreateVideoRequest;
+import com.example.youtube.api.VideoAPI;
 import com.example.youtube.model.VideoSession;
 
-import retrofit2.Callback;
-import com.example.youtube.api.VideoAPI;
-
 import java.util.List;
+
+import retrofit2.Callback;
 
 public class VideoRepository {
     private VideoAPI videoAPI;
@@ -19,7 +18,7 @@ public class VideoRepository {
         videoAPI.getMostViewedAndRandomVideos(callback);
     }
 
-    public void incrementViews(String id, Callback<Void> callback) {
+    public void incrementViews(String id, Callback<VideoSession> callback) {
         videoAPI.incrementViews(id, callback);
     }
 

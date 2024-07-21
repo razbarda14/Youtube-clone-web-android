@@ -3,7 +3,6 @@ package com.example.youtube.api;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.youtube.model.CreateVideoRequest;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.RetrofitInstance;
 
@@ -47,11 +46,11 @@ public class VideoAPI {
         });
     }
 
-    public void incrementViews(String id, Callback<Void> callback) {
-        Call<Void> call = apiService.incrementViews(id);
-        call.enqueue(new Callback<Void>() {
+    public void incrementViews(String id, Callback<VideoSession> callback) {
+        Call<VideoSession> call = apiService.incrementViews(id);
+        call.enqueue(new Callback<VideoSession>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
                 if (response.isSuccessful()) {
                     callback.onResponse(call, response);
                 } else {
@@ -66,7 +65,7 @@ public class VideoAPI {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<VideoSession> call, Throwable t) {
                 Log.e(TAG, "Incrementing views failed: " + t.getMessage());
                 callback.onFailure(call, t);
             }

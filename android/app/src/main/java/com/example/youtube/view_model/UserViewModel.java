@@ -140,4 +140,24 @@ public class UserViewModel extends AndroidViewModel {
         return liveData;
     }
 
+  public LiveData<VideoSession> getVideoById(String userId, String videoId) {
+        MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
+        mRepository.getVideoById(userId, videoId, new Callback<VideoSession>() {
+            @Override
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(response.body());
+                } else {
+                    liveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VideoSession> call, Throwable t) {
+                liveData.setValue(null);
+            }
+        });
+        return liveData;
+    }
+  
 }

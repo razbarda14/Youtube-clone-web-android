@@ -45,11 +45,11 @@ public class VideoViewModel extends AndroidViewModel {
         return liveData;
     }
 
-    public LiveData<Void> incrementViews(String id) {
-        MutableLiveData<Void> liveData = new MutableLiveData<>();
-        videoRepository.incrementViews(id, new Callback<Void>() {
+    public LiveData<VideoSession> incrementViews(String id) {
+        MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
+        videoRepository.incrementViews(id, new Callback<VideoSession>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
                 if (response.isSuccessful()) {
                     liveData.setValue(response.body());
                 } else {
@@ -58,7 +58,7 @@ public class VideoViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<VideoSession> call, Throwable t) {
                 liveData.setValue(null);
             }
         });

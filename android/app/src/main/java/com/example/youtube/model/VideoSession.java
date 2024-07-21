@@ -21,8 +21,8 @@ public class VideoSession {
     private List<String> likedBy;
 
     public VideoSession(String id, String title, String uploaderId, String description, int viewsCount,
-                    String dateUploaded, String videoPath, String thumbnailPath, String topic, int likes,
-                    List<Comment> comments, List<String> likedBy) {
+                        String dateUploaded, String videoPath, String thumbnailPath, String topic, int likes,
+                        List<Comment> comments, List<String> likedBy) {
         this.id = id;
         this.title = title;
         this.uploaderId = uploaderId;
@@ -135,5 +135,17 @@ public class VideoSession {
 
     public List<Comment> getComments() {
         return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<String> getLikedBy() {
+        return likedBy;
+    }
+
+    public void setLikedBy(List<String> likedBy) {
+        this.likedBy = likedBy;
     }
 }

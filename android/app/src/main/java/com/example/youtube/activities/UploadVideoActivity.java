@@ -113,10 +113,6 @@ public class UploadVideoActivity extends AppCompatActivity {
         String description = editTextDescription.getText().toString();
         String topic = editTextTopic.getText().toString();
         String uploaderId = userSession.getUserId();
-
-//        // Get the current user's ID
-//        String uploaderId = "1"; // Assuming username is used as ID here
-
         File videoFile = getFileFromUri(videoUri);
         File imageFile = getFileFromUri(imageUri);
 

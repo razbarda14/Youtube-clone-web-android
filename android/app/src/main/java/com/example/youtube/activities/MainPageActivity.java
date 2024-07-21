@@ -16,22 +16,23 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.youtube.R;
-import com.example.youtube.entities.UserSession;
-
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.youtube.R;
 import com.example.youtube.adapters.VideoSessionAdapter;
-import com.example.youtube.model.VideoSession;
-import com.example.youtube.view_model.VideoViewModel;
+import com.example.youtube.entities.UserSession;
 import com.example.youtube.model.User;
-import com.example.youtube.view_model.UserViewModel;
+import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.TokenManager;
+import com.example.youtube.view_model.UserViewModel;
+import com.example.youtube.view_model.VideoViewModel;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -222,18 +223,25 @@ public class MainPageActivity extends AppCompatActivity {
     }
 
     private void performSearch(String query) {
-        filteredVideoList.clear();
-        if (query.isEmpty()) {
-            filteredVideoList.addAll(videoList);
-        } else {
-            for (VideoSession video : videoList) {
-                if (video.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                    filteredVideoList.add(video);
+        // Fetch the videos using getMostViewedAndRandomVideos
+        videoViewModel.getMostViewedAndRandomVideos().observe(this, new Observer<List<VideoSession>>() {
+            @Override
+            public void onChanged(List<VideoSession> videos) {
+                filteredVideoList.clear();
+                if (query.isEmpty()) {
+                    filteredVideoList.addAll(videos);
+                } else {
+                    for (VideoSession video : videos) {
+                        if (video.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                            filteredVideoList.add(video);
+                        }
+                    }
                 }
+                videoAdapter.updateList(filteredVideoList);
             }
-        }
-        videoAdapter.updateList(filteredVideoList);
+        });
     }
+
 
     private void setImageFromUrl(ImageView imageView, String urlString) {
         if (urlString != null && !urlString.isEmpty()) {

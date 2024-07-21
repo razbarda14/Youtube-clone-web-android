@@ -1,35 +1,15 @@
-//package com.example.youtube.entities;
-//
-//public class Comment {
-//    private String userName;
-//    private String commentText;
-//
-//    public Comment(String userName, String commentText) {
-//        this.userName = userName;
-//        this.commentText = commentText;
-//    }
-//
-//    public String getUserName() {
-//        return userName;
-//    }
-//
-//    public String getCommentText() {
-//        return commentText;
-//    }
-//
-//    public void setCommentText(String commentText) {
-//        this.commentText = commentText;
-//    }
-//}
 package com.example.youtube.entities;
-
 import com.google.gson.annotations.SerializedName;
+import java.util.Map;
 
 public class Comment {
+  
     @SerializedName("_id")
     private String commentId;
+  
     @SerializedName("userId")
-    private String userId;
+    private Object  userId;
+
     private String comment;
     private String displayName;
 
@@ -54,7 +34,13 @@ public class Comment {
 
     // Getters and Setters
     public String getUserId() {
-        return userId;
+        if (userId instanceof String) {
+            return (String) userId;
+        } else if (userId instanceof Map) {
+            Map<String, String> userIdMap = (Map<String, String>) userId;
+            return userIdMap.get("$oid");
+        }
+        return null;
     }
 
     public void setUserId(String userId) {
@@ -85,3 +71,5 @@ public class Comment {
         this.commentId = commentId;
     }
 }
+
+
