@@ -230,6 +230,8 @@ public class VideoPageActivity extends AppCompatActivity {
                 // Call ViewModel to update video
                 videoViewModel.updateVideoDetails(updatedVideo);
 
+                Toast.makeText(VideoPageActivity.this, "Video was updated successfully", Toast.LENGTH_SHORT).show();
+
                 videoTitle.setText(newTitle);
                 descriptionTextView.setText(newDescription);
 
@@ -246,16 +248,33 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
 
-        // This will be the delete option
         deleteVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new AlertDialog.Builder(VideoPageActivity.this)
+                        .setTitle("Delete Video")
+                        .setMessage("Are you sure you want to delete this video?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Call ViewModel to delete video
+                                videoViewModel.deleteVideoById(videoId);
+                                findViewById(R.id.scrollable_content).setPadding(0, 0, 0, 0);
 
-                // Call ViewModel to update video
-                videoViewModel.deleteVideoById(videoId);
-                findViewById(R.id.scrollable_content).setPadding(0, 0, 0, 0);
+                                // Display a toast message to the user
+                                Toast.makeText(VideoPageActivity.this, "Video was deleted successfully", Toast.LENGTH_SHORT).show();
+
+                                // Redirect to MainPageActivity
+                                Intent intent = new Intent(VideoPageActivity.this, MainPageActivity.class);
+                                startActivity(intent);
+                                finish(); // Optional: Call finish() if you don't want to keep this activity in the back stack
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
         });
+
 
 
         commentsRecyclerView = findViewById(R.id.comments_recycler_view);
