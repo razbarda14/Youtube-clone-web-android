@@ -140,8 +140,4 @@ public class UserViewModel extends AndroidViewModel {
         return liveData;
     }
 
-    public void updateVideoDetails(VideoSession video) {
-        mRepository.updateVideoDetails(video);
-    }
-
 }

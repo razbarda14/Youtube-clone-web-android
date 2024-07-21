@@ -167,22 +167,4 @@ public class UserAPI {
         });
     }
 
-    public void updateVideoDetails(VideoSession video) {
-        apiService.updateVideo(video.getId(), video).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Log.d("UserRepository", "Video details updated successfully");
-                } else {
-                    Log.d("UserRepository", "Failed to update video details");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("UserRepository", "Error updating video details", t);
-            }
-        });
-    }
-
 }

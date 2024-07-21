@@ -26,6 +26,7 @@ import com.example.youtube.adapters.VideoAdapter;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.view_model.CommentViewModel;
 import com.example.youtube.view_model.UserViewModel;
+import com.example.youtube.view_model.VideoViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -63,9 +64,11 @@ public class VideoPageActivity extends AppCompatActivity {
     private EditText commentInput;
     private Button addCommentButton;
     private Button cancelCommentButton;
+    private Button deleteVideoButton;
 
     private String videoId;
     private UserViewModel userViewModel;
+    private VideoViewModel videoViewModel;
     private CommentViewModel commentViewModel;
 
 
@@ -76,6 +79,7 @@ public class VideoPageActivity extends AppCompatActivity {
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         commentViewModel = new ViewModelProvider(this).get(CommentViewModel.class);
+        videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class);
 
         videoView = findViewById(R.id.video_view);
         videoTitle = findViewById(R.id.video_title);
@@ -96,6 +100,7 @@ public class VideoPageActivity extends AppCompatActivity {
         editVideoDescription = findViewById(R.id.edit_video_description);
         saveChangesButton = findViewById(R.id.save_changes_button);
         likesTextView = findViewById(R.id.likes_text_view);
+        deleteVideoButton = findViewById(R.id.delete_video_button);
 
         // Get video details from intent
         Intent intent = getIntent();
@@ -170,8 +175,10 @@ public class VideoPageActivity extends AppCompatActivity {
         }
         if (isUserLoggedIn()) {
             addCommentButton.setVisibility(View.VISIBLE);
+            deleteVideoButton.setVisibility(View.VISIBLE);
         } else {
             addCommentButton.setVisibility(View.GONE);
+            deleteVideoButton.setVisibility(View.GONE);
         }
 
         editVideoButton.setOnClickListener(new View.OnClickListener() {
@@ -221,7 +228,7 @@ public class VideoPageActivity extends AppCompatActivity {
                 updatedVideo.setDescription(newDescription);
 
                 // Call ViewModel to update video
-                userViewModel.updateVideoDetails(updatedVideo);
+                videoViewModel.updateVideoDetails(updatedVideo);
 
                 videoTitle.setText(newTitle);
                 descriptionTextView.setText(newDescription);
@@ -235,6 +242,17 @@ public class VideoPageActivity extends AppCompatActivity {
                 shareButton.setVisibility(View.VISIBLE);
                 downloadButton.setVisibility(View.VISIBLE);
 
+                findViewById(R.id.scrollable_content).setPadding(0, 0, 0, 0);
+            }
+        });
+
+        // This will be the delete option
+        deleteVideoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Call ViewModel to update video
+                videoViewModel.deleteVideoById(videoId);
                 findViewById(R.id.scrollable_content).setPadding(0, 0, 0, 0);
             }
         });

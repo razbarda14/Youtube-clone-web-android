@@ -37,8 +37,5 @@ public class UserRepository {
         userAPI.getUserDisplayName(userId, callback);
     }
 
-    public void updateVideoDetails(VideoSession video) {
-        userAPI.updateVideoDetails(video);
-    }
 
 }
