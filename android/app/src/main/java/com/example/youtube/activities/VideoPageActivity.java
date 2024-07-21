@@ -22,10 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youtube.R;
 import com.example.youtube.adapters.CommentAdapter;
-import com.example.youtube.adapters.VideoAdapter;
+import com.example.youtube.adapters.VideoSessionAdapter;
 import com.example.youtube.entities.Comment;
 import com.example.youtube.entities.UserSession;
-import com.example.youtube.entities.Video;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.view_model.CommentViewModel;
 import com.example.youtube.view_model.UserViewModel;
@@ -56,9 +55,9 @@ public class VideoPageActivity extends AppCompatActivity {
     private RecyclerView commentsRecyclerView;
     private RecyclerView relatedVideosRecyclerView;
     private CommentAdapter commentAdapter;
-    private VideoAdapter relatedVideosAdapter;
+    private VideoSessionAdapter relatedVideosAdapter;
     private List<Comment> commentList;
-    private List<Video> relatedVideoList;
+    private List<VideoSession> relatedVideoList = new ArrayList<>(); // Initialize here
 
     private Button likeButton;
     private Button dislikeButton;
@@ -222,11 +221,6 @@ public class VideoPageActivity extends AppCompatActivity {
                 downloadButton.setVisibility(View.VISIBLE);
 
                 findViewById(R.id.scrollable_content).setPadding(0, 0, 0, 0);
-
-                List<Video> relatedVideos = getRelatedVideos(videoId);
-                relatedVideoList.clear();
-                relatedVideoList.addAll(relatedVideos);
-                relatedVideosAdapter.notifyDataSetChanged();
             }
         });
         deleteVideoButton.setOnClickListener(new View.OnClickListener() {
@@ -279,10 +273,10 @@ public class VideoPageActivity extends AppCompatActivity {
             commentAdapter.notifyDataSetChanged();
         }
 
+        relatedVideoList = new ArrayList<>(); // Initialize relatedVideoList
+        relatedVideosAdapter = new VideoSessionAdapter(this, relatedVideoList); // Initialize relatedVideosAdapter
         relatedVideosRecyclerView = findViewById(R.id.related_videos_recycler_view);
         relatedVideosRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        relatedVideoList = getRelatedVideos(videoId); // Get related videos including the new one
-        relatedVideosAdapter = new VideoAdapter(this, relatedVideoList);
         relatedVideosRecyclerView.setAdapter(relatedVideosAdapter);
 
         setUpLikeButton(currentUserId);
@@ -337,6 +331,8 @@ public class VideoPageActivity extends AppCompatActivity {
 
         // Initial fetch of video details
         fetchVideoDetails();
+        // Fetch related videos
+        fetchRelatedVideos();
     }
 
     private void fetchVideoDetails() {
@@ -570,17 +566,6 @@ public class VideoPageActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
-
-    private List<Video> getRelatedVideos(String videoId) {
-        List<Video> relatedVideos = new ArrayList<>();
-        VideoStateManager videoStateManager = VideoStateManager.getInstance();
-        for (Video video : videoStateManager.getAllVideos()) {
-            if (!video.getId().equals(videoId)) {
-                relatedVideos.add(video);
-            }
-        }
-        return relatedVideos;
-    }
     private void deleteVideo() {
         String userId = UserSession.getInstance().getUserId();
         userViewModel.deleteVideoById(userId, videoId).observe(this, new Observer<Boolean>() {
@@ -592,6 +577,21 @@ public class VideoPageActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(VideoPageActivity.this, "Failed to delete video", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+    private void fetchRelatedVideos() {
+        videoViewModel.getMostViewedAndRandomVideos().observe(this, new Observer<List<VideoSession>>() {
+            @Override
+            public void onChanged(List<VideoSession> videos) {
+                // Update the adapter with the new video list
+                relatedVideoList.clear();
+                for (VideoSession video : videos) {
+                    if (!video.getId().equals(videoId)) {
+                        relatedVideoList.add(video);
+                    }
+                }
+                relatedVideosAdapter.notifyDataSetChanged();
             }
         });
     }
