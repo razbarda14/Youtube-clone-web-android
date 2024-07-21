@@ -5,8 +5,8 @@ import com.example.youtube.model.LoginRequest;
 import com.example.youtube.model.LoginResponse;
 import com.example.youtube.model.RegisterUserRequest;
 import com.example.youtube.model.User;
+import com.example.youtube.model.UserDisplayNameResponse;
 import com.example.youtube.model.VideoSession;
-
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Callback;
@@ -33,14 +33,12 @@ public class UserRepository {
     public void createVideo(RequestBody userId, MultipartBody.Part videoFile, MultipartBody.Part thumbnailFile, RequestBody title, RequestBody description, RequestBody topic, Callback<VideoSession> callback) {
         userAPI.createVideo(userId, videoFile, thumbnailFile, title, description, topic, callback);
     }
-    public void getUserDisplayName(String userId, Callback<String> callback) {
+    public void getUserDisplayName(String userId, Callback<UserDisplayNameResponse> callback) {
         userAPI.getUserDisplayName(userId, callback);
     }
+  
     public void getVideoById(String userId, String videoId, Callback<VideoSession> callback) {
         userAPI.getVideoById(userId, videoId, callback);
     }
-    public void deleteVideoById(String userId, String videoId, Callback<Void> callback) {
-        userAPI.deleteVideoById(userId, videoId, callback);
-    }
-
+    
 }

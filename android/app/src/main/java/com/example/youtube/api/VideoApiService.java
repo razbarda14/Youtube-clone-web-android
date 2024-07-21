@@ -39,4 +39,10 @@ public interface VideoApiService {
     @PUT("api/videos/{id}/comments/{commentId}")
     Call<VideoSession> editCommentInVideo(@Path("id") String id, @Path("commentId") String commentId, @Body Comment newComment);
 
+    @PUT("api/users/{userId}/videos/{videoId}")
+    Call<Void> updateVideo(@Path("videoId") String videoId, @Body VideoSession video);
+
+    @DELETE("api/users/{userId}/videos/{videoId}")
+    Call<Void> deleteVideoById(@Path("videoId") String videoId);
+
 }

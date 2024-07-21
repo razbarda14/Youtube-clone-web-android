@@ -1,14 +1,11 @@
 package com.example.youtube.api;
 
 import android.util.Log;
-
 import com.example.youtube.entities.Comment;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.RetrofitInstance;
-
 import java.io.IOException;
 import java.util.Map;
-
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,6 +63,7 @@ public class CommentApi {
             }
         });
     }
+
     public void deleteCommentFromVideo(String videoId, String commentId, Callback<VideoSession> callback) {
         Call<VideoSession> call = apiService.deleteCommentFromVideo(videoId, commentId);
         call.enqueue(new Callback<VideoSession>() {
@@ -92,6 +90,7 @@ public class CommentApi {
             }
         });
     }
+
     public void editCommentInVideo(String videoId, String commentId, Comment newComment, Callback<VideoSession> callback) {
         Call<VideoSession> call = apiService.editCommentInVideo(videoId, commentId, newComment);
         call.enqueue(new Callback<VideoSession>() {
@@ -120,3 +119,4 @@ public class CommentApi {
     }
 
 }
+

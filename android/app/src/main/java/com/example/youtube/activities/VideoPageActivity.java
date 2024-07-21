@@ -12,19 +12,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.youtube.R;
 import com.example.youtube.adapters.CommentAdapter;
 import com.example.youtube.adapters.VideoSessionAdapter;
 import com.example.youtube.entities.Comment;
 import com.example.youtube.entities.UserSession;
+import com.example.youtube.entities.Video;
+import com.example.youtube.adapters.VideoAdapter;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.view_model.CommentViewModel;
 import com.example.youtube.view_model.UserViewModel;
@@ -72,15 +72,18 @@ public class VideoPageActivity extends AppCompatActivity {
     private EditText commentInput;
     private Button addCommentButton;
     private Button cancelCommentButton;
+    private Button deleteVideoButton;
+
     private String videoId;
     private VideoViewModel videoViewModel;
     private CommentViewModel commentviewModel;
     private UserViewModel userViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_page);
-
+      
         videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class);
         commentviewModel = new ViewModelProvider(this).get(CommentViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -105,6 +108,7 @@ public class VideoPageActivity extends AppCompatActivity {
         editVideoDescription = findViewById(R.id.edit_video_description);
         saveChangesButton = findViewById(R.id.save_changes_button);
         likesTextView = findViewById(R.id.likes_text_view);
+        deleteVideoButton = findViewById(R.id.delete_video_button);
 
         // Get video details from intent
         Intent intent = getIntent();
@@ -117,6 +121,16 @@ public class VideoPageActivity extends AppCompatActivity {
         String description = intent.getStringExtra("VIDEO_DESCRIPTION");
         String topic = intent.getStringExtra("VIDEO_TOPIC");
         String channel = intent.getStringExtra("VIDEO_CHANNEL");
+      
+        // Fetch and display the uploader's display name
+        userViewModel.getUserDisplayName(channel).observe(this, displayName -> {
+            if (displayName != null) {
+                channelTextView.setText(displayName);
+            } else {
+                channelTextView.setText(channel); // Fallback to uploaderId if display name is not found
+            }
+        });
+      
         // Deserialize the comments JSON string back to a list of Comment objects
         String commentsJson = intent.getStringExtra("VIDEO_COMMENTS");
         Log.d("VideoPageActivity", "Raw Comments JSON: " + commentsJson);
@@ -205,8 +219,15 @@ public class VideoPageActivity extends AppCompatActivity {
                 String newTitle = editVideoTitle.getText().toString();
                 String newDescription = editVideoDescription.getText().toString();
 
-                VideoStateManager.getInstance().setTitle(videoId, newTitle);
-                VideoStateManager.getInstance().setDescription(videoId, newDescription);
+                VideoSession updatedVideo = new VideoSession();
+                updatedVideo.setId(videoId);
+                updatedVideo.setTitle(newTitle);
+                updatedVideo.setDescription(newDescription);
+
+                // Call ViewModel to update video
+                videoViewModel.updateVideoDetails(updatedVideo);
+
+                Toast.makeText(VideoPageActivity.this, "Video was updated successfully", Toast.LENGTH_SHORT).show();
 
                 videoTitle.setText(newTitle);
                 descriptionTextView.setText(newDescription);
@@ -223,22 +244,33 @@ public class VideoPageActivity extends AppCompatActivity {
                 findViewById(R.id.scrollable_content).setPadding(0, 0, 0, 0);
             }
         });
+
         deleteVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(VideoPageActivity.this)
                         .setTitle("Delete Video")
                         .setMessage("Are you sure you want to delete this video?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                deleteVideo();
+                                // Call ViewModel to delete video
+                                videoViewModel.deleteVideoById(videoId);
+                                findViewById(R.id.scrollable_content).setPadding(0, 0, 0, 0);
+
+                                // Display a toast message to the user
+                                Toast.makeText(VideoPageActivity.this, "Video was deleted successfully", Toast.LENGTH_SHORT).show();
+
+                                // Redirect to MainPageActivity
+                                Intent intent = new Intent(VideoPageActivity.this, MainPageActivity.class);
+                                startActivity(intent);
                             }
                         })
-                        .setNegativeButton(android.R.string.no, null)
+                        .setNegativeButton("No", null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
         });
+
         commentsRecyclerView = findViewById(R.id.comments_recycler_view);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentList = new ArrayList<>();
@@ -266,8 +298,18 @@ public class VideoPageActivity extends AppCompatActivity {
         // Add comments to the comment list and notify the adapter
         if (comments != null) {
             for (Comment comment : comments) {
-                // Log each comment for debugging
                 Log.d("VideoPageActivity", "Comment: " + comment.getComment() + ", User: " + comment.getUserId());
+
+                // Fetch display name for each comment
+                userViewModel.getUserDisplayName(comment.getUserId()).observe(this, displayName -> {
+                    if (displayName != null) {
+                        Log.d("VideoPageActivity", "Fetched Display Name: " + displayName + " for User: " + comment.getUserId());
+                        comment.setDisplayName(displayName);
+                        commentAdapter.notifyDataSetChanged(); // Notify adapter to update the UI
+                    } else {
+                        Log.d("VideoPageActivity", "Display Name is null for User: " + comment.getUserId());
+                    }
+                });
             }
             commentList.addAll(comments);
             commentAdapter.notifyDataSetChanged();
@@ -275,6 +317,7 @@ public class VideoPageActivity extends AppCompatActivity {
 
         relatedVideoList = new ArrayList<>(); // Initialize relatedVideoList
         relatedVideosAdapter = new VideoSessionAdapter(this, relatedVideoList); // Initialize relatedVideosAdapter
+
         relatedVideosRecyclerView = findViewById(R.id.related_videos_recycler_view);
         relatedVideosRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         relatedVideosRecyclerView.setAdapter(relatedVideosAdapter);
@@ -371,7 +414,7 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
     }
-
+  
     private void updateButtonColors() {
         if (isLiked) {
             likeButton.setBackgroundColor(getResources().getColor(R.color.button_darker_color));
@@ -532,24 +575,24 @@ public class VideoPageActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void deleteComment(int position) {
-        Comment comment = commentList.get(position);
-        String videoId = getIntent().getStringExtra("VIDEO_ID");
-        String commentId = comment.getCommentId(); // Ensure commentId is correctly set
+    public LiveData<VideoSession> getVideoById(String userId, String videoId) {
+        MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
+        mRepository.getVideoById(userId, videoId, new Callback<VideoSession>() {
+            @Override
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(response.body());
+                } else {
+                    liveData.setValue(null);
+                }
+            }
 
-        if (commentId == null || commentId.isEmpty()) {
-            Log.e("VideoPageActivity", "Comment ID is null or empty");
-            return;
-        }
-
-        commentviewModel.deleteComment(videoId, commentId).observe(this, videoSession -> {
-            if (videoSession != null) {
-                fetchVideoDetails(); // Fetch updated video details
-                Log.d("VideoPageActivity", "Comment deleted successfully");
-            } else {
-                Log.e("VideoPageActivity", "Failed to delete comment");
+            @Override
+            public void onFailure(Call<VideoSession> call, Throwable t) {
+                liveData.setValue(null);
             }
         });
+        return liveData;
     }
 
     private void showSignInAlert() {

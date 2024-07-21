@@ -1,14 +1,15 @@
 package com.example.youtube.entities;
-
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Map;
 
 public class Comment {
+  
     @SerializedName("_id")
     private String commentId;
+  
     @SerializedName("userId")
     private Object  userId;
+
     private String comment;
     private String displayName;
 
@@ -70,3 +71,5 @@ public class Comment {
         this.commentId = commentId;
     }
 }
+
+

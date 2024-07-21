@@ -22,5 +22,11 @@ public class VideoRepository {
         videoAPI.incrementViews(id, callback);
     }
 
-    // Add more methods as necessary
+    public void updateVideoDetails(VideoSession video) {
+        videoAPI.updateVideoDetails(video);
+    }
+
+    public void deleteVideoById(String videoId) {
+        videoAPI.deleteVideoById(videoId);
+    }
 }

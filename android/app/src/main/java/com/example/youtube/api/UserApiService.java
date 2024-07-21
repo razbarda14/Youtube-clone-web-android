@@ -23,6 +23,15 @@ import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import com.example.youtube.model.CreateVideoRequest;
+import com.example.youtube.model.ImagePathResponse;
+import com.example.youtube.model.LoginRequest;
+import com.example.youtube.model.LoginResponse;
+import com.example.youtube.model.User;
+import com.example.youtube.model.UserDisplayNameResponse;
+import com.example.youtube.model.UserIdResponse;
+import com.example.youtube.model.UserUpdateRequest;
+import com.example.youtube.model.VideoSession;
 
 public interface UserApiService {
     @GET("api/users")
@@ -44,7 +53,8 @@ public interface UserApiService {
     Call<Void> deleteUser(@Path("id") String id);
 
     @GET("/api/users/{id}/getDisplayName")
-    Call<String> getUserDisplayName(@Path("id") String userId);
+    Call<UserDisplayNameResponse> getUserDisplayName(@Path("id") String userId);
+
 
     @GET("api/users/{id}/getImagePath")
     Call<ImagePathResponse> getUserImagePath(@Path("id") String id);
@@ -77,9 +87,8 @@ public interface UserApiService {
             @Part("description") RequestBody description,
             @Part("topic") RequestBody topic
     );
-    @DELETE("api/users/{id}/videos/{pid}")
-    Call<Void> deleteVideoById(@Path("id") String userId, @Path("pid") String videoId);
 
     @GET("api/users/{id}/videos/{pid}")
     Call<VideoSession> getVideoById(@Path("id") String userId, @Path("pid") String videoId);
+
 }

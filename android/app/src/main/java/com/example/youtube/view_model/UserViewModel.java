@@ -8,12 +8,15 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.youtube.model.LoginRequest;
-import com.example.youtube.model.LoginResponse;
 import com.example.youtube.model.RegisterUserRequest;
 import com.example.youtube.model.User;
+import com.example.youtube.model.UserDisplayNameResponse;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.repository.UserRepository;
+import com.example.youtube.model.LoginRequest;
+import com.example.youtube.model.LoginResponse;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -119,25 +122,25 @@ public class UserViewModel extends AndroidViewModel {
     }
     public LiveData<String> getUserDisplayName(String id) {
         MutableLiveData<String> liveData = new MutableLiveData<>();
-        mRepository.getUserDisplayName(id,new Callback<String>() {
+        mRepository.getUserDisplayName(id, new Callback<UserDisplayNameResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    liveData.setValue(response.body());
+            public void onResponse(Call<UserDisplayNameResponse> call, Response<UserDisplayNameResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    liveData.setValue(response.body().getDisplayName());
                 } else {
                     liveData.setValue(null);
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<UserDisplayNameResponse> call, Throwable t) {
                 liveData.setValue(null);
             }
         });
         return liveData;
     }
 
-    public LiveData<VideoSession> getVideoById(String userId, String videoId) {
+  public LiveData<VideoSession> getVideoById(String userId, String videoId) {
         MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
         mRepository.getVideoById(userId, videoId, new Callback<VideoSession>() {
             @Override
@@ -156,20 +159,5 @@ public class UserViewModel extends AndroidViewModel {
         });
         return liveData;
     }
-    public LiveData<Boolean> deleteVideoById(String userId, String videoId) {
-        MutableLiveData<Boolean> resultLiveData = new MutableLiveData<>();
-        mRepository.deleteVideoById(userId, videoId, new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                resultLiveData.setValue(response.isSuccessful());
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                resultLiveData.setValue(false);
-            }
-        });
-        return resultLiveData;
-    }
-
+  
 }

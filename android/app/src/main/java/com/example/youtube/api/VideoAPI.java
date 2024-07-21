@@ -1,6 +1,7 @@
 package com.example.youtube.api;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.RetrofitInstance;
@@ -67,6 +68,43 @@ public class VideoAPI {
             public void onFailure(Call<VideoSession> call, Throwable t) {
                 Log.e(TAG, "Incrementing views failed: " + t.getMessage());
                 callback.onFailure(call, t);
+            }
+        });
+    }
+
+    public void updateVideoDetails(VideoSession video) {
+        apiService.updateVideo(video.getId(), video).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Log.d("UserRepository", "Video details updated successfully");
+                } else {
+                    Log.d("UserRepository", "Failed to update video details");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("UserRepository", "Error updating video details", t);
+            }
+        });
+    }
+
+    public void deleteVideoById(String videoId) {
+        Call<Void> call = apiService.deleteVideoById(videoId);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Log.d("VideoAPI", "Video was deleted successfully");
+                }
+                else {
+                    Log.d("VideoAPI", "Failed to delete video");
+                }
+            }
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("VideoAPI", "Error updating video details", t);
             }
         });
     }
