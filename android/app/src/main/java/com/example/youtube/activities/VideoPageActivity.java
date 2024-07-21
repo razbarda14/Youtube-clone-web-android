@@ -72,8 +72,6 @@ public class VideoPageActivity extends AppCompatActivity {
     private EditText commentInput;
     private Button addCommentButton;
     private Button cancelCommentButton;
-    private Button deleteVideoButton;
-
     private String videoId;
     private VideoViewModel videoViewModel;
     private CommentViewModel commentviewModel;
@@ -575,24 +573,24 @@ public class VideoPageActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public LiveData<VideoSession> getVideoById(String userId, String videoId) {
-        MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
-        mRepository.getVideoById(userId, videoId, new Callback<VideoSession>() {
-            @Override
-            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
-                if (response.isSuccessful()) {
-                    liveData.setValue(response.body());
-                } else {
-                    liveData.setValue(null);
-                }
-            }
+    private void deleteComment(int position) {
+        Comment comment = commentList.get(position);
+        String videoId = getIntent().getStringExtra("VIDEO_ID");
+        String commentId = comment.getCommentId(); // Ensure commentId is correctly set
 
-            @Override
-            public void onFailure(Call<VideoSession> call, Throwable t) {
-                liveData.setValue(null);
+        if (commentId == null || commentId.isEmpty()) {
+            Log.e("VideoPageActivity", "Comment ID is null or empty");
+            return;
+        }
+
+        commentviewModel.deleteComment(videoId, commentId).observe(this, videoSession -> {
+            if (videoSession != null) {
+                fetchVideoDetails(); // Fetch updated video details
+                Log.d("VideoPageActivity", "Comment deleted successfully");
+            } else {
+                Log.e("VideoPageActivity", "Failed to delete comment");
             }
         });
-        return liveData;
     }
 
     private void showSignInAlert() {
@@ -609,20 +607,7 @@ public class VideoPageActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
-    private void deleteVideo() {
-        String userId = UserSession.getInstance().getUserId();
-        userViewModel.deleteVideoById(userId, videoId).observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean success) {
-                if (success) {
-                    Toast.makeText(VideoPageActivity.this, "Video deleted successfully", Toast.LENGTH_SHORT).show();
-                    finish(); // Close the activity or navigate as needed
-                } else {
-                    Toast.makeText(VideoPageActivity.this, "Failed to delete video", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
+
     private void fetchRelatedVideos() {
         videoViewModel.getMostViewedAndRandomVideos().observe(this, new Observer<List<VideoSession>>() {
             @Override
