@@ -2,7 +2,6 @@ package com.example.youtube.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +39,8 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
         VideoSession video = videos.get(position);
         holder.title.setText(video.getTitle());
+        holder.description.setText(video.getDescription());
+        holder.uploaderId.setText(video.getUploaderId());
 
         String thumbnailPath = video.getThumbnailPath();
 
@@ -82,10 +83,7 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
 
             context.startActivity(intent);
         });
-
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -98,14 +96,14 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
     }
 
     public static class VideoViewHolder extends RecyclerView.ViewHolder {
-        TextView title, description;
+        TextView title, description, uploaderId;
         ImageView thumbnail;
 
         public VideoViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.video_title);
-//            description = itemView.findViewById(R.id.video_description);
-//            viewsCount = itemView.findViewById(R.id.video_views);
+            description = itemView.findViewById(R.id.video_description);
+            uploaderId = itemView.findViewById(R.id.video_uploader_id);
             thumbnail = itemView.findViewById(R.id.video_image);
         }
     }
