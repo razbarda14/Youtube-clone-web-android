@@ -12,19 +12,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.youtube.R;
 import com.example.youtube.adapters.CommentAdapter;
 import com.example.youtube.adapters.VideoSessionAdapter;
 import com.example.youtube.entities.Comment;
 import com.example.youtube.entities.UserSession;
-import com.example.youtube.entities.Video;
-import com.example.youtube.adapters.VideoAdapter;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.view_model.CommentViewModel;
 import com.example.youtube.view_model.UserViewModel;
@@ -395,7 +395,7 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
     }
-
+//
     private void incrementViewsOnServer(String videoId) {
         videoViewModel.incrementViews(videoId).observe(this, new Observer<VideoSession>() {
             @SuppressLint("SetTextI18n")
