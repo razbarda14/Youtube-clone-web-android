@@ -270,7 +270,7 @@ public class VideoPageActivity extends AppCompatActivity {
         commentsRecyclerView = findViewById(R.id.comments_recycler_view);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentList = new ArrayList<>();
-        commentAdapter = new CommentAdapter(commentList, this, new CommentAdapter.CommentActionListener() {
+        commentAdapter = new CommentAdapter(commentList, this, currentUserId, new CommentAdapter.CommentActionListener() {
             @Override
             public void onEditComment(int position) {
                 if (isUserLoggedIn()) {
@@ -329,7 +329,8 @@ public class VideoPageActivity extends AppCompatActivity {
                     if (!newCommentText.isEmpty()) {
                         try {
                             JSONObject commentJson = new JSONObject();
-                            commentJson.put("userId", UserSession.getInstance().getUserId());
+                            String userId = UserSession.getInstance().getUserId();
+                            commentJson.put("userId", userId);
                             commentJson.put("comment", newCommentText);
                             String commentString = commentJson.toString();
 
@@ -341,7 +342,34 @@ public class VideoPageActivity extends AppCompatActivity {
                                 public void onChanged(VideoSession videoSession) {
                                     if (videoSession != null) {
                                         commentInput.setText(""); // Clear the input field
-                                        fetchVideoDetails(); // Fetch updated video details
+                                        // Create a new Comment object with the correct ID from the server response
+                                        Comment newComment = new Comment(userId, newCommentText);
+                                        // Assuming videoSession contains the updated comments with IDs
+                                        List<Comment> updatedComments = videoSession.getComments();
+                                        Log.d("VideoPageActivity", "Adding comment for userId: " + userId);
+                                        for (Comment comment : updatedComments) {
+                                            Log.d("VideoPageActivity", "Checking comment: " + comment.getComment() + " by userId: " + comment.getUserId());
+                                            if (comment.getUserId() != null && comment.getUserId().equals(userId) && comment.getComment().equals(newCommentText)) {
+                                                newComment.setCommentId(comment.getCommentId());
+                                                break;
+                                            }
+                                        }
+
+                                        commentList.add(newComment);
+                                        int newCommentPosition = commentList.size() - 1;
+                                        commentAdapter.notifyItemInserted(newCommentPosition);
+                                        commentsRecyclerView.scrollToPosition(newCommentPosition); // Scroll to the new comment
+                                        Toast.makeText(VideoPageActivity.this, "Comment added successfully", Toast.LENGTH_SHORT).show();
+
+                                        // Fetch the display name for the new comment
+                                        userViewModel.getUserDisplayName(userId).observe(VideoPageActivity.this, displayName -> {
+                                            if (displayName != null) {
+                                                newComment.setDisplayName(displayName);
+                                                commentAdapter.notifyItemChanged(newCommentPosition); // Update the adapter to display the display name
+                                            } else {
+                                                Log.d("VideoPageActivity", "Display Name is null for User: " + userId);
+                                            }
+                                        });
                                     } else {
                                         Toast.makeText(VideoPageActivity.this, "Failed to add comment", Toast.LENGTH_SHORT).show();
                                     }
@@ -357,6 +385,11 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
 
+
+
+
+
+
         cancelCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -369,7 +402,7 @@ public class VideoPageActivity extends AppCompatActivity {
         }
 
         // Initial fetch of video details
-        fetchVideoDetails();
+    //    fetchVideoDetails();
         // Fetch related videos
         fetchRelatedVideos();
     }
@@ -548,13 +581,16 @@ public class VideoPageActivity extends AppCompatActivity {
                 if (!editedCommentText.isEmpty()) {
                     String videoId = getIntent().getStringExtra("VIDEO_ID");
                     String commentId = comment.getCommentId();
+                    Log.d("VideoPageActivity", "Editing comment ID: " + commentId);
 
                     comment.setComment(editedCommentText);
 
                     commentviewModel.editComment(videoId, commentId, comment).observe(VideoPageActivity.this, videoSession -> {
                         if (videoSession != null) {
-                            fetchVideoDetails(); // Fetch updated video details
-                            Log.d("VideoPageActivity", "Comment edited successfully");
+                            // Manually update the comment list and notify the adapter
+                            commentList.set(position, comment);
+                            commentAdapter.notifyItemChanged(position);
+                            Toast.makeText(VideoPageActivity.this, "Comment edited successfully", Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e("VideoPageActivity", "Failed to edit comment");
                         }
@@ -574,10 +610,13 @@ public class VideoPageActivity extends AppCompatActivity {
         builder.show();
     }
 
+
+
     private void deleteComment(int position) {
         Comment comment = commentList.get(position);
         String videoId = getIntent().getStringExtra("VIDEO_ID");
         String commentId = comment.getCommentId(); // Ensure commentId is correctly set
+        Log.d("VideoPageActivity", "Deleting comment ID: " + commentId);
 
         if (commentId == null || commentId.isEmpty()) {
             Log.e("VideoPageActivity", "Comment ID is null or empty");
@@ -586,13 +625,17 @@ public class VideoPageActivity extends AppCompatActivity {
 
         commentviewModel.deleteComment(videoId, commentId).observe(this, videoSession -> {
             if (videoSession != null) {
-                fetchVideoDetails(); // Fetch updated video details
-                Log.d("VideoPageActivity", "Comment deleted successfully");
+                // Manually update the comment list and notify the adapter
+                commentList.remove(position);
+                commentAdapter.notifyItemRemoved(position);
+                Toast.makeText(VideoPageActivity.this, "Comment deleted successfully", Toast.LENGTH_SHORT).show();
             } else {
                 Log.e("VideoPageActivity", "Failed to delete comment");
             }
         });
     }
+
+
 
     private void showSignInAlert() {
         new AlertDialog.Builder(this)
@@ -619,6 +662,11 @@ public class VideoPageActivity extends AppCompatActivity {
                     if (!video.getId().equals(videoId)) {
                         relatedVideoList.add(video);
                     }
+                    userViewModel.getUserDisplayName(video.getUploaderId()).observe(VideoPageActivity.this, displayName -> {
+                        if (displayName != null) {
+                            video.setUploaderDisplayName(displayName); // Update the uploaderId with the display name
+                        }
+                    });
                 }
                 relatedVideosAdapter.notifyDataSetChanged();
             }

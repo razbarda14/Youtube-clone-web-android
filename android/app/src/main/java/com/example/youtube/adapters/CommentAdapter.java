@@ -18,15 +18,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private List<Comment> commentList;
     private Context context;
     private CommentActionListener actionListener;
+    private String currentUserId;
 
     public interface CommentActionListener {
         void onEditComment(int position);
         void onDeleteComment(int position);
     }
 
-    public CommentAdapter(List<Comment> commentList, Context context, CommentActionListener actionListener) {
+    public CommentAdapter(List<Comment> commentList, Context context, String currentUserId, CommentActionListener actionListener) {
         this.commentList = commentList;
         this.context = context;
+        this.currentUserId = currentUserId;
         this.actionListener = actionListener;
     }
 
@@ -45,8 +47,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         String displayName = comment.getDisplayName() != null ? comment.getDisplayName() : comment.getUserId();
         holder.commentUserName.setText(displayName);
 
-
         holder.commentText.setText(comment.getComment());
+
+        // Show edit and delete buttons only if the comment's userId matches the currentUserId
+        if (currentUserId!= null && comment.getUserId() != null && comment.getUserId().equals(currentUserId)) {
+            holder.editButton.setVisibility(View.VISIBLE);
+            holder.deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            holder.editButton.setVisibility(View.GONE);
+            holder.deleteButton.setVisibility(View.GONE);
+        }
+
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +71,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         });
     }
-
 
     @Override
     public int getItemCount() {
