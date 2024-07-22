@@ -40,7 +40,7 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
         VideoSession video = videos.get(position);
         holder.title.setText(video.getTitle());
         holder.description.setText(video.getDescription());
-        holder.uploaderId.setText(video.getUploaderId());
+        holder.uploaderDisplayName.setText(video.getUploaderDisplayName());
 
         String thumbnailPath = video.getThumbnailPath();
 
@@ -78,8 +78,8 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
             intent.putExtra("VIDEO_UPLOAD_DATE", video.getDateUploaded());
             intent.putExtra("VIDEO_DESCRIPTION", video.getDescription());
             intent.putExtra("VIDEO_TOPIC", video.getTopic());
-            intent.putExtra("VIDEO_CHANNEL", video.getUploaderId());
-            intent.putExtra("VIDEO_COMMENTS", commentsJson); // Pass the comments JSON string
+            intent.putExtra("VIDEO_CHANNEL", video.getUploaderDisplayName());
+            intent.putExtra("VIDEO_COMMENTS", commentsJson);
 
             context.startActivity(intent);
         });
@@ -96,14 +96,14 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
     }
 
     public static class VideoViewHolder extends RecyclerView.ViewHolder {
-        TextView title, description, uploaderId;
+        TextView title, description, uploaderDisplayName;
         ImageView thumbnail;
 
         public VideoViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.video_title);
             description = itemView.findViewById(R.id.video_description);
-            uploaderId = itemView.findViewById(R.id.video_uploader_id);
+            uploaderDisplayName = itemView.findViewById(R.id.video_uploader_display_name);
             thumbnail = itemView.findViewById(R.id.video_image);
         }
     }

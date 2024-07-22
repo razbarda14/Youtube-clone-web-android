@@ -10,6 +10,7 @@ public class VideoSession {
     private String id;
     private String title;
     private String uploaderId;
+    private String uploaderDisplayName;
     private String description;
     private int viewsCount;
     private String dateUploaded;
@@ -26,6 +27,7 @@ public class VideoSession {
         this.id = id;
         this.title = title;
         this.uploaderId = uploaderId;
+        this.uploaderDisplayName = null;
         this.description = description;
         this.viewsCount = viewsCount;
         this.dateUploaded = dateUploaded;
@@ -147,5 +149,13 @@ public class VideoSession {
 
     public void setLikedBy(List<String> likedBy) {
         this.likedBy = likedBy;
+    }
+
+    public String getUploaderDisplayName() {
+        return uploaderDisplayName;
+    }
+
+    public void setUploaderDisplayName(String uploaderDisplayName) {
+        this.uploaderDisplayName = uploaderDisplayName;
     }
 }

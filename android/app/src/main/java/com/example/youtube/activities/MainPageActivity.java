@@ -227,7 +227,7 @@ public class MainPageActivity extends AppCompatActivity {
         for (VideoSession video : videos) {
             userViewModel.getUserDisplayName(video.getUploaderId()).observe(this, displayName -> {
                 if (displayName != null) {
-                    video.setUploaderId(displayName); // Update the uploaderId with the display name
+                    video.setUploaderDisplayName(displayName); // Update the uploaderId with the display name
                 }
                 videoAdapter.notifyDataSetChanged(); // Notify the adapter about data changes
             });
