@@ -79,6 +79,7 @@ public class VideoSessionAdapter extends RecyclerView.Adapter<VideoSessionAdapte
             intent.putExtra("VIDEO_DESCRIPTION", video.getDescription());
             intent.putExtra("VIDEO_TOPIC", video.getTopic());
             intent.putExtra("VIDEO_CHANNEL", video.getUploaderDisplayName());
+            intent.putExtra("VIDEO_UPLOADER_ID", video.getUploaderId());
             intent.putExtra("VIDEO_COMMENTS", commentsJson);
 
             context.startActivity(intent);

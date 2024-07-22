@@ -119,6 +119,7 @@ public class VideoPageActivity extends AppCompatActivity {
         String description = intent.getStringExtra("VIDEO_DESCRIPTION");
         String topic = intent.getStringExtra("VIDEO_TOPIC");
         String channel = intent.getStringExtra("VIDEO_CHANNEL");
+        String uploaderId = intent.getStringExtra("VIDEO_UPLOADER_ID");
 
         // Deserialize the comments JSON string back to a list of Comment objects
         String commentsJson = intent.getStringExtra("VIDEO_COMMENTS");
@@ -140,7 +141,7 @@ public class VideoPageActivity extends AppCompatActivity {
         views = videoStateManager.getViewCount(videoId); // Get the updated view count
         viewsTextView.setText("Views: " + views); // Update the viewsTextView with the incremented view count
         likesTextView.setText("Likes: " + likes);
-        String currentUserId = UserSession.getInstance().getUsername();
+        String currentUserId = UserSession.getInstance().getUserId();
         isLiked = videoStateManager.isLikedByUser(videoId, currentUserId);
         isDisliked = videoStateManager.isDislikedByUser(videoId, currentUserId);
         updateButtonColors();
@@ -153,18 +154,24 @@ public class VideoPageActivity extends AppCompatActivity {
         topicTextView.setText("Topic: " + topic);
         channelTextView.setText("Channel: " + channel);
 
-        // Show edit video button if user is logged in
+        // Show add, edit and delete comment buttons if the user's uploader is the logged-in user
         if (isUserLoggedIn()) {
-            editVideoButton.setVisibility(View.VISIBLE);
             commentInput.setVisibility(View.VISIBLE);
             cancelCommentButton.setVisibility(View.VISIBLE);
             addCommentButton.setVisibility(View.VISIBLE);
-            deleteVideoButton.setVisibility(View.VISIBLE);
+
         } else {
-            editVideoButton.setVisibility(View.GONE);
             commentInput.setVisibility(View.GONE);
             cancelCommentButton.setVisibility(View.GONE);
             addCommentButton.setVisibility(View.GONE);
+        }
+
+        // Show edit/delete video buttons if the user's uploader is the logged-in user
+        if ((currentUserId != null) && (currentUserId.equals(uploaderId))) {
+            editVideoButton.setVisibility(View.VISIBLE);
+            deleteVideoButton.setVisibility(View.VISIBLE);
+        } else {
+            editVideoButton.setVisibility(View.GONE);
             deleteVideoButton.setVisibility(View.GONE);
         }
         editVideoButton.setOnClickListener(new View.OnClickListener() {
@@ -481,6 +488,10 @@ public class VideoPageActivity extends AppCompatActivity {
 
     private boolean isUserLoggedIn() {
         return UserSession.getInstance().isLoggedIn();
+    }
+
+    private String userSessionId() {
+        return UserSession.getInstance().getUserId();
     }
 
     private void disableCommentInput() {
