@@ -359,7 +359,6 @@ public class VideoPageActivity extends AppCompatActivity {
                                         int newCommentPosition = commentList.size() - 1;
                                         commentAdapter.notifyItemInserted(newCommentPosition);
                                         commentsRecyclerView.scrollToPosition(newCommentPosition); // Scroll to the new comment
-                                        Toast.makeText(VideoPageActivity.this, "Comment added successfully", Toast.LENGTH_SHORT).show();
 
                                         // Fetch the display name for the new comment
                                         userViewModel.getUserDisplayName(userId).observe(VideoPageActivity.this, displayName -> {
@@ -370,6 +369,21 @@ public class VideoPageActivity extends AppCompatActivity {
                                                 Log.d("VideoPageActivity", "Display Name is null for User: " + userId);
                                             }
                                         });
+
+                                        // Show an alert dialog before navigating to MainPageActivity
+                                        new AlertDialog.Builder(VideoPageActivity.this)
+                                                .setTitle("Success")
+                                                .setMessage("Comment added successfully")
+                                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // Continue to MainPageActivity
+                                                        Intent intent = new Intent(VideoPageActivity.this, MainPageActivity.class);
+                                                        startActivity(intent);
+                                                        finish(); // Close the current activity
+                                                    }
+                                                })
+                                                .setIcon(android.R.drawable.ic_dialog_info)
+                                                .show();
                                     } else {
                                         Toast.makeText(VideoPageActivity.this, "Failed to add comment", Toast.LENGTH_SHORT).show();
                                     }
@@ -384,6 +398,7 @@ public class VideoPageActivity extends AppCompatActivity {
                 }
             }
         });
+
 
 
 
