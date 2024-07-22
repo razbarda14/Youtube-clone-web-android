@@ -379,7 +379,6 @@ public class VideoPageActivity extends AppCompatActivity {
                     likesTextView.setText("Likes: " + videoSession.getLikes());
                     descriptionTextView.setText(videoSession.getDescription());
                     topicTextView.setText("Topic: " + videoSession.getTopic());
-                    channelTextView.setText("Channel: " + videoSession.getUploaderId());
                     commentList.clear();
                     commentList.addAll(videoSession.getComments());
                     commentAdapter.notifyDataSetChanged();
