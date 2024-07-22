@@ -45,4 +45,7 @@ public interface VideoApiService {
     @DELETE("api/users/{userId}/videos/{videoId}")
     Call<Void> deleteVideoById(@Path("videoId") String videoId);
 
+    @GET("api/users/{userId}/videos")
+    Call<List<VideoSession>> getUserVideos(@Path("userId") String userId);
+
 }

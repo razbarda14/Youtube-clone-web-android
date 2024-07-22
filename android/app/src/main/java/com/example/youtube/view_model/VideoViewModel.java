@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.repository.VideoRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -72,4 +73,26 @@ public class VideoViewModel extends AndroidViewModel {
     public void deleteVideoById(String videoId) {
         videoRepository.deleteVideoById(videoId);
     }
+
+    public LiveData<List<VideoSession>> getUserVideos(String userId) {
+        MutableLiveData<List<VideoSession>> liveData = new MutableLiveData<>();
+        videoRepository.getUserVideos(userId, new retrofit2.Callback<List<VideoSession>>() {
+            @Override
+            public void onResponse(retrofit2.Call<List<VideoSession>> call, retrofit2.Response<List<VideoSession>> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(response.body());
+                } else {
+                    liveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<List<VideoSession>> call, Throwable t) {
+                liveData.setValue(null);
+            }
+        });
+        return liveData;
+    }
 }
+
+

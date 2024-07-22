@@ -46,6 +46,9 @@
             android:name=".activities.VideoPageActivity"
             android:windowSoftInputMode="adjustResize">
         </activity>
+        <activity
+            android:name=".activities.UserPageActivity"
+            android:exported="true" />
         <activity android:name=".activities.UploadVideoActivity" />
 <!--        <activity-->
 <!--            android:name=".MainPageActivity"-->
