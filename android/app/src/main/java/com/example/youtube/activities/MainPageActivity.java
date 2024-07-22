@@ -98,6 +98,7 @@ public class MainPageActivity extends AppCompatActivity {
             public void onChanged(List<VideoSession> videos) {
                 // Update the adapter with the new video list
                 videoAdapter.updateList(videos);
+                fetchDisplayNamesAndUpdateVideos(videos);
             }
         });
 
@@ -219,6 +220,17 @@ public class MainPageActivity extends AppCompatActivity {
             // Add new video to the list
             videoList.add(newVideo);
             videoAdapter.updateList(videoList);
+        }
+    }
+
+    private void fetchDisplayNamesAndUpdateVideos(List<VideoSession> videos) {
+        for (VideoSession video : videos) {
+            userViewModel.getUserDisplayName(video.getUploaderId()).observe(this, displayName -> {
+                if (displayName != null) {
+                    video.setUploaderId(displayName); // Update the uploaderId with the display name
+                }
+                videoAdapter.notifyDataSetChanged(); // Notify the adapter about data changes
+            });
         }
     }
 
