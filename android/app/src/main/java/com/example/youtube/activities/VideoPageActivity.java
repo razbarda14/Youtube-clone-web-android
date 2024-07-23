@@ -12,19 +12,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.youtube.R;
 import com.example.youtube.adapters.CommentAdapter;
 import com.example.youtube.adapters.VideoSessionAdapter;
 import com.example.youtube.entities.Comment;
 import com.example.youtube.entities.UserSession;
-import com.example.youtube.entities.Video;
-import com.example.youtube.adapters.VideoAdapter;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.view_model.CommentViewModel;
 import com.example.youtube.view_model.UserViewModel;
@@ -119,16 +119,8 @@ public class VideoPageActivity extends AppCompatActivity {
         String description = intent.getStringExtra("VIDEO_DESCRIPTION");
         String topic = intent.getStringExtra("VIDEO_TOPIC");
         String channel = intent.getStringExtra("VIDEO_CHANNEL");
-      
-        // Fetch and display the uploader's display name
-        userViewModel.getUserDisplayName(channel).observe(this, displayName -> {
-            if (displayName != null) {
-                channelTextView.setText(displayName);
-            } else {
-                channelTextView.setText(channel); // Fallback to uploaderId if display name is not found
-            }
-        });
-      
+        String uploaderId = intent.getStringExtra("VIDEO_UPLOADER_ID");
+
         // Deserialize the comments JSON string back to a list of Comment objects
         String commentsJson = intent.getStringExtra("VIDEO_COMMENTS");
         Log.d("VideoPageActivity", "Raw Comments JSON: " + commentsJson);
@@ -149,7 +141,7 @@ public class VideoPageActivity extends AppCompatActivity {
         views = videoStateManager.getViewCount(videoId); // Get the updated view count
         viewsTextView.setText("Views: " + views); // Update the viewsTextView with the incremented view count
         likesTextView.setText("Likes: " + likes);
-        String currentUserId = UserSession.getInstance().getUsername();
+        String currentUserId = UserSession.getInstance().getUserId();
         isLiked = videoStateManager.isLikedByUser(videoId, currentUserId);
         isDisliked = videoStateManager.isDislikedByUser(videoId, currentUserId);
         updateButtonColors();
@@ -162,18 +154,24 @@ public class VideoPageActivity extends AppCompatActivity {
         topicTextView.setText("Topic: " + topic);
         channelTextView.setText("Channel: " + channel);
 
-        // Show edit video button if user is logged in
+        // Show add, edit and delete comment buttons if the user's uploader is the logged-in user
         if (isUserLoggedIn()) {
-            editVideoButton.setVisibility(View.VISIBLE);
             commentInput.setVisibility(View.VISIBLE);
             cancelCommentButton.setVisibility(View.VISIBLE);
             addCommentButton.setVisibility(View.VISIBLE);
-            deleteVideoButton.setVisibility(View.VISIBLE);
+
         } else {
-            editVideoButton.setVisibility(View.GONE);
             commentInput.setVisibility(View.GONE);
             cancelCommentButton.setVisibility(View.GONE);
             addCommentButton.setVisibility(View.GONE);
+        }
+
+        // Show edit/delete video buttons if the user's uploader is the logged-in user
+        if ((currentUserId != null) && (currentUserId.equals(uploaderId))) {
+            editVideoButton.setVisibility(View.VISIBLE);
+            deleteVideoButton.setVisibility(View.VISIBLE);
+        } else {
+            editVideoButton.setVisibility(View.GONE);
             deleteVideoButton.setVisibility(View.GONE);
         }
         editVideoButton.setOnClickListener(new View.OnClickListener() {
@@ -272,7 +270,7 @@ public class VideoPageActivity extends AppCompatActivity {
         commentsRecyclerView = findViewById(R.id.comments_recycler_view);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentList = new ArrayList<>();
-        commentAdapter = new CommentAdapter(commentList, this, new CommentAdapter.CommentActionListener() {
+        commentAdapter = new CommentAdapter(commentList, this, currentUserId, new CommentAdapter.CommentActionListener() {
             @Override
             public void onEditComment(int position) {
                 if (isUserLoggedIn()) {
@@ -331,7 +329,8 @@ public class VideoPageActivity extends AppCompatActivity {
                     if (!newCommentText.isEmpty()) {
                         try {
                             JSONObject commentJson = new JSONObject();
-                            commentJson.put("userId", UserSession.getInstance().getUserId());
+                            String userId = UserSession.getInstance().getUserId();
+                            commentJson.put("userId", userId);
                             commentJson.put("comment", newCommentText);
                             String commentString = commentJson.toString();
 
@@ -343,7 +342,48 @@ public class VideoPageActivity extends AppCompatActivity {
                                 public void onChanged(VideoSession videoSession) {
                                     if (videoSession != null) {
                                         commentInput.setText(""); // Clear the input field
-                                        fetchVideoDetails(); // Fetch updated video details
+                                        // Create a new Comment object with the correct ID from the server response
+                                        Comment newComment = new Comment(userId, newCommentText);
+                                        // Assuming videoSession contains the updated comments with IDs
+                                        List<Comment> updatedComments = videoSession.getComments();
+                                        Log.d("VideoPageActivity", "Adding comment for userId: " + userId);
+                                        for (Comment comment : updatedComments) {
+                                            Log.d("VideoPageActivity", "Checking comment: " + comment.getComment() + " by userId: " + comment.getUserId());
+                                            if (comment.getUserId() != null && comment.getUserId().equals(userId) && comment.getComment().equals(newCommentText)) {
+                                                newComment.setCommentId(comment.getCommentId());
+                                                break;
+                                            }
+                                        }
+
+                                        commentList.add(newComment);
+                                        int newCommentPosition = commentList.size() - 1;
+                                        commentAdapter.notifyItemInserted(newCommentPosition);
+                                        commentsRecyclerView.scrollToPosition(newCommentPosition); // Scroll to the new comment
+
+                                        // Fetch the display name for the new comment
+                                        userViewModel.getUserDisplayName(userId).observe(VideoPageActivity.this, displayName -> {
+                                            if (displayName != null) {
+                                                newComment.setDisplayName(displayName);
+                                                commentAdapter.notifyItemChanged(newCommentPosition); // Update the adapter to display the display name
+                                            } else {
+                                                Log.d("VideoPageActivity", "Display Name is null for User: " + userId);
+                                            }
+                                        });
+
+                                        // Show an alert dialog before navigating to MainPageActivity
+                                        new AlertDialog.Builder(VideoPageActivity.this)
+                                                .setTitle("Success")
+                                                .setMessage("Comment added successfully")
+                                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // Continue to MainPageActivity
+                                                        Intent intent = new Intent(VideoPageActivity.this, MainPageActivity.class);
+                                                        startActivity(intent);
+                                                        finish(); // Close the current activity
+                                                    }
+                                                })
+                                                .setIcon(android.R.drawable.ic_dialog_info)
+                                                .show();
                                     } else {
                                         Toast.makeText(VideoPageActivity.this, "Failed to add comment", Toast.LENGTH_SHORT).show();
                                     }
@@ -359,6 +399,12 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
 
+
+
+
+
+
+
         cancelCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -371,7 +417,7 @@ public class VideoPageActivity extends AppCompatActivity {
         }
 
         // Initial fetch of video details
-        fetchVideoDetails();
+    //    fetchVideoDetails();
         // Fetch related videos
         fetchRelatedVideos();
     }
@@ -388,7 +434,6 @@ public class VideoPageActivity extends AppCompatActivity {
                     likesTextView.setText("Likes: " + videoSession.getLikes());
                     descriptionTextView.setText(videoSession.getDescription());
                     topicTextView.setText("Topic: " + videoSession.getTopic());
-                    channelTextView.setText("Channel: " + videoSession.getUploaderId());
                     commentList.clear();
                     commentList.addAll(videoSession.getComments());
                     commentAdapter.notifyDataSetChanged();
@@ -398,7 +443,7 @@ public class VideoPageActivity extends AppCompatActivity {
             }
         });
     }
-
+//
     private void incrementViewsOnServer(String videoId) {
         videoViewModel.incrementViews(videoId).observe(this, new Observer<VideoSession>() {
             @SuppressLint("SetTextI18n")
@@ -493,6 +538,10 @@ public class VideoPageActivity extends AppCompatActivity {
         return UserSession.getInstance().isLoggedIn();
     }
 
+    private String userSessionId() {
+        return UserSession.getInstance().getUserId();
+    }
+
     private void disableCommentInput() {
         commentInput.setEnabled(false);
         addCommentButton.setEnabled(false);
@@ -547,13 +596,16 @@ public class VideoPageActivity extends AppCompatActivity {
                 if (!editedCommentText.isEmpty()) {
                     String videoId = getIntent().getStringExtra("VIDEO_ID");
                     String commentId = comment.getCommentId();
+                    Log.d("VideoPageActivity", "Editing comment ID: " + commentId);
 
                     comment.setComment(editedCommentText);
 
                     commentviewModel.editComment(videoId, commentId, comment).observe(VideoPageActivity.this, videoSession -> {
                         if (videoSession != null) {
-                            fetchVideoDetails(); // Fetch updated video details
-                            Log.d("VideoPageActivity", "Comment edited successfully");
+                            // Manually update the comment list and notify the adapter
+                            commentList.set(position, comment);
+                            commentAdapter.notifyItemChanged(position);
+                            Toast.makeText(VideoPageActivity.this, "Comment edited successfully", Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e("VideoPageActivity", "Failed to edit comment");
                         }
@@ -573,10 +625,13 @@ public class VideoPageActivity extends AppCompatActivity {
         builder.show();
     }
 
+
+
     private void deleteComment(int position) {
         Comment comment = commentList.get(position);
         String videoId = getIntent().getStringExtra("VIDEO_ID");
         String commentId = comment.getCommentId(); // Ensure commentId is correctly set
+        Log.d("VideoPageActivity", "Deleting comment ID: " + commentId);
 
         if (commentId == null || commentId.isEmpty()) {
             Log.e("VideoPageActivity", "Comment ID is null or empty");
@@ -585,13 +640,17 @@ public class VideoPageActivity extends AppCompatActivity {
 
         commentviewModel.deleteComment(videoId, commentId).observe(this, videoSession -> {
             if (videoSession != null) {
-                fetchVideoDetails(); // Fetch updated video details
-                Log.d("VideoPageActivity", "Comment deleted successfully");
+                // Manually update the comment list and notify the adapter
+                commentList.remove(position);
+                commentAdapter.notifyItemRemoved(position);
+                Toast.makeText(VideoPageActivity.this, "Comment deleted successfully", Toast.LENGTH_SHORT).show();
             } else {
                 Log.e("VideoPageActivity", "Failed to delete comment");
             }
         });
     }
+
+
 
     private void showSignInAlert() {
         new AlertDialog.Builder(this)
@@ -618,6 +677,11 @@ public class VideoPageActivity extends AppCompatActivity {
                     if (!video.getId().equals(videoId)) {
                         relatedVideoList.add(video);
                     }
+                    userViewModel.getUserDisplayName(video.getUploaderId()).observe(VideoPageActivity.this, displayName -> {
+                        if (displayName != null) {
+                            video.setUploaderDisplayName(displayName); // Update the uploaderId with the display name
+                        }
+                    });
                 }
                 relatedVideosAdapter.notifyDataSetChanged();
             }
