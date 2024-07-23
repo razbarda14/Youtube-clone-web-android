@@ -101,6 +101,7 @@ public class UserViewModel extends AndroidViewModel {
         });
         return liveData;
     }
+
     public LiveData<VideoSession> createVideo(RequestBody userId, MultipartBody.Part videoFile, MultipartBody.Part thumbnailFile, RequestBody title, RequestBody description, RequestBody topic) {
         MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
         mRepository.createVideo(userId, videoFile, thumbnailFile, title, description, topic, new Callback<VideoSession>() {
@@ -120,6 +121,7 @@ public class UserViewModel extends AndroidViewModel {
         });
         return liveData;
     }
+
     public LiveData<String> getUserDisplayName(String id) {
         MutableLiveData<String> liveData = new MutableLiveData<>();
         mRepository.getUserDisplayName(id, new Callback<UserDisplayNameResponse>() {
@@ -140,7 +142,7 @@ public class UserViewModel extends AndroidViewModel {
         return liveData;
     }
 
-  public LiveData<VideoSession> getVideoById(String userId, String videoId) {
+    public LiveData<VideoSession> getVideoById(String userId, String videoId) {
         MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
         mRepository.getVideoById(userId, videoId, new Callback<VideoSession>() {
             @Override
@@ -159,5 +161,10 @@ public class UserViewModel extends AndroidViewModel {
         });
         return liveData;
     }
-  
+
+    public LiveData<Boolean> updateDisplayName(String token, String userId, String displayName) {
+        return mRepository.updateDisplayName(token, userId, displayName);
+    }
+
+
 }

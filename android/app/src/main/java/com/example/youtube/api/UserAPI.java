@@ -11,6 +11,8 @@ import com.example.youtube.utils.RetrofitInstance;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -199,5 +201,35 @@ public class UserAPI {
             }
         });
     }
-   
+
+    public void updateDisplayName(String token, String userId, String displayName, Callback<User> callback) {
+        Map<String, String> displayNameMap = new HashMap<>();
+        displayNameMap.put("display_name", displayName);
+
+        Call<User> call = apiService.updateDisplayName("Bearer " + token, userId, displayNameMap);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    callback.onResponse(call, response);
+                } else {
+                    Log.e(TAG, "Updating display name failed with response code: " + response.code());
+                    try {
+                        Log.e(TAG, "Response error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    callback.onFailure(call, new Throwable("Updating display name failed with response code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e(TAG, "Updating display name failed: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
+
+
 }

@@ -160,17 +160,20 @@ public class UserPageActivity extends AppCompatActivity {
                 if (!newDisplayName.isEmpty()) {
                     userSession.setDisplayName(newDisplayName);
                     displayNameTextView.setText(newDisplayName);
+                    String token = tokenManager.getToken();
                     // Update the display name in the backend if necessary
-//                    userViewModel.updateDisplayName(userSession.getUserId(), newDisplayName).observe(UserPageActivity.this, new Observer<Boolean>() {
-//                        @Override
-//                        public void onChanged(Boolean success) {
-//                            if (success) {
-//                                Toast.makeText(UserPageActivity.this, "Display name updated", Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                Toast.makeText(UserPageActivity.this, "Failed to update display name", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
+                    userViewModel.updateDisplayName(token, userSession.getUserId(), newDisplayName).observe(UserPageActivity.this, new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean success) {
+                            if (success) {
+                                userSession.setDisplayName(newDisplayName);
+                                displayNameTextView.setText(newDisplayName);
+                                Toast.makeText(UserPageActivity.this, "Display name updated", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(UserPageActivity.this, "Failed to update display name", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 } else {
                     Toast.makeText(UserPageActivity.this, "Display name cannot be empty", Toast.LENGTH_SHORT).show();
                 }

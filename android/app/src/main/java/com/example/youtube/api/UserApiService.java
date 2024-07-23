@@ -9,6 +9,7 @@ import com.example.youtube.model.UserUpdateRequest;
 import com.example.youtube.model.VideoSession;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -90,5 +91,9 @@ public interface UserApiService {
 
     @GET("api/users/{id}/videos/{pid}")
     Call<VideoSession> getVideoById(@Path("id") String userId, @Path("pid") String videoId);
+
+    @PUT("api/users/{id}")
+    Call<User> updateDisplayName(@Header("Authorization") String token, @Path("id") String userId, @Body Map<String, String> displayName);
+
 
 }
