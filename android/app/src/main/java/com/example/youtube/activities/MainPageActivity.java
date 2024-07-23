@@ -32,7 +32,7 @@ import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.TokenManager;
 import com.example.youtube.view_model.UserViewModel;
 import com.example.youtube.view_model.VideoViewModel;
-
+import com.example.youtube.entities.UserSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -127,6 +127,18 @@ public class MainPageActivity extends AppCompatActivity {
                         profileImageView.setVisibility(View.VISIBLE);
                         signInButton.setVisibility(View.GONE);
                         signOutButton.setVisibility(View.VISIBLE);
+
+                        // Set click listener for display name to open UserPageActivity
+                        displayNameTextView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(MainPageActivity.this, UserPageActivity.class);
+                                intent.putExtra("userId", userSession.getUserId());
+                                intent.putExtra("displayName", userSession.getDisplayName());
+                                startActivity(intent);
+                            }
+                        });
+
                     } else {
                         displayNameTextView.setVisibility(View.GONE);
                         profileImageView.setVisibility(View.GONE);

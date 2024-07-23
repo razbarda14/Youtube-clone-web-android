@@ -108,4 +108,31 @@ public class VideoAPI {
             }
         });
     }
+
+    public void getUserVideos(String userId, Callback<List<VideoSession>> callback) {
+        Call<List<VideoSession>> call = apiService.getUserVideos(userId);
+        call.enqueue(new Callback<List<VideoSession>>() {
+            @Override
+            public void onResponse(Call<List<VideoSession>> call, Response<List<VideoSession>> response) {
+                if (response.isSuccessful()) {
+                    callback.onResponse(call, response);
+                } else {
+                    Log.e(TAG, "Failed to fetch user videos with response code: " + response.code());
+                    try {
+                        Log.e(TAG, "Response error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    callback.onFailure(call, new Throwable("Failed to fetch user videos with response code: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<VideoSession>> call, Throwable t) {
+                Log.e(TAG, "Failed to fetch user videos: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
+
 }

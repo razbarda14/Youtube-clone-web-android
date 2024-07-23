@@ -29,4 +29,9 @@ public class VideoRepository {
     public void deleteVideoById(String videoId) {
         videoAPI.deleteVideoById(videoId);
     }
+
+    public void getUserVideos(String userId, Callback<List<VideoSession>> callback) {
+        videoAPI.getUserVideos(userId, callback);
+    }
+
 }
