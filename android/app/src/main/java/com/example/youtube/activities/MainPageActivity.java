@@ -32,7 +32,7 @@ import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.TokenManager;
 import com.example.youtube.view_model.UserViewModel;
 import com.example.youtube.view_model.VideoViewModel;
-import com.example.youtube.entities.UserSession;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -251,6 +251,7 @@ public class MainPageActivity extends AppCompatActivity {
         videoViewModel.getMostViewedAndRandomVideos().observe(this, new Observer<List<VideoSession>>() {
             @Override
             public void onChanged(List<VideoSession> videos) {
+                fetchDisplayNamesAndUpdateVideos(videos);
                 filteredVideoList.clear();
                 if (query.isEmpty()) {
                     filteredVideoList.addAll(videos);
