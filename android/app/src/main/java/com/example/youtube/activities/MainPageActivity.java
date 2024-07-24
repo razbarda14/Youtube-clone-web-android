@@ -93,14 +93,21 @@ public class MainPageActivity extends AppCompatActivity {
         profileImageView = findViewById(R.id.profile_image);
 
         videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class);
-        videoViewModel.getMostViewedAndRandomVideos().observe(this, new Observer<List<VideoSession>>() {
-            @Override
-            public void onChanged(List<VideoSession> videos) {
-                // Update the adapter with the new video list
-                videoAdapter.updateList(videos);
-                fetchDisplayNamesAndUpdateVideos(videos);
-            }
+
+        videoViewModel.getVideos().observe(this, videos -> {
+            videoAdapter.updateList(videos);
+            fetchDisplayNamesAndUpdateVideos(videos);
         });
+
+        // In commented - the original use before implementing room
+//        videoViewModel.getMostViewedAndRandomVideos().observe(this, new Observer<List<VideoSession>>() {
+//            @Override
+//            public void onChanged(List<VideoSession> videos) {
+//                // Update the adapter with the new video list
+//                videoAdapter.updateList(videos);
+//                fetchDisplayNamesAndUpdateVideos(videos);
+//            }
+//        });
 
         // Check if user is logged in and display user information
         String token = tokenManager.getToken();
