@@ -1,12 +1,22 @@
 package com.example.youtube.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
 import com.example.youtube.entities.Comment;
+import com.example.youtube.room.CommentTypeConverter;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity
+@TypeConverters(CommentTypeConverter.class)
 public class VideoSession {
     @SerializedName("_id")
+    @PrimaryKey
+    @NonNull
     private String id;
     private String title;
     private String uploaderId;
@@ -19,11 +29,10 @@ public class VideoSession {
     private String topic;
     private int likes;
     private List<Comment> comments;
-    private List<String> likedBy;
 
     public VideoSession(String id, String title, String uploaderId, String description, int viewsCount,
                         String dateUploaded, String videoPath, String thumbnailPath, String topic, int likes,
-                        List<Comment> comments, List<String> likedBy) {
+                        List<Comment> comments) {
         this.id = id;
         this.title = title;
         this.uploaderId = uploaderId;
@@ -36,7 +45,6 @@ public class VideoSession {
         this.topic = topic;
         this.likes = likes;
         this.comments = comments;
-        this.likedBy = likedBy;
     }
 
     public VideoSession(){
@@ -51,7 +59,6 @@ public class VideoSession {
         this.topic = null;
         this.likes = 0;
         this.comments = null;
-        this.likedBy = null;
     }
 
     // Getters and Setters
@@ -141,14 +148,6 @@ public class VideoSession {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
-    }
-
-    public List<String> getLikedBy() {
-        return likedBy;
-    }
-
-    public void setLikedBy(List<String> likedBy) {
-        this.likedBy = likedBy;
     }
 
     public String getUploaderDisplayName() {

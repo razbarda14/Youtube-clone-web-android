@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.youtube.entities.Video;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.repository.VideoRepository;
 
@@ -20,12 +21,24 @@ import retrofit2.Response;
 public class VideoViewModel extends AndroidViewModel {
     private static final String TAG = VideoViewModel.class.getSimpleName();
     private VideoRepository videoRepository;
+    private LiveData<List<VideoSession>> videos;
 
     public VideoViewModel(@NonNull Application application) {
         super(application);
-        videoRepository = new VideoRepository();
+        videoRepository = new VideoRepository(application);
+        videos = videoRepository.getAll();
     }
 
+    // modified method to match the android development powerpoint
+    public LiveData<List<VideoSession>> getVideos() {
+        return videos;
+    }
+
+    public void reload() {
+        videoRepository.reload();
+    }
+
+    // Original getMostViewedAndRandomVideos
     public LiveData<List<VideoSession>> getMostViewedAndRandomVideos() {
         MutableLiveData<List<VideoSession>> liveData = new MutableLiveData<>();
         videoRepository.getMostViewedAndRandomVideos(new Callback<List<VideoSession>>() {

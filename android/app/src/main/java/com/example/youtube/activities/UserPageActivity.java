@@ -99,6 +99,7 @@ public class UserPageActivity extends AppCompatActivity {
                     userVideoList.clear();
                     userVideoList.addAll(videos);
                     videoAdapter.updateList(userVideoList);
+                    fetchDisplayNamesAndUpdateVideos(videos);
                 } else {
                     Log.e(TAG, "Failed to fetch user videos");
                 }
@@ -188,5 +189,16 @@ public class UserPageActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private void fetchDisplayNamesAndUpdateVideos(List<VideoSession> videos) {
+        for (VideoSession video : videos) {
+            userViewModel.getUserDisplayName(video.getUploaderId()).observe(this, displayName -> {
+                if (displayName != null) {
+                    video.setUploaderDisplayName(displayName); // Update the uploaderId with the display name
+                }
+                videoAdapter.notifyDataSetChanged(); // Notify the adapter about data changes
+            });
+        }
     }
 }

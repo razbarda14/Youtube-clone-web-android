@@ -3,7 +3,10 @@ package com.example.youtube.api;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.youtube.model.VideoSession;
+import com.example.youtube.room.VideoDao;
 import com.example.youtube.utils.RetrofitInstance;
 
 import java.io.IOException;
@@ -12,14 +15,42 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class VideoAPI {
     private static final String TAG = VideoAPI.class.getSimpleName();
-    private VideoApiService apiService;
+    VideoApiService apiService;
+    Retrofit retrofit;
+    private MutableLiveData<List<VideoSession>> videoListData;
 
+    // Original constructor
     public VideoAPI() {
         apiService = RetrofitInstance.getRetrofitInstance().create(VideoApiService.class);
     }
+
+    // Constructor overload to match the android development powerpoint
+    public VideoAPI(MutableLiveData<List<VideoSession>> videoListData, VideoDao videoDao) {
+        this.videoListData = videoListData;
+        apiService = RetrofitInstance.getRetrofitInstance().create(VideoApiService.class);
+    }
+
+    // getMostViewedAndRandomVideos overload to match the android development powerpoint
+    public void getMostViewedAndRandomVideos(MutableLiveData<List<VideoSession>> videos) {
+        Call <List<VideoSession>> call = apiService.getMostViewedAndRandomVideos();
+        call.enqueue(new Callback<List<VideoSession>>() {
+            @Override
+            public void onResponse(Call<List<VideoSession>> call, Response<List<VideoSession>> response) {
+                videos.postValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<VideoSession>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    // Original getMostViewedAndRandomVideos
     public void getMostViewedAndRandomVideos(Callback<List<VideoSession>> callback) {
         Call<List<VideoSession>> call = apiService.getMostViewedAndRandomVideos();
         call.enqueue(new Callback<List<VideoSession>>() {
