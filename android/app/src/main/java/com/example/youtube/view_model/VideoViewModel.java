@@ -34,6 +34,10 @@ public class VideoViewModel extends AndroidViewModel {
         return videos;
     }
 
+    public void reload() {
+        videoRepository.reload();
+    }
+
     // Original getMostViewedAndRandomVideos
     public LiveData<List<VideoSession>> getMostViewedAndRandomVideos() {
         MutableLiveData<List<VideoSession>> liveData = new MutableLiveData<>();

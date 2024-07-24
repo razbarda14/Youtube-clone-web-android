@@ -222,6 +222,7 @@ public class VideoPageActivity extends AppCompatActivity {
 
                 // Call ViewModel to update video
                 videoViewModel.updateVideoDetails(updatedVideo);
+                videoViewModel.reload();
 
                 Toast.makeText(VideoPageActivity.this, "Video was updated successfully", Toast.LENGTH_SHORT).show();
 

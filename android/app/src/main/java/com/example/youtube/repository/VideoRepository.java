@@ -42,6 +42,10 @@ public class VideoRepository {
         return videoListData;
     }
 
+    public void reload() {
+        videoAPI.getMostViewedAndRandomVideos(this.videoListData);
+    }
+
     public void getMostViewedAndRandomVideos(Callback<List<VideoSession>> callback) {
         videoAPI.getMostViewedAndRandomVideos(callback);
     }
