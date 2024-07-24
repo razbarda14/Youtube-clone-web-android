@@ -25,6 +25,7 @@ import com.example.youtube.R;
 import com.example.youtube.entities.UserSession;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.view_model.UserViewModel;
+import com.example.youtube.view_model.VideoViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,6 +48,7 @@ public class UploadVideoActivity extends AppCompatActivity {
     private EditText editTextTopic;
     private EditText editTextUploaderID;
     private UserViewModel userViewModel;
+    private VideoViewModel videoViewModel;
     private UserSession userSession;
 
     @Override

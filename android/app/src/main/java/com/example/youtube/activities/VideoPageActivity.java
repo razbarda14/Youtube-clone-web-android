@@ -154,6 +154,17 @@ public class VideoPageActivity extends AppCompatActivity {
         topicTextView.setText("Topic: " + topic);
         channelTextView.setText("Channel: " + channel);
 
+        // Add OnClickListener to channelTextView to navigate to UserPageActivity
+        channelTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VideoPageActivity.this, UserPageActivity.class);
+                intent.putExtra("userId", uploaderId);
+                intent.putExtra("displayName", channel);
+                startActivity(intent);
+            }
+        });
+
         // Show add, edit and delete comment buttons if the user's uploader is the logged-in user
         if (isUserLoggedIn()) {
             commentInput.setVisibility(View.VISIBLE);
