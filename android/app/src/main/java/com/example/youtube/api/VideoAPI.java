@@ -6,6 +6,7 @@ import android.widget.Toast;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.youtube.model.VideoSession;
+import com.example.youtube.room.VideoDao;
 import com.example.youtube.utils.RetrofitInstance;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class VideoAPI {
     }
 
     // Constructor overload to match the android development powerpoint
-    public VideoAPI(MutableLiveData<List<VideoSession>> videoListData) {
+    public VideoAPI(MutableLiveData<List<VideoSession>> videoListData, VideoDao videoDao) {
         this.videoListData = videoListData;
         apiService = RetrofitInstance.getRetrofitInstance().create(VideoApiService.class);
     }

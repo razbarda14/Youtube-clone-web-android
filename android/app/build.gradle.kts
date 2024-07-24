@@ -42,11 +42,11 @@ dependencies {
     annotationProcessor(libs.glide.compiler)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    implementation (libs.viewModel)
-    implementation (libs.roomRuntime)
-    //kapt (libs.roomCompiler)
-    implementation (libs.roomKtx)
-    implementation (libs.androidxSecurityCrypto)
+    implementation(libs.viewModel)
+    implementation(libs.roomRuntime)
+    annotationProcessor(libs.roomCompiler) // Ensure this line is included
+    implementation(libs.roomKtx)
+    implementation(libs.androidxSecurityCrypto)
 
 
 

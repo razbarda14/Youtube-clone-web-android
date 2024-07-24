@@ -234,7 +234,7 @@ public class MainPageActivity extends AppCompatActivity {
 
             // Create new video object
             VideoSession newVideo = new VideoSession(
-                    id, title, channel, description, views, uploadDate, videoUrl, imageUrl, topic, likes, new ArrayList<>(), new ArrayList<>());
+                    id, title, channel, description, views, uploadDate, videoUrl, imageUrl, topic, likes, new ArrayList<>());
 
             // Add new video to the list
             videoList.add(newVideo);

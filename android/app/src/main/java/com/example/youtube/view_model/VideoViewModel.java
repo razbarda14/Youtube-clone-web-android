@@ -25,11 +25,11 @@ public class VideoViewModel extends AndroidViewModel {
 
     public VideoViewModel(@NonNull Application application) {
         super(application);
-        videoRepository = new VideoRepository();
+        videoRepository = new VideoRepository(application);
         videos = videoRepository.getAll();
     }
 
-    // modified getMostViewedAndRandomVideos to match the android development powerpoint
+    // modified method to match the android development powerpoint
     public LiveData<List<VideoSession>> getVideos() {
         return videos;
     }

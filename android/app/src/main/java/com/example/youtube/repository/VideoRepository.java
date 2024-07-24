@@ -1,10 +1,18 @@
 package com.example.youtube.repository;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.room.Room;
 
+import com.example.youtube.activities.BaseActivity;
+import com.example.youtube.activities.MainPageActivity;
 import com.example.youtube.api.VideoAPI;
 import com.example.youtube.model.VideoSession;
+import com.example.youtube.room.AppDB;
+import com.example.youtube.room.VideoDao;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,12 +20,16 @@ import java.util.List;
 import retrofit2.Callback;
 
 public class VideoRepository {
+   private VideoDao videoDao;
     private VideoAPI videoAPI;
     private VideoListData videoListData;
 
-    public VideoRepository() {
-        videoAPI = new VideoAPI();
+    public VideoRepository(@NonNull Application application) {
+        AppDB db = Room.databaseBuilder(application.getApplicationContext(), AppDB.class, "PostsDB")
+                .fallbackToDestructiveMigration().build();
+        videoDao = db.videoDao();
         videoListData = new VideoListData();
+        videoAPI = new VideoAPI(videoListData, videoDao);
     }
 
     class VideoListData extends MutableLiveData<List<VideoSession>> {
@@ -32,9 +44,9 @@ public class VideoRepository {
             super.onActive();
             videoAPI.getMostViewedAndRandomVideos(this);
 
-//            new Thread(()->{
-//                videoSessionListData.postValue();
-//            }).start();
+            new Thread(()->{
+                videoListData.postValue(videoDao.index());
+            }).start();
         }
     }
 
