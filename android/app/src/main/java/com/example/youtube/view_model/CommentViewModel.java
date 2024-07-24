@@ -23,7 +23,7 @@ public class CommentViewModel extends AndroidViewModel {
 
     public CommentViewModel(@NonNull Application application) {
         super(application);
-        repository = new CommentRepository();
+        repository = new CommentRepository(application.getApplicationContext());
     }
     public LiveData<VideoSession> addCommentToVideo(String videoId, RequestBody commentJson) {
         MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
