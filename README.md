@@ -105,16 +105,16 @@ Please note that the JWT you get when log-in to your account expires within 1 ho
 ## Some screenshots and videos from the application
 
 **Homescreen:** you should see in your homescreen 20 videos (10 of them are the most viewed videos and 10 of them are random) in random order:
-![Screenshot_20240726_120451](https://github.com/user-attachments/assets/9cf9c9f9-540f-4bc9-845f-289d422acd4e)
+<img src="https://github.com/user-attachments/assets/9cf9c9f9-540f-4bc9-845f-289d422acd4e" alt="image" width="300">
 
 **Get to your profile:** when you sign in, you can access to your user profile clicking on the upperbar:
-![Screenshot_20240726_174850](https://github.com/user-attachments/assets/c5f92259-04df-46f9-8444-d0472735de38)
+<img src="https://github.com/user-attachments/assets/c5f92259-04df-46f9-8444-d0472735de38" alt="Get to your profile" width="300">
 
 **User profile:** this is how your proflie looks when you uploaded videos:
-![Screenshot_20240726_120625](https://github.com/user-attachments/assets/72540528-5a6f-4992-9e9a-bae1d72b50e7)
+<img src="https://github.com/user-attachments/assets/72540528-5a6f-4992-9e9a-bae1d72b50e7" alt="User profile" width="300">
 
 **Some more screenshots from the application**:
-![Screenshot_20240726_103917](https://github.com/user-attachments/assets/3b0da25b-185d-4ebf-a0ee-d78ecca4ab42)
-![Screenshot_20240726_104533](https://github.com/user-attachments/assets/3cb4d5bd-a075-41f2-9f99-4993c16395f8)
+<img src="https://github.com/user-attachments/assets/3b0da25b-185d-4ebf-a0ee-d78ecca4ab42" alt="Screenshot" width="300">
+<img src="https://github.com/user-attachments/assets/3cb4d5bd-a075-41f2-9f99-4993c16395f8" alt="Screenshot" width="300">
 
 Enjoy the watch!
