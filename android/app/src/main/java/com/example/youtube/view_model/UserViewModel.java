@@ -30,7 +30,7 @@ public class UserViewModel extends AndroidViewModel {
 
     public UserViewModel(@NonNull Application application) {
         super(application);
-        mRepository = new UserRepository();
+        mRepository = new UserRepository(application.getApplicationContext());
     }
 
     public LiveData<User> registerUser(RegisterUserRequest registerRequest) {
@@ -102,25 +102,8 @@ public class UserViewModel extends AndroidViewModel {
         return liveData;
     }
 
-    public LiveData<VideoSession> createVideo(RequestBody userId, MultipartBody.Part videoFile, MultipartBody.Part thumbnailFile, RequestBody title, RequestBody description, RequestBody topic) {
-        MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
-        mRepository.createVideo(userId, videoFile, thumbnailFile, title, description, topic, new Callback<VideoSession>() {
-            @Override
-            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
-                if (response.isSuccessful()) {
-                    liveData.setValue(response.body());
-                } else {
-                    liveData.setValue(null);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<VideoSession> call, Throwable t) {
-                liveData.setValue(null);
-            }
-        });
-        return liveData;
-    }
+
 
     public LiveData<String> getUserDisplayName(String id) {
         MutableLiveData<String> liveData = new MutableLiveData<>();
@@ -166,5 +149,48 @@ public class UserViewModel extends AndroidViewModel {
         return mRepository.updateDisplayName(token, userId, displayName);
     }
 
+    public LiveData<Boolean> deleteUser(String token, String userId) {
+        MutableLiveData<Boolean> liveData = new MutableLiveData<>();
+        mRepository.deleteUser(token, userId, new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(true);
+                } else {
+                    liveData.setValue(false);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                liveData.setValue(false);
+            }
+        });
+        return liveData;
+    }
+
+
+    public LiveData<User> getUserById(String userId) {
+        return mRepository.getUserById(userId);
+    }
+
+    public LiveData<VideoSession> createVideo(RequestBody userId, MultipartBody.Part videoFile, MultipartBody.Part thumbnailFile, RequestBody title, RequestBody description, RequestBody topic) {
+        MutableLiveData<VideoSession> liveData = new MutableLiveData<>();
+        mRepository.createVideo(userId, videoFile, thumbnailFile, title, description, topic, new Callback<VideoSession>() {
+            @Override
+            public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
+                if (response.isSuccessful()) {
+                    liveData.setValue(response.body());
+                } else {
+                    liveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VideoSession> call, Throwable t) {
+                liveData.setValue(null);
+            }
+        });
+        return liveData;
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.youtube.repository;
 
+import android.content.Context;
+
 import com.example.youtube.api.CommentApi;
 import com.example.youtube.entities.Comment;
 import com.example.youtube.model.VideoSession;
@@ -10,8 +12,8 @@ import retrofit2.Callback;
 public class CommentRepository {
     private CommentApi commentApi;
 
-    public CommentRepository() {
-        commentApi = new CommentApi();
+    public CommentRepository(Context context) {
+        commentApi = new CommentApi(context);
     }
 
     public void addCommentToVideo(String videoId, RequestBody commentJson, Callback<VideoSession> callback) {

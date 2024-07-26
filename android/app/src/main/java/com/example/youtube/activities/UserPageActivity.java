@@ -2,6 +2,7 @@ package com.example.youtube.activities;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.youtube.R;
 import com.example.youtube.adapters.VideoSessionAdapter;
 import com.example.youtube.entities.UserSession;
@@ -46,6 +49,7 @@ public class UserPageActivity extends AppCompatActivity {
     private TextView displayNameTextView;
     private ImageView profileImageView;
     private Button editDetailsButton;
+    private Button deleteUserButton;
     private UserViewModel userViewModel;
     private TokenManager tokenManager;
 
@@ -59,39 +63,119 @@ public class UserPageActivity extends AppCompatActivity {
         displayNameTextView = findViewById(R.id.display_name);
         profileImageView = findViewById(R.id.profile_image);
         editDetailsButton = findViewById(R.id.edit_details_button);
+        deleteUserButton = findViewById(R.id.delete_user_button);
         videoAdapter = new VideoSessionAdapter(this, userVideoList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(videoAdapter);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class); // Initialize videoViewModel
         tokenManager = new TokenManager(this);
 
-        UserSession userSession = UserSession.getInstance();
-        String userId = userSession.getUserId();
-        displayNameTextView.setText(userSession.getDisplayName());
-        String profilePhotoUrl = userSession.getProfilePhoto();
-        if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
-            setImageFromUrl(profileImageView, profilePhotoUrl);
-        } else {
-            profileImageView.setImageResource(R.drawable.default_profile);
-        }
-
-        // Verify user token
+        Intent intent = getIntent();
+        String passedUserId = intent.getStringExtra("userId");
         String token = tokenManager.getToken();
+
         if (token != null) {
             userViewModel.verifyUser(token).observe(this, new Observer<User>() {
                 @Override
                 public void onChanged(User user) {
-                    if (user != null && user.getId().equals(userId)) {
-                        editDetailsButton.setVisibility(View.VISIBLE);
+                    if (user != null) {
+                        UserSession userSession = UserSession.getInstance();
+                        if (passedUserId.equals(userSession.getUserId())) {
+                            // Token is verified and user ID matches, show user details from UserSession
+                            showUserDetailsFromSession();
+                            fetchUserVideos(userSession.getUserId());
+                            editDetailsButton.setVisibility(View.VISIBLE);
+                            deleteUserButton.setVisibility(View.VISIBLE);
+                        } else {
+                            // Token is verified but user ID does not match, fetch user details from server
+                            fetchUserDetailsFromServer(passedUserId);
+                            fetchUserVideos(passedUserId);
+                        }
                     } else {
-                        editDetailsButton.setVisibility(View.GONE);
+                        // Token is not verified, fetch user details from server
+                        fetchUserDetailsFromServer(passedUserId);
+                        fetchUserVideos(passedUserId);
                     }
                 }
             });
+        } else {
+            // No token, fetch user details from server
+            fetchUserDetailsFromServer(passedUserId);
+            fetchUserVideos(passedUserId);
         }
 
-        videoViewModel = new ViewModelProvider(this).get(VideoViewModel.class);
+        editDetailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditDetailsDialog(UserSession.getInstance());
+            }
+        });
+
+        deleteUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDeleteUserDialog(UserSession.getInstance());
+            }
+        });
+    }
+
+    private void fetchUserDetailsFromServer(String userId) {
+        userViewModel.getUserById(userId).observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                if (user != null) {
+                    displayNameTextView.setText(user.getDisplay_name());
+                    String profilePhotoUrl = user.getImage();
+
+                    if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
+                        profilePhotoUrl = profilePhotoUrl.replace("\\", "/");
+                        if (!profilePhotoUrl.startsWith("http://") && !profilePhotoUrl.startsWith("https://")) {
+                            profilePhotoUrl = "http://10.0.2.2:8080" + profilePhotoUrl; // Replace with your server URL
+                        }
+
+                        // Use Glide to load the profile image
+                        Glide.with(UserPageActivity.this)
+                                .load(profilePhotoUrl)
+                                .apply(new RequestOptions()
+                                        .placeholder(R.drawable.default_profile)
+                                        .error(R.drawable.default_profile))
+                                .into(profileImageView);
+                    } else {
+                        profileImageView.setImageResource(R.drawable.default_profile);
+                    }
+                } else {
+                    Log.e(TAG, "Failed to fetch user details from server");
+                }
+            }
+        });
+    }
+
+    private void showUserDetailsFromSession() {
+        UserSession userSession = UserSession.getInstance();
+        displayNameTextView.setText(userSession.getDisplayName());
+        String profilePhotoUrl = userSession.getProfilePhoto();
+
+        if (profilePhotoUrl != null && !profilePhotoUrl.isEmpty()) {
+            profilePhotoUrl = profilePhotoUrl.replace("\\", "/");
+            if (!profilePhotoUrl.startsWith("http://") && !profilePhotoUrl.startsWith("https://")) {
+                profilePhotoUrl = "http://10.0.2.2:8080" + profilePhotoUrl; // Replace with your server URL
+            }
+
+            // Use Glide to load the profile image
+            Glide.with(this)
+                    .load(profilePhotoUrl)
+                    .apply(new RequestOptions()
+                            .placeholder(R.drawable.default_profile)
+                            .error(R.drawable.default_profile))
+                    .into(profileImageView);
+        } else {
+            profileImageView.setImageResource(R.drawable.default_profile);
+        }
+    }
+
+    private void fetchUserVideos(String userId) {
         videoViewModel.getUserVideos(userId).observe(this, new Observer<List<VideoSession>>() {
             @Override
             public void onChanged(List<VideoSession> videos) {
@@ -99,20 +183,13 @@ public class UserPageActivity extends AppCompatActivity {
                     userVideoList.clear();
                     userVideoList.addAll(videos);
                     videoAdapter.updateList(userVideoList);
-                    fetchDisplayNamesAndUpdateVideos(videos);
                 } else {
                     Log.e(TAG, "Failed to fetch user videos");
                 }
             }
         });
-
-        editDetailsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEditDetailsDialog(userSession);
-            }
-        });
     }
+
 
     private void setImageFromUrl(ImageView imageView, String urlString) {
         if (urlString != null && !urlString.isEmpty()) {
@@ -191,14 +268,44 @@ public class UserPageActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void fetchDisplayNamesAndUpdateVideos(List<VideoSession> videos) {
-        for (VideoSession video : videos) {
-            userViewModel.getUserDisplayName(video.getUploaderId()).observe(this, displayName -> {
-                if (displayName != null) {
-                    video.setUploaderDisplayName(displayName); // Update the uploaderId with the display name
-                }
-                videoAdapter.notifyDataSetChanged(); // Notify the adapter about data changes
-            });
-        }
+    private void showDeleteUserDialog(UserSession userSession) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete User");
+        builder.setMessage("Are you sure you want to delete your account? This action cannot be undone.");
+
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String token = tokenManager.getToken();
+                userViewModel.deleteUser(token, userSession.getUserId()).observe(UserPageActivity.this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean success) {
+                        if (success) {
+                            Toast.makeText(UserPageActivity.this, "Account deleted successfully", Toast.LENGTH_SHORT).show();
+                            // Clear user session and token
+                            userSession.clearSession();
+                            tokenManager.clearToken();
+                            // Redirect to the login or main page
+                            Intent intent = new Intent(UserPageActivity.this, MainPageActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(UserPageActivity.this, "Failed to delete account", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
+
 }

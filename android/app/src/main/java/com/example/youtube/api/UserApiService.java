@@ -44,9 +44,6 @@ public interface UserApiService {
     @GET("api/users/getUserId")
     Call<UserIdResponse> getUserIdByUsername(@Query("username") String username);
 
-    @GET("api/users/{id}")
-    Call<User> getUserById(@Path("id") String id);
-
     @PUT("api/users/{id}")
     Call<User> updateUser(@Path("id") String id, @Body UserUpdateRequest updateRequest);
 
@@ -78,16 +75,8 @@ public interface UserApiService {
     @GET("api/users/{id}/videos")
     Call<List<VideoSession>> getVideosByUploader(@Path("id") String id);
 
-    @Multipart
-    @POST("api/users/{id}/videos")
-    Call<VideoSession> createVideo(
-            @Part("uploaderId") RequestBody uploaderId,
-            @Part MultipartBody.Part videoFile,
-            @Part MultipartBody.Part thumbnailFile,
-            @Part("title") RequestBody title,
-            @Part("description") RequestBody description,
-            @Part("topic") RequestBody topic
-    );
+
+
 
     @GET("api/users/{id}/videos/{pid}")
     Call<VideoSession> getVideoById(@Path("id") String userId, @Path("pid") String videoId);
@@ -96,4 +85,21 @@ public interface UserApiService {
     Call<User> updateDisplayName(@Header("Authorization") String token, @Path("id") String userId, @Body Map<String, String> displayName);
 
 
+    @DELETE("api/users/{id}")
+    Call<Void> deleteUser(@Header("Authorization") String token, @Path("id") String userId);
+
+    @GET("api/users/{id}")
+    Call<User> getUserById(@Path("id") String id);
+
+    @Multipart
+    @POST("api/users/{id}/videos")
+    Call<VideoSession> createVideo(
+            @Header("Authorization") String token,
+            @Part("uploaderId") RequestBody uploaderId,
+            @Part MultipartBody.Part videoFile,
+            @Part MultipartBody.Part thumbnailFile,
+            @Part("title") RequestBody title,
+            @Part("description") RequestBody description,
+            @Part("topic") RequestBody topic
+    );
 }

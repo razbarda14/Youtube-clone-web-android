@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -30,14 +31,14 @@ public interface VideoApiService {
     Call<VideoSession> incrementViews(@Path("id") String id);
 
     @POST("api/videos/{id}/comments")
-    Call<VideoSession> addCommentToVideo(@Path("id") String id, @Body RequestBody commentJson);
+    Call<VideoSession> addCommentToVideo(@Header("Authorization") String token, @Path("id") String id, @Body RequestBody commentJson);
 
 
     @DELETE("api/videos/{id}/comments/{commentId}")
-    Call<VideoSession> deleteCommentFromVideo(@Path("id") String id, @Path("commentId") String commentId);
+    Call<VideoSession> deleteCommentFromVideo(@Header("Authorization") String token, @Path("id") String id, @Path("commentId") String commentId);
 
     @PUT("api/videos/{id}/comments/{commentId}")
-    Call<VideoSession> editCommentInVideo(@Path("id") String id, @Path("commentId") String commentId, @Body Comment newComment);
+    Call<VideoSession> editCommentInVideo(@Header("Authorization") String token, @Path("id") String id, @Path("commentId") String commentId, @Body Comment newComment);
 
     @PUT("api/users/{userId}/videos/{videoId}")
     Call<Void> updateVideo(@Path("videoId") String videoId, @Body VideoSession video);

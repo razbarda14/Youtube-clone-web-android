@@ -24,6 +24,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.youtube.R;
 import com.example.youtube.adapters.VideoSessionAdapter;
 import com.example.youtube.entities.UserSession;
@@ -137,6 +139,17 @@ public class MainPageActivity extends AppCompatActivity {
 
                         // Set click listener for display name to open UserPageActivity
                         displayNameTextView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(MainPageActivity.this, UserPageActivity.class);
+                                intent.putExtra("userId", userSession.getUserId());
+                                intent.putExtra("displayName", userSession.getDisplayName());
+                                startActivity(intent);
+                            }
+                        });
+
+                        // Set click listener for profile image to open UserPageActivity
+                        profileImageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(MainPageActivity.this, UserPageActivity.class);
@@ -277,20 +290,26 @@ public class MainPageActivity extends AppCompatActivity {
 
     private void setImageFromUrl(ImageView imageView, String urlString) {
         if (urlString != null && !urlString.isEmpty()) {
+            final String finalUrlString = urlString.replace("\\", "/");
             new Thread(() -> {
                 try {
-                    Log.d(TAG, "Loading image from URL: " + urlString);
-                    InputStream inputStream = new URL(urlString).openStream();
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    Log.d(TAG, "Loading image from URL: " + finalUrlString);
+                    String urlToLoad = finalUrlString;
+                    if (!urlToLoad.startsWith("http://") && !urlToLoad.startsWith("https://")) {
+                        urlToLoad = "http://10.0.2.2:8080" + urlToLoad; // Replace with your server URL
+                    }
+
+                    // Use Glide to load the profile image
+                    String finalUrlToLoad = urlToLoad;
                     runOnUiThread(() -> {
-                        if (bitmap != null) {
-                            imageView.setImageBitmap(bitmap);
-                        } else {
-                            Log.e(TAG, "Bitmap is null");
-                            imageView.setImageResource(R.drawable.default_profile);
-                        }
+                        Glide.with(MainPageActivity.this)
+                                .load(finalUrlToLoad)
+                                .apply(new RequestOptions()
+                                        .placeholder(R.drawable.default_profile)
+                                        .error(R.drawable.default_profile))
+                                .into(imageView);
                     });
-                } catch (IOException e) {
+                } catch (Exception e) {
                     Log.e(TAG, "Error loading image from URL", e);
                     runOnUiThread(() -> imageView.setImageResource(R.drawable.default_profile));
                 }

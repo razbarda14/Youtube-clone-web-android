@@ -1,9 +1,12 @@
 package com.example.youtube.api;
 
+import android.content.Context;
 import android.util.Log;
 import com.example.youtube.entities.Comment;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.RetrofitInstance;
+import com.example.youtube.utils.TokenManager;
+
 import java.io.IOException;
 import java.util.Map;
 import okhttp3.RequestBody;
@@ -14,13 +17,16 @@ import retrofit2.Response;
 public class CommentApi {
     private static final String TAG = CommentApi.class.getSimpleName();
     private VideoApiService apiService;
+    private TokenManager tokenManager;
 
-    public CommentApi() {
+    public CommentApi(Context context) {
         apiService = RetrofitInstance.getRetrofitInstance().create(VideoApiService.class);
+        tokenManager = new TokenManager(context);
     }
 
     public void addCommentToVideo(String videoId, RequestBody commentJson, Callback<VideoSession> callback) {
-        Call<VideoSession> call = apiService.addCommentToVideo(videoId, commentJson);
+        String token = tokenManager.getToken(); // Get the token
+        Call<VideoSession> call = apiService.addCommentToVideo("Bearer " + token, videoId, commentJson);
         Log.d(TAG, "commentJson is : " + commentJson);
         call.enqueue(new Callback<VideoSession>() {
             @Override
@@ -65,7 +71,8 @@ public class CommentApi {
     }
 
     public void deleteCommentFromVideo(String videoId, String commentId, Callback<VideoSession> callback) {
-        Call<VideoSession> call = apiService.deleteCommentFromVideo(videoId, commentId);
+        String token = tokenManager.getToken(); // Get the token
+        Call<VideoSession> call = apiService.deleteCommentFromVideo("Bearer " + token, videoId, commentId);
         call.enqueue(new Callback<VideoSession>() {
             @Override
             public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
@@ -92,7 +99,8 @@ public class CommentApi {
     }
 
     public void editCommentInVideo(String videoId, String commentId, Comment newComment, Callback<VideoSession> callback) {
-        Call<VideoSession> call = apiService.editCommentInVideo(videoId, commentId, newComment);
+        String token = tokenManager.getToken(); // Get the token
+        Call<VideoSession> call = apiService.editCommentInVideo("Bearer " + token, videoId, commentId, newComment);
         call.enqueue(new Callback<VideoSession>() {
             @Override
             public void onResponse(Call<VideoSession> call, Response<VideoSession> response) {
