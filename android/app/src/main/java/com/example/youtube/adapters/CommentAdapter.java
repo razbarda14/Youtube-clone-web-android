@@ -45,12 +45,24 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
         // Check if displayName is available, otherwise use userId
         String displayName = comment.getDisplayName() != null ? comment.getDisplayName() : comment.getUserId();
-        holder.commentUserName.setText(displayName);
 
-        holder.commentText.setText(comment.getComment());
+        // Check if displayName equals userId, which indicates the user might not exist
+        if (displayName.equals(comment.getUserId())) {
+            displayName = null;
+        }
+
+        if (displayName == null) {
+            holder.commentUserName.setVisibility(View.GONE);
+            holder.commentText.setVisibility(View.GONE);
+        } else {
+            holder.commentUserName.setVisibility(View.VISIBLE);
+            holder.commentText.setVisibility(View.VISIBLE);
+            holder.commentUserName.setText(displayName);
+            holder.commentText.setText(comment.getComment());
+        }
 
         // Show edit and delete buttons only if the comment's userId matches the currentUserId
-        if (currentUserId!= null && comment.getUserId() != null && comment.getUserId().equals(currentUserId)) {
+        if (currentUserId != null && comment.getUserId() != null && comment.getUserId().equals(currentUserId)) {
             holder.editButton.setVisibility(View.VISIBLE);
             holder.deleteButton.setVisibility(View.VISIBLE);
         } else {
