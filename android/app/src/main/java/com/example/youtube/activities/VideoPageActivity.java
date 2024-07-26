@@ -267,7 +267,9 @@ public class VideoPageActivity extends AppCompatActivity {
 
                                 // Display a toast message to the user
                                 Toast.makeText(VideoPageActivity.this, "Video was deleted successfully", Toast.LENGTH_SHORT).show();
-
+                                // Continue to MainPageActivity
+                                Intent intent = new Intent(VideoPageActivity.this, MainPageActivity.class);
+                                startActivity(intent);
                                 finish();
                             }
                         })
