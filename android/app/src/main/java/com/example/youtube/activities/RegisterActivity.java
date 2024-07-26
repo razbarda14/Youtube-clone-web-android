@@ -24,6 +24,7 @@ import com.example.youtube.entities.UserSession;
 import com.example.youtube.utils.TokenManager;
 
 import java.io.IOException;
+import androidx.lifecycle.Observer;
 
 import com.example.youtube.model.RegisterUserRequest;
 import com.example.youtube.model.User;
@@ -88,26 +89,31 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     if (isValidPassword(pass)) {
                         if (pass.equals(repass)) {
-                            RegisterUserRequest request = new RegisterUserRequest(user, display, pass, imagePath);
-                            userViewModel.registerUser(request).observe(RegisterActivity.this, new Observer<User>() {
+                            userViewModel.checkUsernameExists(user).observe(RegisterActivity.this, new Observer<Boolean>() {
                                 @Override
-                                public void onChanged(User user) {
-                                    if (user != null) {
-                                        UserSession userSession = UserSession.getInstance();
-                                        userSession.setUserId(user.getId());
-                                        userSession.setUsername(user.getUsername());
-                                        userSession.setDisplayName(user.getDisplay_name());
-                                        userSession.setProfilePhoto(user.getImage());
-
-                                        // Save the token if available in User response
-                                        // This is an example, usually the token is in LoginResponse
-                                        // tokenManager.saveToken(user.getToken());
-
-                                        Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                                        startActivity(intent);
+                                public void onChanged(Boolean exists) {
+                                    if (exists != null && exists) {
+                                        Toast.makeText(RegisterActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                                        RegisterUserRequest request = new RegisterUserRequest(user, display, pass, imagePath);
+                                        userViewModel.registerUser(request).observe(RegisterActivity.this, new Observer<User>() {
+                                            @Override
+                                            public void onChanged(User user) {
+                                                if (user != null) {
+                                                    UserSession userSession = UserSession.getInstance();
+                                                    userSession.setUserId(user.getId());
+                                                    userSession.setUsername(user.getUsername());
+                                                    userSession.setDisplayName(user.getDisplay_name());
+                                                    userSession.setProfilePhoto(user.getImage());
+
+                                                    Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                                                    startActivity(intent);
+                                                } else {
+                                                    Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     }
                                 }
                             });

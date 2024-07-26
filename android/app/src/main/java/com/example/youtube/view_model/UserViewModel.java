@@ -193,4 +193,8 @@ public class UserViewModel extends AndroidViewModel {
         });
         return liveData;
     }
+
+    public LiveData<Boolean> checkUsernameExists(String username) {
+        return mRepository.checkUsernameExists(username);
+    }
 }

@@ -41,9 +41,6 @@ public interface UserApiService {
     @POST("api/users")
     Call<User> createUser(@Body User user);
 
-    @GET("api/users/getUserId")
-    Call<UserIdResponse> getUserIdByUsername(@Query("username") String username);
-
     @PUT("api/users/{id}")
     Call<User> updateUser(@Path("id") String id, @Body UserUpdateRequest updateRequest);
 
@@ -102,4 +99,6 @@ public interface UserApiService {
             @Part("description") RequestBody description,
             @Part("topic") RequestBody topic
     );
+    @GET("api/users/getUserId")
+    Call<UserIdResponse> getUserIdByUsername(@Query("username") String username);
 }

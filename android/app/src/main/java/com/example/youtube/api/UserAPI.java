@@ -7,6 +7,7 @@ import com.example.youtube.model.LoginRequest;
 import com.example.youtube.model.LoginResponse;
 import com.example.youtube.model.RegisterUserRequest;
 import com.example.youtube.model.User;
+import com.example.youtube.model.UserIdResponse;
 import com.example.youtube.model.VideoSession;
 import com.example.youtube.utils.RetrofitInstance;
 
@@ -291,5 +292,29 @@ public class UserAPI {
         });
     }
 
+    public void checkUsername(String username, Callback<UserIdResponse> callback) {
+        Call<UserIdResponse> call = apiService.getUserIdByUsername(username);
+        call.enqueue(new Callback<UserIdResponse>() {
+            @Override
+            public void onResponse(Call<UserIdResponse> call, Response<UserIdResponse> response) {
+                if (response.isSuccessful()) {
+                    callback.onResponse(call, response);
+                } else {
+                    Log.e(TAG, "Checking username existence failed with response code: " + response.code());
+                    try {
+                        Log.e(TAG, "Response error body: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    callback.onFailure(call, new Throwable("Checking username existence failed with response code: " + response.code()));
+                }
+            }
 
+            @Override
+            public void onFailure(Call<UserIdResponse> call, Throwable t) {
+                Log.e(TAG, "Checking username existence failed: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
 }

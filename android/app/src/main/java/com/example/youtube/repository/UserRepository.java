@@ -11,6 +11,7 @@ import com.example.youtube.model.LoginResponse;
 import com.example.youtube.model.RegisterUserRequest;
 import com.example.youtube.model.User;
 import com.example.youtube.model.UserDisplayNameResponse;
+import com.example.youtube.model.UserIdResponse;
 import com.example.youtube.model.VideoSession;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -93,6 +94,26 @@ public class UserRepository {
 
     public void createVideo(RequestBody userId, MultipartBody.Part videoFile, MultipartBody.Part thumbnailFile, RequestBody title, RequestBody description, RequestBody topic, Callback<VideoSession> callback) {
         userAPI.createVideo(userId, videoFile, thumbnailFile, title, description, topic, callback);
+    }
+
+    public LiveData<Boolean> checkUsernameExists(String username) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        userAPI.checkUsername(username, new Callback<UserIdResponse>() {
+            @Override
+            public void onResponse(Call<UserIdResponse> call, Response<UserIdResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    result.setValue(true); // Username exists
+                } else {
+                    result.setValue(false); // Username does not exist or response is unsuccessful
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserIdResponse> call, Throwable t) {
+                result.setValue(false);
+            }
+        });
+        return result;
     }
 
 }
