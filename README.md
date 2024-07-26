@@ -62,7 +62,8 @@ for each one of them:
 - Choose the right CSV file, provided in the CSV folder
 
 Most importantly, for videomodel you have to make sure uploaderId is set to be ObjectId as in the picture:
-![image](https://github.com/user-attachments/assets/4b05d7ee-4512-4e00-b21a-20bb3c5ffe45)
+
+<img src="https://github.com/user-attachments/assets/4b05d7ee-4512-4e00-b21a-20bb3c5ffe45" alt="image" width="800">
 
 **Drop `id_1` Index:**
 In case an `id_1` index appears in the `videomodels` collection in the `test` database (or the database you use), user will be limited to upload just a single video.
