@@ -4,7 +4,7 @@ This project is a simplified version of YouTube, allowing users to watch videos 
 
 In this exercise, we were asked to add a server to the android application so it consists of two main folders:
 1. android - this is the client side, created using the project android files from the first exercise and modified to work with the server by implementing MVVM model and Room database
-3. server – as the name implies, this is the server folder. Using express and mongoose.
+3. server – as the name implies, this is the server folder. Using express and mongoose
 
 Please note:
 1. **main** branch is the branch for exercise 1
@@ -96,10 +96,9 @@ npm start
 
 ### Set up the android application
 
-1. Open Android Studio
-2. Open the project in Android Studio
-3. Build and the application 
-4. Run the Application on an Android emulator
+1. Open the project in Android Studio
+2. Build the application 
+3. Run the application on an Android emulator
 
 Please note that the JWT you get when log-in to your account expires within 1 hour. After that time, you will not be able to upload, edit or delete anything. You can sign-out and then sign-in again and you will be able to perform these actions.
 
