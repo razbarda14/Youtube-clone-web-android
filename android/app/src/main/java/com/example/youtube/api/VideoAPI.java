@@ -22,6 +22,7 @@ public class VideoAPI {
     VideoApiService apiService;
     Retrofit retrofit;
     private MutableLiveData<List<VideoSession>> videoListData;
+    private VideoDao videoDao;
 
     // Original constructor
     public VideoAPI() {
@@ -32,6 +33,7 @@ public class VideoAPI {
     public VideoAPI(MutableLiveData<List<VideoSession>> videoListData, VideoDao videoDao) {
         this.videoListData = videoListData;
         apiService = RetrofitInstance.getRetrofitInstance().create(VideoApiService.class);
+        this.videoDao = videoDao;
     }
 
     // getMostViewedAndRandomVideos overload to match the android development powerpoint
@@ -40,7 +42,12 @@ public class VideoAPI {
         call.enqueue(new Callback<List<VideoSession>>() {
             @Override
             public void onResponse(Call<List<VideoSession>> call, Response<List<VideoSession>> response) {
-                videos.postValue(response.body());
+                new Thread(() -> {
+                    videoDao.clear();
+                    videoDao.insertList(response.body());
+                    videos.postValue(response.body());
+                    videos.postValue(videoDao.index());
+                }).start();
             }
 
             @Override
@@ -108,6 +115,9 @@ public class VideoAPI {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+                    new Thread(() -> {
+                        videoDao.update(video);
+                    }).start();
                     Log.d("UserRepository", "Video details updated successfully");
                 } else {
                     Log.d("UserRepository", "Failed to update video details");
@@ -127,6 +137,10 @@ public class VideoAPI {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+                    new Thread(() -> {
+                        videoDao.delete(videoId);
+                    }).start();
+
                     Log.d("VideoAPI", "Video was deleted successfully");
                 }
                 else {

@@ -25,7 +25,7 @@ public class VideoRepository {
     private VideoListData videoListData;
 
     public VideoRepository(@NonNull Application application) {
-        AppDB db = Room.databaseBuilder(application.getApplicationContext(), AppDB.class, "PostsDB")
+        AppDB db = Room.databaseBuilder(application.getApplicationContext(), AppDB.class, "VideosDB")
                 .fallbackToDestructiveMigration().build();
         videoDao = db.videoDao();
         videoListData = new VideoListData();

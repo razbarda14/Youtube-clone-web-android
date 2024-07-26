@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.youtube.model.VideoSession;
 
@@ -19,6 +20,12 @@ public interface VideoDao {
 
     @Query("DELETE FROM videosession")
     void clear();
+
+    @Query("DELETE FROM videosession WHERE id = :id")
+    void delete(String id);
+
+    @Update
+    void update(VideoSession videoSession);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertList(List<VideoSession> videoSessions);
