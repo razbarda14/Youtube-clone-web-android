@@ -107,7 +107,7 @@ Please note that the JWT you get when log-in to your account expires within 1 ho
 
 **Homescreen:** you should see in your homescreen 20 videos (10 of them are the most viewed videos and 10 of them are random) in random order:
 
-<img src="https://github.com/user-attachments/assets/9cf9c9f9-540f-4bc9-845f-289d422acd4e" alt="image" width="250">
+<img src="https://github.com/user-attachments/assets/c0a2a379-8c50-467e-9e3f-21724ad76b42" alt="image" width="250">
 
 **Get to your profile:** when you sign in, you can access to your user profile clicking on the upperbar:
 
