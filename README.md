@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 89-3210 Course - Youtube Project
 
 This project is a simplified version of YouTube, allowing users to watch videos as a guest or a registered user so you can upload, comment and like videos.
@@ -72,3 +73,6 @@ Click on the "Run" button (the green play button in the toolbar) or select Run >
 Choose your connected device or AVD from the list and click OK.
 
 The application should now be running on your selected Android device or emulator.
+=======
+# Youtube-clone-web-android
+>>>>>>> 62a147eae73489c2111043adaf59b05c85aafa8a
