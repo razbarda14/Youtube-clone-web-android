@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # 89-3210 Course - Exercise 3 - Youtube Project with Server Side - Android 
+=======
+<<<<<<< HEAD
+# 89-3210 Course - Youtube Project
+>>>>>>> 8c10cb57b23d733f1e55089433f2deef7b61e8c6
 
 This project is a simplified version of YouTube, allowing users to watch videos as a guest or a registered user, so you can upload videos, write comments and see other user's profiles and their videos.
 
@@ -123,4 +128,15 @@ Please note that the JWT you get when log-in to your account expires within 1 ho
 
 <img src="https://github.com/user-attachments/assets/3cb4d5bd-a075-41f2-9f99-4993c16395f8" alt="Screenshot" width="250">
 
+<<<<<<< HEAD
 Enjoy the watch!
+=======
+Click on the "Run" button (the green play button in the toolbar) or select Run > Run 'app' from the top menu.
+
+Choose your connected device or AVD from the list and click OK.
+
+The application should now be running on your selected Android device or emulator.
+=======
+# Youtube-clone-web-android
+>>>>>>> 62a147eae73489c2111043adaf59b05c85aafa8a
+>>>>>>> 8c10cb57b23d733f1e55089433f2deef7b61e8c6
